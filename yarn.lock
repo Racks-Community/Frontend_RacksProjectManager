@@ -2479,6 +2479,14 @@ caniuse-lite@^1.0.30001332, caniuse-lite@^1.0.30001370, caniuse-lite@^1.0.300013
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001383.tgz#aecf317ccd940690725ae3ae4f28293c5fb8050e"
   integrity sha512-swMpEoTp5vDoGBZsYZX7L7nXHe6dsHxi9o6/LKf/f0LukVtnrxly5GVb/fWdCDTqi/yw6Km6tiJ0pmBacm0gbg==
 
+chakra-ui-flashless@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/chakra-ui-flashless/-/chakra-ui-flashless-0.0.8.tgz#51a69dbeca00b8620bfbedf9028c949981522564"
+  integrity sha512-VJT+El7a9JA5ikEMq0WkbEJpdyKWq2rh7sQxmwjeTx7VDt2unr5Xll5JAgRvj1ijHg1bqoEDh8Stav0JTfwcaQ==
+  dependencies:
+    lodash.merge "^4.6.2"
+    outdent "^0.8.0"
+
 chalk@^2.0.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"

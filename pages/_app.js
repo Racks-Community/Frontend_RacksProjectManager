@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/globals.css";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./chakra_theme/theme";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   getDefaultWallets,
@@ -34,13 +35,6 @@ const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
-});
-
-const theme = extendTheme({
-  config: {
-    initialColorMode: "dark",
-    useSystemColorMode: false,
-  },
 });
 
 function MyApp({ Component, pageProps }) {
