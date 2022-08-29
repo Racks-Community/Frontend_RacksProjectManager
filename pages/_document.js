@@ -9,6 +9,7 @@ export default class MyDocument extends Document {
       <Html>
         <body>
           <FlashlessScript theme={theme} />
+          <Head />
           <Main />
           <NextScript />
         </body>
