@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/globals.css";
-import { ChakraProvider } from "@chakra-ui/react";
-import theme from "./chakra_theme/theme";
+import { ThemeProvider } from "./chakra_theme/theme";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   getDefaultWallets,
@@ -15,6 +14,9 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 import { ethers } from "ethers";
+import { wrapper } from "../store/store";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../store/userSlice";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -40,6 +42,7 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }) {
   const [authenticationStatus, setAuthenticationStatus] = useState("loading");
   const [loginStatus, setLoginStatus] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
@@ -47,16 +50,14 @@ function MyApp({ Component, pageProps }) {
         method: "get",
         headers: new Headers({
           Authorization: localStorage.getItem("token"),
-          "Content-Type": "application/x-www-form-urlencoded",
         }),
       });
       if (!res?.ok) {
         setAuthenticationStatus("unauthenticated");
       } else {
-        const data = await res.json();
-        console.log(data.token);
-        localStorage.setItem("token", "Bearer " + data.token);
         setAuthenticationStatus("authenticated");
+        const data = await res.json();
+        dispatch(setUserInfo(data.user));
       }
     };
 
@@ -95,13 +96,19 @@ function MyApp({ Component, pageProps }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, signature }),
       });
-      const data = await verifyRes.json();
-      localStorage.setItem("token", "Bearer " + data.token);
-      setLoginStatus(true);
-      return true;
+      if (!verifyRes?.ok) {
+        return false;
+      } else {
+        const data = await verifyRes.json();
+        localStorage.setItem("token", "Bearer " + data.token);
+        dispatch(setUserInfo(data.user));
+        setLoginStatus(true);
+        return true;
+      }
     },
     signOut: async () => {
       localStorage.removeItem("token");
+      dispatch(setUserInfo({}));
     },
   });
 
@@ -114,19 +121,20 @@ function MyApp({ Component, pageProps }) {
         <RainbowKitProvider
           chains={chains}
           theme={darkTheme({
-            // accentColor: "#00D6C1",
+            accentColor: "#55f4b2",
             overlayBlur: "small",
-            accentColorForeground: "white",
+            borderRadius: "small",
+            accentColorForeground: "#1A202C",
           })}
           modalSize="compact"
         >
-          <ChakraProvider theme={theme}>
+          <ThemeProvider>
             <Component {...pageProps} />
-          </ChakraProvider>
+          </ThemeProvider>
         </RainbowKitProvider>
       </RainbowKitAuthenticationProvider>
     </WagmiConfig>
   );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

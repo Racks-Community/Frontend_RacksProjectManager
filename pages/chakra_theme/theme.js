@@ -1,13 +1,40 @@
-import { extendTheme } from "@chakra-ui/react";
-import { flashless } from "chakra-ui-flashless";
+import {
+  ThemeProvider as NextThemeProvider,
+  useTheme as useNextTheme,
+} from "next-themes";
 
-const theme = extendTheme(
-  flashless({
-    config: {
-      initialColorMode: "dark",
-      useSystemColorMode: false,
-    },
-  })
-);
+import {
+  ColorModeProvider,
+  CSSReset,
+  GlobalStyle,
+  PortalManager,
+  theme,
+  ThemeProvider as ChakraThemeProvider,
+} from "@chakra-ui/react";
 
-export default theme;
+function CustomChakraProvider({ children }) {
+  const { resolvedTheme } = useNextTheme();
+
+  return (
+    <ChakraThemeProvider theme={theme}>
+      <ColorModeProvider
+        options={{
+          initialColorMode: "dark",
+        }}
+        value={resolvedTheme}
+      >
+        <GlobalStyle />
+        <CSSReset />
+        <PortalManager>{children}</PortalManager>
+      </ColorModeProvider>
+    </ChakraThemeProvider>
+  );
+}
+
+export function ThemeProvider({ children }) {
+  return (
+    <NextThemeProvider>
+      <CustomChakraProvider>{children}</CustomChakraProvider>
+    </NextThemeProvider>
+  );
+}
