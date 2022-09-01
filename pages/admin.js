@@ -45,6 +45,7 @@ const Admin = () => {
     if (res?.ok) {
       const data = await res.json();
       localStorage.setItem("token", "Bearer " + data.token);
+      localStorage.setItem("manualLogin", true);
       dispatch(setUserInfo(data.user));
       router.push("/");
     } else {

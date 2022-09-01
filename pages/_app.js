@@ -109,6 +109,7 @@ function MyApp({ Component, pageProps }) {
     signOut: async () => {
       localStorage.removeItem("token");
       dispatch(setUserInfo({}));
+      setLoginStatus(false);
     },
   });
 

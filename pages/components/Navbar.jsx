@@ -1,17 +1,16 @@
 import React from "react";
 import { Flex, Image, Box, Spacer, Button } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useSelector, useDispatch } from "react-redux";
-import { selectUserInfo, setUserInfo } from "../../store/userSlice";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../../store/userSlice";
 
 function Navbar() {
   const user = useSelector(selectUserInfo);
-  const dispatch = useDispatch();
-  console.log(user);
-
+  // console.log(user);
   const handleLogout = () => {
     localStorage.removeItem("token");
-    dispatch(setUserInfo({}));
+    localStorage.removeItem("manualLogin");
+    window.location.reload(false);
   };
 
   return (
@@ -26,7 +25,7 @@ function Navbar() {
         </Box>
         <Spacer />
         <Box p="10" className="flex items-center">
-          {user.role === "admin" ? (
+          {user.role === "admin" && localStorage.getItem("manualLogin") ? (
             <Button
               onClick={handleLogout}
               colorScheme="teal"
