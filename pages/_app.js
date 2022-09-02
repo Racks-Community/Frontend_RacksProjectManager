@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }) {
         setAuthenticationStatus("authenticated");
         const data = await res.json();
         dispatch(setUserInfo(data.user));
+        setLoginStatus(true);
       }
     };
 
@@ -122,9 +123,9 @@ function MyApp({ Component, pageProps }) {
         <RainbowKitProvider
           chains={chains}
           theme={darkTheme({
-            accentColor: "#55f4b2",
+            accentColor: "#FEFE0E",
             overlayBlur: "small",
-            borderRadius: "small",
+            borderRadius: "none",
             accentColorForeground: "#1A202C",
           })}
           modalSize="compact"

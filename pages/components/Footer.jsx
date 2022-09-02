@@ -4,7 +4,12 @@ import React from "react";
 function Footer() {
   return (
     <>
-      <Divider w={"80%"} mx={"auto"} style={{ borderColor: "#55f4b2" }} />
+      <Divider
+        w={"80%"}
+        mx={"auto"}
+        mt="4rem"
+        style={{ borderColor: "#FEFE0E" }}
+      />
       <Container py={"2rem"}>
         <Text textAlign={"center"} fontSize={"1rem"}>
           <Link isExternal href="https://twitter.com/rackslabs">

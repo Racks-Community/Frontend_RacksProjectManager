@@ -1,16 +1,17 @@
 import React from "react";
 import { Flex, Image, Box, Spacer, Button } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 
 function Navbar() {
   const user = useSelector(selectUserInfo);
-  // console.log(user);
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("manualLogin");
-    window.location.reload(false);
+    dispatch(setUserInfo({}));
   };
 
   return (
@@ -28,9 +29,18 @@ function Navbar() {
           {user.role === "admin" && localStorage.getItem("manualLogin") ? (
             <Button
               onClick={handleLogout}
-              colorScheme="teal"
-              variant="outline"
+              variant="solid"
               mr="1rem"
+              bg="#FEFE0E"
+              color="black"
+              borderRadius={"none"}
+              _hover={{
+                bg: "#d8d80e",
+              }}
+              _active={{
+                bg: "#d8d80e",
+                transform: "scale(1.05)",
+              }}
             >
               Logout
             </Button>
