@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* body {
+  background-color: transparent !important;
+} */
+
+[data-theme="dark"],
+[data-theme="dark"] body {
+  color: white;
+  background: linear-gradient(90deg, #0e0f13 0, #21262c);
+}
+
+.bg-overlay {
+  background: linear-gradient(90deg, #0e0f13 0, #21262c);
+  height: 100vh;
+  width: 100vw;
+}
+
+.chakra-modal__content {
+  background: linear-gradient(90deg, #282d33 0, #222222) !important;
+}

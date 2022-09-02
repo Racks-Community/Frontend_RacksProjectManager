@@ -20,6 +20,9 @@ function CustomChakraProvider({ children }) {
       <ColorModeProvider
         options={{
           initialColorMode: "dark",
+          colors: {
+            accent: "#FEFE0E",
+          },
         }}
         value={resolvedTheme}
       >
