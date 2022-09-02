@@ -23,7 +23,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const { chains, provider } = configureChains(
   [chain.rinkeby],
   [
-    jsonRpcProvider({ rpc: () => ({ http: "https://rpc.ankr.com/eth" }) }),
+    jsonRpcProvider({
+      rpc: () => ({ http: process.env.NEXT_PUBLIC_INFURA_ID }),
+    }),
     publicProvider(),
   ]
 );
