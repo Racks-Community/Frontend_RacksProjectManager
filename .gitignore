@@ -35,3 +35,5 @@ yarn-error.log*
 .vercel
 
 /web3Constanst
+
+.vscode
