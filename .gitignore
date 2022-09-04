@@ -34,6 +34,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-/web3Constanst
+/web3Constants/networkMapping.json
+/web3Constants/polygon
+/web3Constants/rinkeby
 
 .vscode

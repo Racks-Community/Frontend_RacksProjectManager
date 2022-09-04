@@ -8,9 +8,15 @@ import {
   CSSReset,
   GlobalStyle,
   PortalManager,
-  theme,
+  extendTheme,
   ThemeProvider as ChakraThemeProvider,
 } from "@chakra-ui/react";
+
+const theme = extendTheme({
+  fonts: {
+    heading: `'Montserrat', sans-serif`,
+  },
+});
 
 function CustomChakraProvider({ children }) {
   const { resolvedTheme } = useNextTheme();
@@ -20,9 +26,6 @@ function CustomChakraProvider({ children }) {
       <ColorModeProvider
         options={{
           initialColorMode: "dark",
-          colors: {
-            accent: "#FEFE0E",
-          },
         }}
         value={resolvedTheme}
       >

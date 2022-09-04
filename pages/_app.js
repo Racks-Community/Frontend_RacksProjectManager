@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/globals.css";
 import { ThemeProvider } from "./chakra_theme/theme";
 import "@rainbow-me/rainbowkit/styles.css";
+import "@fontsource/montserrat/400.css";
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -17,6 +18,8 @@ import { ethers } from "ethers";
 import { wrapper } from "../store/store";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../store/userSlice";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,7 +27,7 @@ const { chains, provider } = configureChains(
   [chain.rinkeby],
   [
     jsonRpcProvider({
-      rpc: () => ({ http: process.env.NEXT_PUBLIC_INFURA_ID }),
+      rpc: () => ({ http: process.env.NEXT_PUBLIC_RPC_URL }),
     }),
     publicProvider(),
   ]
@@ -134,6 +137,17 @@ function MyApp({ Component, pageProps }) {
         >
           <ThemeProvider>
             <Component {...pageProps} />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              draggable={false}
+              pauseOnVisibilityChange
+              closeOnClick
+              pauseOnHover
+              toastStyle={{ backgroundColor: "#333", color: "white" }}
+            />
           </ThemeProvider>
         </RainbowKitProvider>
       </RainbowKitAuthenticationProvider>

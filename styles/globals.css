@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  background-color: transparent !important;
-} */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 [data-theme="dark"],
 [data-theme="dark"] body {
   color: white;
   background: linear-gradient(90deg, #0e0f13 0, #21262c);
+  font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
 }
 
 .bg-overlay {
@@ -20,4 +19,18 @@
 
 .chakra-modal__content {
   background: linear-gradient(90deg, #282d33 0, #222222) !important;
+}
+
+/* CONNECT WALLET */
+
+.connect-wallet-container {
+  min-height: 70vh;
+  min-width: 43rem;
+  text-align: center;
+}
+
+/* PROJECTS */
+
+.projects-container {
+  min-height: 75vh;
 }
