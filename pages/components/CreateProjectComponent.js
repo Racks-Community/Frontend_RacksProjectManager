@@ -11,6 +11,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Textarea,
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
@@ -18,7 +19,7 @@ import toast from "../components/Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const CreateProjectComponent = ({ isOpen, setIsOpen }) => {
+const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
@@ -47,6 +48,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen }) => {
       });
 
       if (res?.ok) {
+        setTimeout(async () => {
+          await fetchProjects();
+        }, 1000);
         notify("success", "Proyecto creado!");
       } else {
         notify("error", "Error al crear Proyecto");
@@ -76,11 +80,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen }) => {
 
             <FormControl mt={4} isRequired>
               <FormLabel>Descripción</FormLabel>
-              <Input
+              <Textarea
                 type="text"
                 placeholder="Descripción"
                 focusBorderColor="white"
                 borderRadius={"none"}
+                resize={"none"}
               />
             </FormControl>
 
@@ -132,6 +137,8 @@ const CreateProjectComponent = ({ isOpen, setIsOpen }) => {
                 transform: "scale(1.05)",
               }}
               mr={3}
+              mt={-5}
+              mb={1}
             >
               Crear
             </Button>
@@ -145,6 +152,8 @@ const CreateProjectComponent = ({ isOpen, setIsOpen }) => {
                 bg: "#dddfe236",
                 transform: "scale(1.05)",
               }}
+              mt={-4}
+              mb={1}
             >
               Cancel
             </Button>
