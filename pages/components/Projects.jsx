@@ -10,9 +10,7 @@ import {
   Center,
   Divider,
 } from "@chakra-ui/react";
-import { useContractRead, useAccount } from "wagmi";
-import { contractAddresses, RacksPmAbi } from "../../web3Constants";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
 import CreateProjectComponent from "./CreateProjectComponent";
@@ -23,7 +21,6 @@ function Projects() {
   const user = useSelector(selectUserInfo);
   const [isOpenCreateProjectComponent, setIsOpenCreateProjectComponent] =
     useState(false);
-  const [data, setData] = useState([]);
   const [projects, setProjects] = useState([]);
   const status = {
     created: "CREATED",
@@ -37,37 +34,26 @@ function Projects() {
     }
   };
 
-  const account = useAccount();
-
-  useContractRead({
-    addressOrName: contractAddresses[4].RacksProjectManager[0],
-    contractInterface: RacksPmAbi,
-    functionName: "getProjects",
-    overrides: { from: account.address },
-    onSuccess: (data) => setData(data),
-    watch: true,
-  });
+  const fetchProjects = async () => {
+    console.log("fetching projects");
+    const res = await fetch(API_URL + "projects", {
+      method: "get",
+      headers: new Headers({
+        Authorization: localStorage.getItem("token"),
+      }),
+    });
+    if (res?.ok) {
+      const data = await res.json();
+      setProjects(data);
+      return projects.length;
+    }
+  };
 
   useEffect(() => {
-    if (data) {
-      let prj = [];
-      data.map((address) => {
-        const response = fetch(API_URL + "projects/" + address, {
-          method: "get",
-          headers: new Headers({
-            Authorization: localStorage.getItem("token"),
-            "Content-Type": "application/x-www-form-urlencoded",
-          }),
-        })
-          .then((res) => res.json())
-          .then((json) => {
-            if (json.length > 0) prj.push(json[0]);
-          });
-      });
-      setProjects(prj);
-      console.log(projects);
+    if (user) {
+      fetchProjects();
     }
-  }, [data]);
+  }, []);
 
   return (
     <>
@@ -202,20 +188,6 @@ function Projects() {
                     </VStack>
                   </Box>
                 </Box>
-                {/* <Box
-                  mt="1"
-                  fontWeight="semibold"
-                  as="h4"
-                  lineHeight="tight"
-                  noOfLines={1}
-                >
-                  {p.name}
-                </Box>
-                <Box>
-                  {p.description}
-                  <Box as="span" color="gray.600" fontSize="sm"></Box>
-                </Box>
-                {`${p.colateralCost} USDC`} */}
               </Box>
             ))}
           </Grid>
@@ -228,6 +200,7 @@ function Projects() {
       <CreateProjectComponent
         isOpen={isOpenCreateProjectComponent}
         setIsOpen={setIsOpenCreateProjectComponent}
+        fetchProjects={fetchProjects}
       />
     </>
   );
