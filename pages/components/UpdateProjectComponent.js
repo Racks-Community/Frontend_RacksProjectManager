@@ -15,11 +15,16 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import toast from "../components/Toast";
+import toast from "./Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
+const UpdateProjectComponent = ({
+  isOpen,
+  setIsOpen,
+  fetchProjects,
+  project,
+}) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
@@ -28,18 +33,22 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const projectData = {
-      name: event?.target[0]?.value,
-      description: event?.target[1]?.value,
-      reputationLevel: event?.target[2]?.value,
-      colateralCost: event?.target[3]?.value,
-      maxContributorsNumber: event?.target[4]?.value,
-    };
+    const projectData = {};
+    if (project.name !== event?.target[0]?.value)
+      projectData.name = event?.target[0]?.value;
+    if (project.description !== event?.target[1]?.value)
+      projectData.description = event?.target[1]?.value;
+    if (project.reputationLevel !== Number(event?.target[2]?.value))
+      projectData.reputationLevel = Number(event?.target[2]?.value);
+    if (project.colateralCost !== Number(event?.target[3]?.value))
+      projectData.colateralCost = Number(event?.target[3]?.value);
+    if (project.maxContributorsNumber !== Number(event?.target[4]?.value))
+      projectData.maxContributorsNumber = Number(event?.target[4]?.value);
 
     if (user.role === "admin") {
       setLoading(true);
-      const res = await fetch(API_URL + "projects", {
-        method: "POST",
+      const res = await fetch(API_URL + "projects/" + project.address, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
@@ -51,9 +60,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
-        notify("success", "Proyecto creado!");
+        notify("success", "Proyecto actualizado!");
       } else {
-        notify("error", "Error al crear Proyecto");
+        notify("error", "Error al actualizar Proyecto");
       }
       setIsOpen(false);
       setLoading(false);
@@ -64,7 +73,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
       <ModalContent mt="12%">
-        <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
+        <ModalHeader className="text-center">ACTUALIZAR PROYECTO</ModalHeader>
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
           <ModalBody pb={6}>
@@ -72,6 +81,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <FormLabel>Nombre</FormLabel>
               <Input
                 type="text"
+                defaultValue={project.name}
                 placeholder="Nombre"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -82,6 +92,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <FormLabel>Descripción</FormLabel>
               <Textarea
                 type="text"
+                defaultValue={project.description}
                 placeholder="Descripción"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -93,6 +104,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <FormLabel>Nivel de Reputación</FormLabel>
               <Input
                 type="number"
+                defaultValue={project.reputationLevel}
                 placeholder="Reputación"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -103,6 +115,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <FormLabel>Colateral</FormLabel>
               <Input
                 type="number"
+                defaultValue={project.colateralCost}
                 placeholder="Colateral"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -113,6 +126,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <FormLabel>Número máximo de Contribuidores</FormLabel>
               <Input
                 type="number"
+                defaultValue={project.maxContributorsNumber}
                 placeholder="Número de Contribuidores"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -124,7 +138,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             <Button
               type="submit"
               isLoading={loading}
-              loadingText="Creando"
+              loadingText="Actualizando"
               bg="white"
               color="black"
               variant="solid"
@@ -140,7 +154,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               mt={-5}
               mb={1}
             >
-              Crear
+              Update
             </Button>
             <Button
               onClick={() => setIsOpen(false)}
@@ -164,4 +178,4 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   );
 };
 
-export default CreateProjectComponent;
+export default UpdateProjectComponent;

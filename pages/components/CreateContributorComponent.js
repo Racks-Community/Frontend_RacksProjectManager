@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
+import { contractAddresses, RacksPmAbi } from "../../web3Constants";
 import {
   Modal,
   ModalContent,
@@ -11,15 +12,16 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import toast from "../components/Toast";
+import toast from "./Toast";
+import { ethers } from "ethers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
-const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
+const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
@@ -28,32 +30,55 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const projectData = {
-      name: event?.target[0]?.value,
-      description: event?.target[1]?.value,
-      reputationLevel: event?.target[2]?.value,
-      colateralCost: event?.target[3]?.value,
-      maxContributorsNumber: event?.target[4]?.value,
+    const contributorData = {
+      email: event?.target[0]?.value,
+      discord: event?.target[1]?.value,
+      githubUsername: event?.target[2]?.value,
     };
-
-    if (user.role === "admin") {
+    if (event?.target[3]?.value != "")
+      contributorData.urlTwitter = event?.target[3]?.value;
+    if (event?.target[4]?.value != "")
+      contributorData.country = event?.target[4]?.value;
+    if (user.address) {
       setLoading(true);
-      const res = await fetch(API_URL + "projects", {
+      const res = await fetch(API_URL + "users/contributor/" + user.address, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
-        body: JSON.stringify(projectData),
+        body: JSON.stringify(contributorData),
       });
-
       if (res?.ok) {
-        setTimeout(async () => {
-          await fetchProjects();
-        }, 1000);
-        notify("success", "Proyecto creado!");
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const racksPM = new ethers.Contract(
+          contractAddresses[CHAIN_ID].RacksProjectManager[0],
+          RacksPmAbi,
+          signer
+        );
+        try {
+          let tx = await racksPM.registerContributor();
+          await tx.wait();
+          if (tx.hash) {
+            setTimeout(async () => {
+              await fetchUser();
+            }, 1000);
+            notify("success", "Bienvenido a Racks Labs como Contributor!");
+          }
+        } catch (error) {
+          console.log(error);
+          await fetch(API_URL + "users/contributor/" + user.address, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: localStorage.getItem("token"),
+            },
+          });
+          notify("error", "Error al registrarse como Contributor");
+        }
       } else {
-        notify("error", "Error al crear Proyecto");
+        notify("error", "Error al registrarse como Contributor");
       }
       setIsOpen(false);
       setLoading(false);
@@ -64,56 +89,58 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
       <ModalContent mt="12%">
-        <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
+        <ModalHeader className="text-center">
+          REGISTRO DE CONTRIBUTOR
+        </ModalHeader>
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
           <ModalBody pb={6}>
             <FormControl isRequired>
-              <FormLabel>Nombre</FormLabel>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
+                placeholder="Email"
+                focusBorderColor="white"
+                borderRadius={"none"}
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              />
+            </FormControl>
+
+            <FormControl mt={4} isRequired>
+              <FormLabel>Github</FormLabel>
               <Input
                 type="text"
-                placeholder="Nombre"
+                placeholder="Usuario de Github"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
             <FormControl mt={4} isRequired>
-              <FormLabel>Descripción</FormLabel>
-              <Textarea
+              <FormLabel>Discord</FormLabel>
+              <Input
                 type="text"
-                placeholder="Descripción"
-                focusBorderColor="white"
-                borderRadius={"none"}
-                resize={"none"}
-              />
-            </FormControl>
-
-            <FormControl mt={4} isRequired>
-              <FormLabel>Nivel de Reputación</FormLabel>
-              <Input
-                type="number"
-                placeholder="Reputación"
+                placeholder="Usuario de Discord"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
-              <FormLabel>Colateral</FormLabel>
+            <FormControl mt={4}>
+              <FormLabel>Twitter</FormLabel>
               <Input
-                type="number"
-                placeholder="Colateral"
+                type="text"
+                placeholder="Url Twitter"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
-              <FormLabel>Número máximo de Contribuidores</FormLabel>
+            <FormControl mt={4}>
+              <FormLabel>País</FormLabel>
               <Input
-                type="number"
-                placeholder="Número de Contribuidores"
+                type="text"
+                placeholder="País"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
@@ -124,7 +151,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             <Button
               type="submit"
               isLoading={loading}
-              loadingText="Creando"
+              loadingText="Registrando"
               bg="white"
               color="black"
               variant="solid"
@@ -140,7 +167,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               mt={-5}
               mb={1}
             >
-              Crear
+              Registrarse
             </Button>
             <Button
               onClick={() => setIsOpen(false)}
@@ -164,4 +191,4 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   );
 };
 
-export default CreateProjectComponent;
+export default CreateContributorComponent;

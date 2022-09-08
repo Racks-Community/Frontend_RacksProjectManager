@@ -14,6 +14,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
 import CreateProjectComponent from "./CreateProjectComponent";
+import UpdateProjectComponent from "./UpdateProjectComponent";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,7 +22,10 @@ function Projects() {
   const user = useSelector(selectUserInfo);
   const [isOpenCreateProjectComponent, setIsOpenCreateProjectComponent] =
     useState(false);
+  const [isOpenUpdateProjectComponent, setIsOpenUpdateProjectComponent] =
+    useState(false);
   const [projects, setProjects] = useState([]);
+  const [projectToUpdate, setProjectToUpdate] = useState({});
   const status = {
     created: "CREATED",
     doing: "DOING",
@@ -34,10 +38,16 @@ function Projects() {
     }
   };
 
+  const handleProjectClick = (project) => {
+    if (user.role === "admin") {
+      setProjectToUpdate(project);
+      setIsOpenUpdateProjectComponent(true);
+    }
+  };
+
   const fetchProjects = async () => {
-    console.log("fetching projects");
     const res = await fetch(API_URL + "projects", {
-      method: "get",
+      method: "GET",
       headers: new Headers({
         Authorization: localStorage.getItem("token"),
       }),
@@ -84,13 +94,14 @@ function Projects() {
         {projects.length != 0 ? (
           <Grid templateColumns="repeat(4, 1fr)">
             {projects.map((p) => (
-              <Box p="6" key={p.address}>
+              <Box p="6" key={p.address} onClick={() => handleProjectClick(p)}>
                 <Box
                   w="15rem"
                   borderWidth="1px"
                   borderRadius="lg"
                   borderColor="#555"
                   overflow="hidden"
+                  style={{ cursor: "pointer" }}
                 >
                   <Box p="6">
                     <Box
@@ -201,6 +212,12 @@ function Projects() {
         isOpen={isOpenCreateProjectComponent}
         setIsOpen={setIsOpenCreateProjectComponent}
         fetchProjects={fetchProjects}
+      />
+      <UpdateProjectComponent
+        isOpen={isOpenUpdateProjectComponent}
+        setIsOpen={setIsOpenUpdateProjectComponent}
+        fetchProjects={fetchProjects}
+        project={projectToUpdate}
       />
     </>
   );
