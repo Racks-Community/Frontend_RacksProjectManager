@@ -28,13 +28,17 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let nProjectsBefore = await fetchProjects();
     const projectData = {
       name: event?.target[0]?.value,
       description: event?.target[1]?.value,
-      reputationLevel: event?.target[2]?.value,
-      colateralCost: event?.target[3]?.value,
-      maxContributorsNumber: event?.target[4]?.value,
+      reputationLevel: event?.target[3]?.value,
+      colateralCost: event?.target[4]?.value,
+      maxContributorsNumber: event?.target[5]?.value,
     };
+    if (event?.target[2]?.value != "") {
+      projectData.requirements = event?.target[2]?.value;
+    }
 
     if (user.role === "admin") {
       setLoading(true);
@@ -48,8 +52,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       });
 
       if (res?.ok) {
-        setTimeout(async () => {
-          await fetchProjects();
+        const fetchProjectsInterval = setInterval(async () => {
+          let nProjects = await fetchProjects();
+          if (nProjects > nProjectsBefore) clearInterval(fetchProjectsInterval);
         }, 1000);
         notify("success", "Proyecto creado!");
       } else {
@@ -63,7 +68,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
-      <ModalContent mt="12%">
+      <ModalContent mt="9%">
         <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
@@ -83,6 +88,17 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               <Textarea
                 type="text"
                 placeholder="Descripción"
+                focusBorderColor="white"
+                borderRadius={"none"}
+                resize={"none"}
+              />
+            </FormControl>
+
+            <FormControl mt={4} isRequired>
+              <FormLabel>Requerimientos</FormLabel>
+              <Textarea
+                type="text"
+                placeholder="Requerimientos"
                 focusBorderColor="white"
                 borderRadius={"none"}
                 resize={"none"}

@@ -38,12 +38,14 @@ const UpdateProjectComponent = ({
       projectData.name = event?.target[0]?.value;
     if (project.description !== event?.target[1]?.value)
       projectData.description = event?.target[1]?.value;
-    if (project.reputationLevel !== Number(event?.target[2]?.value))
-      projectData.reputationLevel = Number(event?.target[2]?.value);
-    if (project.colateralCost !== Number(event?.target[3]?.value))
-      projectData.colateralCost = Number(event?.target[3]?.value);
-    if (project.maxContributorsNumber !== Number(event?.target[4]?.value))
-      projectData.maxContributorsNumber = Number(event?.target[4]?.value);
+    if (project.requirements !== event?.target[2]?.value)
+      projectData.requirements = event?.target[2]?.value;
+    if (project.reputationLevel !== Number(event?.target[3]?.value))
+      projectData.reputationLevel = Number(event?.target[3]?.value);
+    if (project.colateralCost !== Number(event?.target[4]?.value))
+      projectData.colateralCost = Number(event?.target[4]?.value);
+    if (project.maxContributorsNumber !== Number(event?.target[5]?.value))
+      projectData.maxContributorsNumber = Number(event?.target[5]?.value);
 
     if (user.role === "admin") {
       setLoading(true);
@@ -72,7 +74,7 @@ const UpdateProjectComponent = ({
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
-      <ModalContent mt="12%">
+      <ModalContent mt="11%">
         <ModalHeader className="text-center">ACTUALIZAR PROYECTO</ModalHeader>
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
@@ -94,6 +96,18 @@ const UpdateProjectComponent = ({
                 type="text"
                 defaultValue={project.description}
                 placeholder="Descripción"
+                focusBorderColor="white"
+                borderRadius={"none"}
+                resize={"none"}
+              />
+            </FormControl>
+
+            <FormControl mt={4} isRequired>
+              <FormLabel>Requerimientos</FormLabel>
+              <Textarea
+                type="text"
+                defaultValue={project.requirements}
+                placeholder="Requerimientos"
                 focusBorderColor="white"
                 borderRadius={"none"}
                 resize={"none"}

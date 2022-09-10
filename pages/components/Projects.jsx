@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Grid,
+  GridItem,
   VStack,
   Badge,
   Center,
@@ -15,6 +16,7 @@ import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
 import CreateProjectComponent from "./CreateProjectComponent";
 import UpdateProjectComponent from "./UpdateProjectComponent";
+import ShowProjectComponent from "./ShowProjectComponent";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,8 +26,11 @@ function Projects() {
     useState(false);
   const [isOpenUpdateProjectComponent, setIsOpenUpdateProjectComponent] =
     useState(false);
+  const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
+    useState(false);
   const [projects, setProjects] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState({});
+  const [projectToShow, setProjectToShow] = useState({});
   const status = {
     created: "CREATED",
     doing: "DOING",
@@ -42,6 +47,9 @@ function Projects() {
     if (user.role === "admin") {
       setProjectToUpdate(project);
       setIsOpenUpdateProjectComponent(true);
+    } else {
+      setProjectToShow(project);
+      setIsOpenShowProjectComponent(true);
     }
   };
 
@@ -55,7 +63,7 @@ function Projects() {
     if (res?.ok) {
       const data = await res.json();
       setProjects(data);
-      return projects.length;
+      return data.length;
     }
   };
 
@@ -96,7 +104,7 @@ function Projects() {
             {projects.map((p) => (
               <Box p="6" key={p.address} onClick={() => handleProjectClick(p)}>
                 <Box
-                  w="15rem"
+                  w="17rem"
                   borderWidth="1px"
                   borderRadius="lg"
                   borderColor="#555"
@@ -137,64 +145,74 @@ function Projects() {
                         </Badge>
                       )}
 
-                      <Grid templateColumns="repeat(2, 1fr)">
-                        <Box
+                      <Box fontSize={"0.85rem"}>
+                        <Center>{p.requirements}</Center>
+                      </Box>
+
+                      <Grid templateColumns="repeat(3, 1fr)">
+                        <GridItem
                           color="gray.500"
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           textTransform="uppercase"
+                          colSpan={2}
                         >
                           <Text color="gray">Reputation</Text>
-                        </Box>
-                        <Box
+                        </GridItem>
+                        <GridItem
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           ml="3rem"
+                          colSpan={1}
                         >
                           {p.reputationLevel}
-                        </Box>
-                        <Box
+                        </GridItem>
+                        <GridItem
                           color="gray.500"
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           textTransform="uppercase"
                           mt="1"
+                          colSpan={2}
                         >
-                          <Text color="gray">Colateral</Text>
-                        </Box>
-                        <Box
+                          <Text color="gray">Colateral (USDC)</Text>
+                        </GridItem>
+                        <GridItem
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           ml="3rem"
                           mt="1"
+                          colSpan={1}
                         >
                           {p.colateralCost}
-                        </Box>
-                        <Box
+                        </GridItem>
+                        <GridItem
                           color="gray.500"
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           textTransform="uppercase"
                           mt="1"
+                          colSpan={2}
                         >
                           <Text color="gray">N.Contributors</Text>
-                        </Box>
-                        <Box
+                        </GridItem>
+                        <GridItem
                           fontWeight="semibold"
                           letterSpacing="wide"
                           fontSize="xs"
                           ml="3rem"
                           mt="1"
+                          colSpan={1}
                         >
                           {p.contributors.length +
                             "/" +
                             p.maxContributorsNumber}
-                        </Box>
+                        </GridItem>
                       </Grid>
                     </VStack>
                   </Box>
@@ -218,6 +236,12 @@ function Projects() {
         setIsOpen={setIsOpenUpdateProjectComponent}
         fetchProjects={fetchProjects}
         project={projectToUpdate}
+      />
+      <ShowProjectComponent
+        isOpen={isOpenShowProjectComponent}
+        setIsOpen={setIsOpenShowProjectComponent}
+        fetchProjects={fetchProjects}
+        project={projectToShow}
       />
     </>
   );

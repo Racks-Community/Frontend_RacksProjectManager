@@ -60,7 +60,7 @@ function Navbar() {
         </Box>
         <Spacer />
         <Box p="10" className="flex items-center">
-          {user.contributor && (
+          {user.role === "user" && user.contributor && (
             <Button
               onClick={handleProfileClick}
               variant="outline"
@@ -84,7 +84,7 @@ function Navbar() {
               {user.verified ? <>Profile</> : <> Completar Registro</>}
             </Button>
           )}
-          {user.address && !user.contributor && (
+          {user.role === "user" && user.address && !user.contributor && (
             <Button
               onClick={handleContributorClick}
               variant="outline"

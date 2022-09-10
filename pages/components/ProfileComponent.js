@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
+import DiscordInviteComponent from "./DiscordInviteComponent";
 import {
   Modal,
   ModalContent,
@@ -22,12 +23,15 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState({});
+  const [isOpenDiscordInviteComponent, setIsOpenDiscordInviteComponent] =
+    useState(false);
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const sendDiscordInvite = !user.verified;
     const contributorData = {};
     if (event?.target[0]?.value != profile.email)
       contributorData.email = event?.target[0]?.value;
@@ -50,10 +54,11 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
         body: JSON.stringify(contributorData),
       });
       if (res?.ok) {
+        notify("success", "Perfil de Contributor actualizada!");
+        if (sendDiscordInvite) setIsOpenDiscordInviteComponent(true);
         setTimeout(async () => {
           await fetchUser();
         }, 1000);
-        notify("success", "Perfil de Contributor actualizada!");
       } else {
         notify("error", "Error al actualizar el perfil");
       }
@@ -82,113 +87,119 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   }, [user]);
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalOverlay />
-      <ModalContent mt="12%">
-        <ModalHeader className="text-center">
-          {user.verified ? <>PERFIL</> : <> COMPLETA TU REGISTRO</>}
-        </ModalHeader>
-        <ModalCloseButton colorScheme="teal" />
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <ModalBody pb={6}>
-            <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                defaultValue={profile.email}
-                placeholder="Email"
-                focusBorderColor="white"
-                borderRadius={"none"}
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-              />
-            </FormControl>
+    <>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalOverlay />
+        <ModalContent mt="12%">
+          <ModalHeader className="text-center">
+            {user.verified ? <>PERFIL</> : <> COMPLETA TU REGISTRO</>}
+          </ModalHeader>
+          <ModalCloseButton colorScheme="teal" />
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <ModalBody pb={6}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type="email"
+                  defaultValue={profile.email}
+                  placeholder="Email"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                />
+              </FormControl>
 
-            <FormControl mt={4} isRequired>
-              <FormLabel>Github</FormLabel>
-              <Input
-                type="text"
-                defaultValue={profile.githubUsername}
-                placeholder="Usuario de Github"
-                focusBorderColor="white"
-                borderRadius={"none"}
-              />
-            </FormControl>
+              <FormControl mt={4} isRequired>
+                <FormLabel>Github</FormLabel>
+                <Input
+                  type="text"
+                  defaultValue={profile.githubUsername}
+                  placeholder="Usuario de Github"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                />
+              </FormControl>
 
-            <FormControl mt={4} isRequired>
-              <FormLabel>Discord</FormLabel>
-              <Input
-                type="text"
-                defaultValue={profile.discord}
-                placeholder="Usuario de Discord"
-                focusBorderColor="white"
-                borderRadius={"none"}
-              />
-            </FormControl>
+              <FormControl mt={4} isRequired>
+                <FormLabel>Discord</FormLabel>
+                <Input
+                  type="text"
+                  defaultValue={profile.discord}
+                  placeholder="Usuario de Discord"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                />
+              </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Twitter</FormLabel>
-              <Input
-                type="text"
-                defaultValue={profile.urlTwitter}
-                placeholder="Url Twitter"
-                focusBorderColor="white"
-                borderRadius={"none"}
-              />
-            </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Twitter</FormLabel>
+                <Input
+                  type="text"
+                  defaultValue={profile.urlTwitter}
+                  placeholder="Url Twitter"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                />
+              </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>País</FormLabel>
-              <Input
-                type="text"
-                defaultValue={profile.country}
-                placeholder="País"
-                focusBorderColor="white"
-                borderRadius={"none"}
-              />
-            </FormControl>
-          </ModalBody>
+              <FormControl mt={4}>
+                <FormLabel>País</FormLabel>
+                <Input
+                  type="text"
+                  defaultValue={profile.country}
+                  placeholder="País"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                />
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button
-              type="submit"
-              isLoading={loading}
-              loadingText="Actualizando"
-              bg="white"
-              color="black"
-              variant="solid"
-              borderRadius={"none"}
-              _hover={{
-                bg: "#dddfe2",
-              }}
-              _active={{
-                bg: "#dddfe2",
-                transform: "scale(1.05)",
-              }}
-              mr={3}
-              mt={-5}
-              mb={1}
-            >
-              Actualizar
-            </Button>
-            <Button
-              onClick={() => setIsOpen(false)}
-              colorScheme="white"
-              variant="outline"
-              borderRadius={"none"}
-              _hover={{ bg: "#dddfe236" }}
-              _active={{
-                bg: "#dddfe236",
-                transform: "scale(1.05)",
-              }}
-              mt={-5}
-              mb={1}
-            >
-              Cancelar
-            </Button>
-          </ModalFooter>
-        </form>
-      </ModalContent>
-    </Modal>
+            <ModalFooter>
+              <Button
+                type="submit"
+                isLoading={loading}
+                loadingText="Actualizando"
+                bg="white"
+                color="black"
+                variant="solid"
+                borderRadius={"none"}
+                _hover={{
+                  bg: "#dddfe2",
+                }}
+                _active={{
+                  bg: "#dddfe2",
+                  transform: "scale(1.05)",
+                }}
+                mr={3}
+                mt={-5}
+                mb={1}
+              >
+                Actualizar
+              </Button>
+              <Button
+                onClick={() => setIsOpen(false)}
+                colorScheme="white"
+                variant="outline"
+                borderRadius={"none"}
+                _hover={{ bg: "#dddfe236" }}
+                _active={{
+                  bg: "#dddfe236",
+                  transform: "scale(1.05)",
+                }}
+                mt={-5}
+                mb={1}
+              >
+                Cancelar
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+      <DiscordInviteComponent
+        isOpen={isOpenDiscordInviteComponent}
+        setIsOpen={setIsOpenDiscordInviteComponent}
+      />
+    </>
   );
 };
 
