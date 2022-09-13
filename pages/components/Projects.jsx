@@ -10,6 +10,13 @@ import {
   Badge,
   Center,
   Divider,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -28,6 +35,7 @@ function Projects() {
     useState(false);
   const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
     useState(false);
+  const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
   const [projects, setProjects] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
@@ -48,9 +56,17 @@ function Projects() {
       setProjectToUpdate(project);
       setIsOpenUpdateProjectComponent(true);
     } else {
-      setProjectToShow(project);
-      setIsOpenShowProjectComponent(true);
+      if (user.contributor && user.verified) {
+        setProjectToShow(project);
+        setIsOpenShowProjectComponent(true);
+      } else {
+        setIsOpenProjectPopover(true);
+      }
     }
+  };
+
+  const onCloseProjectPopover = () => {
+    setIsOpenProjectPopover(false);
   };
 
   const fetchProjects = async () => {
@@ -79,9 +95,23 @@ function Projects() {
         className="flex flex-col items-center projects-container"
         mt={"-1rem"}
       >
-        <Heading as="h1" mb="2rem">
-          Racks Project Manager
-        </Heading>
+        <Popover isOpen={isOpenProjectPopover} onClose={onCloseProjectPopover}>
+          <PopoverTrigger>
+            <Heading as="h1" mb="2rem">
+              Racks Project Manager
+            </Heading>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverHeader>Se un Contributor!</PopoverHeader>
+            <PopoverBody>
+              Para participar en un proyecto antes debe registrarse como
+              Contributor.
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
+
         {user.role === "admin" && (
           <Button
             onClick={handleDisplayCreateProject}
@@ -91,10 +121,6 @@ function Projects() {
             colorScheme="white"
             borderRadius={"none"}
             _hover={{ bg: "white", color: "black" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(1.05)",
-            }}
           >
             Create Project
           </Button>

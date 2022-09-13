@@ -66,9 +66,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
-      <ModalContent mt="9%">
+      <ModalContent>
         <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
@@ -148,10 +148,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               _hover={{
                 bg: "#dddfe2",
               }}
-              _active={{
-                bg: "#dddfe2",
-                transform: "scale(1.05)",
-              }}
               mr={3}
               mt={-5}
               mb={1}
@@ -164,10 +160,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
-              _active={{
-                bg: "#dddfe236",
-                transform: "scale(1.05)",
-              }}
               mt={-5}
               mb={1}
             >

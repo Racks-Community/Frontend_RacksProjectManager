@@ -74,12 +74,6 @@ function Navbar() {
                 color: "black",
                 transition: "0.5s",
               }}
-              _active={{
-                bg: "#FEFE0E",
-                color: "black",
-                transition: "0.5s",
-                transform: "scale(1.05)",
-              }}
             >
               {user.verified ? <>Profile</> : <> Completar Registro</>}
             </Button>
@@ -98,12 +92,6 @@ function Navbar() {
                 color: "black",
                 transition: "0.5s",
               }}
-              _active={{
-                bg: "#FEFE0E",
-                color: "black",
-                transition: "0.5s",
-                transform: "scale(1.05)",
-              }}
             >
               Contributor
             </Button>
@@ -118,10 +106,6 @@ function Navbar() {
               borderRadius={"none"}
               _hover={{
                 bg: "#d8d80e",
-              }}
-              _active={{
-                bg: "#d8d80e",
-                transform: "scale(1.05)",
               }}
             >
               Logout

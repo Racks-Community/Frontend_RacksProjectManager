@@ -124,10 +124,10 @@ const ShowProjectComponent = ({
   }, [project]);
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
       {userIsProjectCtr == true ? (
-        <ModalContent mt="10%">
+        <ModalContent>
           <ModalHeader className="text-center">
             DETALLES DEL PROYECTO
           </ModalHeader>
@@ -260,10 +260,6 @@ const ShowProjectComponent = ({
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
-              _active={{
-                bg: "#dddfe236",
-                transform: "scale(1.05)",
-              }}
               mt={-5}
               mb={1}
             >
@@ -275,7 +271,7 @@ const ShowProjectComponent = ({
         <ModalContent mt="15%">
           <ModalHeader className="text-center">UNIRSE AL PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="white" />
-          <ModalBody pb={6}>
+          <ModalBody pb={6} fontSize={"0.85rem"}>
             <Text>
               Para participar en este proyecto debes transferir
               {" " + project.colateralCost} USDC como fianza.
@@ -303,10 +299,6 @@ const ShowProjectComponent = ({
               _hover={{
                 bg: "#dddfe2",
               }}
-              _active={{
-                bg: "#dddfe2",
-                transform: "scale(1.05)",
-              }}
               mr={3}
               mt={-5}
               mb={1}
@@ -319,10 +311,6 @@ const ShowProjectComponent = ({
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
-              _active={{
-                bg: "#dddfe236",
-                transform: "scale(1.05)",
-              }}
               mt={-5}
               mb={1}
             >

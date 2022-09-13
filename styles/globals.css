@@ -19,6 +19,10 @@
   background: linear-gradient(90deg, #33393f 0, #2a2b2b) !important;
 }
 
+.chakra-popover__content {
+  background: linear-gradient(90deg, #2a2b2b 0, #33393f) !important;
+}
+
 /* CONNECT WALLET */
 
 .connect-wallet-container {

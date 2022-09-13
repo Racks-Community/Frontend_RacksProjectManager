@@ -37,15 +37,13 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
   };
 
   useEffect(() => {
-    if (isOpen) {
-      getDiscordInvite().then((invite) => setDiscordInvite(invite));
-    }
+    getDiscordInvite().then((invite) => setDiscordInvite(invite));
   }, [isOpen, user]);
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
-      <ModalContent mt="18%">
+      <ModalContent>
         <ModalHeader className="text-center">INVITACIÓN DE DISCORD</ModalHeader>
         <ModalCloseButton colorScheme="white" />
         <ModalBody pb={6}>
@@ -65,10 +63,6 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
             variant="outline"
             borderRadius={"none"}
             _hover={{ bg: "#dddfe236" }}
-            _active={{
-              bg: "#dddfe236",
-              transform: "scale(1.05)",
-            }}
             mt={-5}
             mb={1}
           >

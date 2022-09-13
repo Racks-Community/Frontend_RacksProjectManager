@@ -35,8 +35,8 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     event.preventDefault();
     const contributorData = {
       email: event?.target[0]?.value,
-      discord: event?.target[1]?.value,
-      githubUsername: event?.target[2]?.value,
+      githubUsername: event?.target[1]?.value,
+      discord: event?.target[2]?.value,
     };
     if (event?.target[3]?.value != "")
       contributorData.urlTwitter = event?.target[3]?.value;
@@ -64,13 +64,13 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
           let tx = await racksPM.registerContributor();
           await tx.wait();
           if (tx.hash) {
-            notify("success", "Bienvenido a Racks Labs como Contributor!");
             setTimeout(async () => {
               await fetchUser();
             }, 1000);
+            notify("success", "Bienvenido a Racks Labs como Contributor!");
             setTimeout(async () => {
               setIsOpenDiscordInviteComponent(true);
-            }, 500);
+            }, 1000);
           }
         } catch (error) {
           await fetch(API_URL + "users/contributor/" + user.address, {
@@ -92,9 +92,9 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
-        <ModalContent mt="10%">
+        <ModalContent>
           <ModalHeader className="text-center">
             REGISTRO DE CONTRIBUTOR
           </ModalHeader>
@@ -165,10 +165,6 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
                 _hover={{
                   bg: "#dddfe2",
                 }}
-                _active={{
-                  bg: "#dddfe2",
-                  transform: "scale(1.05)",
-                }}
                 mr={3}
                 mt={-5}
                 mb={1}
@@ -181,10 +177,6 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
                 variant="outline"
                 borderRadius={"none"}
                 _hover={{ bg: "#dddfe236" }}
-                _active={{
-                  bg: "#dddfe236",
-                  transform: "scale(1.05)",
-                }}
                 mt={-5}
                 mb={1}
               >

@@ -31,7 +31,7 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const sendDiscordInvite = !user.verified;
+    const sendDiscordInvite = user.verified;
     const contributorData = {};
     if (event?.target[0]?.value != profile.email)
       contributorData.email = event?.target[0]?.value;
@@ -54,10 +54,12 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
         body: JSON.stringify(contributorData),
       });
       if (res?.ok) {
-        notify("success", "Perfil de Contributor actualizada!");
-        if (sendDiscordInvite) setIsOpenDiscordInviteComponent(true);
         setTimeout(async () => {
           await fetchUser();
+        }, 1000);
+        notify("success", "Perfil de Contributor actualizada!");
+        setTimeout(async () => {
+          if (sendDiscordInvite) setIsOpenDiscordInviteComponent(true);
         }, 1000);
       } else {
         notify("error", "Error al actualizar el perfil");
@@ -88,9 +90,9 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
-        <ModalContent mt="12%">
+        <ModalContent>
           <ModalHeader className="text-center">
             {user.verified ? <>PERFIL</> : <> COMPLETA TU REGISTRO</>}
           </ModalHeader>
@@ -166,10 +168,6 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
                 _hover={{
                   bg: "#dddfe2",
                 }}
-                _active={{
-                  bg: "#dddfe2",
-                  transform: "scale(1.05)",
-                }}
                 mr={3}
                 mt={-5}
                 mb={1}
@@ -182,10 +180,6 @@ const ProfileComponent = ({ isOpen, setIsOpen, fetchUser }) => {
                 variant="outline"
                 borderRadius={"none"}
                 _hover={{ bg: "#dddfe236" }}
-                _active={{
-                  bg: "#dddfe236",
-                  transform: "scale(1.05)",
-                }}
                 mt={-5}
                 mb={1}
               >

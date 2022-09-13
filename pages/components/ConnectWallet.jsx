@@ -11,7 +11,7 @@ function ConnectWallet() {
         <Center>
           <Heading as="h1" size="4xl" mx="auto" style={{ lineHeight: "5rem" }}>
             Contribuye con los desarrollos de
-            <span style={{ color: "#FEFE0E" }}> Racks Labs</span>
+            <Text style={{ color: "#FEFE0E" }}> Racks Community</Text>
           </Heading>
         </Center>
         <Center mt="2rem">
