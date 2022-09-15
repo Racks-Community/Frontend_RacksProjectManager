@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../store/userSlice";
 import {
   Modal,
   ModalContent,
@@ -15,14 +17,12 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { setUserInfo } from "../store/userSlice";
 
 const Admin = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
-  const dispatch = useDispatch();
 
   const handleShow = () => setShow(!show);
   const handleInvalidPassword = () => setIsPasswordInvalid(false);

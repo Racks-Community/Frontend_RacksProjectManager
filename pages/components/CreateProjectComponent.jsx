@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../../store/userSlice";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -15,12 +13,12 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import toast from "../components/Toast";
+import toast from "./Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
-  const user = useSelector(selectUserInfo);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
@@ -64,6 +62,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>

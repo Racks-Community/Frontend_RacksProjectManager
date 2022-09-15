@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../store/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Layout from "./components/Layout";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -136,7 +137,9 @@ function MyApp({ Component, pageProps }) {
           modalSize="compact"
         >
           <ThemeProvider>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
             <ToastContainer
               position="top-right"
               autoClose={5000}

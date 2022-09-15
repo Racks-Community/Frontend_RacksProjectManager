@@ -36,6 +36,7 @@ function Projects() {
   const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
     useState(false);
   const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
+  const [isOpenBlockedPopover, setIsOpenBlockedPopover] = useState(false);
   const [projects, setProjects] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
@@ -56,9 +57,15 @@ function Projects() {
       setProjectToUpdate(project);
       setIsOpenUpdateProjectComponent(true);
     } else {
+      const userIsProjectContributor =
+        project.contributors.indexOf(user._id) > -1;
       if (user.contributor && user.verified) {
-        setProjectToShow(project);
-        setIsOpenShowProjectComponent(true);
+        if (project.completed && !userIsProjectContributor) {
+          setIsOpenBlockedPopover(true);
+        } else {
+          setProjectToShow(project);
+          setIsOpenShowProjectComponent(true);
+        }
       } else {
         setIsOpenProjectPopover(true);
       }
@@ -67,6 +74,10 @@ function Projects() {
 
   const onCloseProjectPopover = () => {
     setIsOpenProjectPopover(false);
+  };
+
+  const onCloseBlockedPopover = () => {
+    setIsOpenBlockedPopover(false);
   };
 
   const fetchProjects = async () => {
@@ -126,126 +137,155 @@ function Projects() {
           </Button>
         )}
         {projects.length != 0 ? (
-          <Grid templateColumns="repeat(4, 1fr)">
-            {projects.map((p) => (
-              <Box p="6" key={p.address} onClick={() => handleProjectClick(p)}>
-                <Box
-                  w="17rem"
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  borderColor="#555"
-                  overflow="hidden"
-                  style={{ cursor: "pointer" }}
-                >
-                  <Box p="6">
+          <Popover
+            isOpen={isOpenBlockedPopover}
+            onClose={onCloseBlockedPopover}
+          >
+            <PopoverTrigger>
+              <Grid templateColumns="repeat(4, 1fr)">
+                {projects.map((p) => (
+                  <Box
+                    p="6"
+                    key={p.address}
+                    onClick={() => handleProjectClick(p)}
+                  >
                     <Box
-                      mt="1"
-                      ml="1"
-                      fontWeight="semibold"
-                      as="h4"
-                      lineHeight="tight"
+                      w="17rem"
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      borderColor="#555"
+                      overflow="hidden"
+                      style={{ cursor: "pointer" }}
                     >
-                      <Center>{p.name}</Center>
-                    </Box>
-                    <Divider
-                      w={"95%"}
-                      mx={"auto"}
-                      mt="2"
-                      mb="1rem"
-                      style={{ borderColor: "#FEFE0E" }}
-                    />
-                    <VStack alignItems="baseline">
-                      {p.status === status.created && (
-                        <Badge borderRadius="full" px="2" colorScheme="green">
-                          NEW
-                        </Badge>
-                      )}
-                      {p.status === status.doing && (
-                        <Badge borderRadius="full" px="2" colorScheme="teal">
-                          IN DEVELOPMENT
-                        </Badge>
-                      )}
-                      {p.status === status.finished && (
-                        <Badge borderRadius="full" px="2" colorScheme="red">
-                          COMPLETED
-                        </Badge>
-                      )}
+                      <Box p="6">
+                        <Box
+                          mt="1"
+                          ml="1"
+                          fontWeight="semibold"
+                          as="h4"
+                          lineHeight="tight"
+                        >
+                          <Center>{p.name}</Center>
+                        </Box>
 
-                      <Box fontSize={"0.85rem"}>
-                        <Center>{p.requirements}</Center>
+                        <Divider
+                          w={"95%"}
+                          mx={"auto"}
+                          mt="2"
+                          mb="1rem"
+                          style={{ borderColor: "#FEFE0E" }}
+                        />
+
+                        <VStack alignItems="baseline">
+                          {p.status === status.created && (
+                            <Badge
+                              borderRadius="full"
+                              px="2"
+                              colorScheme="green"
+                            >
+                              NEW
+                            </Badge>
+                          )}
+                          {p.status === status.doing && (
+                            <Badge
+                              borderRadius="full"
+                              px="2"
+                              colorScheme="teal"
+                            >
+                              IN DEVELOPMENT
+                            </Badge>
+                          )}
+                          {p.status === status.finished && (
+                            <Badge borderRadius="full" px="2" colorScheme="red">
+                              COMPLETED
+                            </Badge>
+                          )}
+
+                          <Box fontSize={"0.85rem"}>
+                            <Center>{p.requirements}</Center>
+                          </Box>
+
+                          <Grid templateColumns="repeat(3, 1fr)">
+                            <GridItem
+                              color="gray.500"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                              colSpan={2}
+                            >
+                              <Text color="gray">Reputation</Text>
+                            </GridItem>
+                            <GridItem
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              ml="3rem"
+                              colSpan={1}
+                            >
+                              {p.reputationLevel}
+                            </GridItem>
+                            <GridItem
+                              color="gray.500"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                              mt="1"
+                              colSpan={2}
+                            >
+                              <Text color="gray">Colateral (USDC)</Text>
+                            </GridItem>
+                            <GridItem
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              ml="3rem"
+                              mt="1"
+                              colSpan={1}
+                            >
+                              {p.colateralCost}
+                            </GridItem>
+                            <GridItem
+                              color="gray.500"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                              mt="1"
+                              colSpan={2}
+                            >
+                              <Text color="gray">N.Contributors</Text>
+                            </GridItem>
+                            <GridItem
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              ml="3rem"
+                              mt="1"
+                              colSpan={1}
+                            >
+                              {p.contributors.length +
+                                "/" +
+                                p.maxContributorsNumber}
+                            </GridItem>
+                          </Grid>
+                        </VStack>
                       </Box>
-
-                      <Grid templateColumns="repeat(3, 1fr)">
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          colSpan={2}
-                        >
-                          <Text color="gray">Reputation</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          ml="3rem"
-                          colSpan={1}
-                        >
-                          {p.reputationLevel}
-                        </GridItem>
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          mt="1"
-                          colSpan={2}
-                        >
-                          <Text color="gray">Colateral (USDC)</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          ml="3rem"
-                          mt="1"
-                          colSpan={1}
-                        >
-                          {p.colateralCost}
-                        </GridItem>
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          mt="1"
-                          colSpan={2}
-                        >
-                          <Text color="gray">N.Contributors</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          ml="3rem"
-                          mt="1"
-                          colSpan={1}
-                        >
-                          {p.contributors.length +
-                            "/" +
-                            p.maxContributorsNumber}
-                        </GridItem>
-                      </Grid>
-                    </VStack>
+                    </Box>
                   </Box>
-                </Box>
-              </Box>
-            ))}
-          </Grid>
+                ))}
+              </Grid>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader borderColor="red">No disponible</PopoverHeader>
+              <PopoverBody>
+                El Proyecto no admite nuevos Contributors.
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
         ) : (
           <Text fontSize={"1rem"} ml="-1rem">
             No Projects

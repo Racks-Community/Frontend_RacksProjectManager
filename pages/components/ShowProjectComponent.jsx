@@ -115,7 +115,6 @@ const ShowProjectComponent = ({
     if (!project.address) return false;
     const userIsProjectContributor =
       project.contributors.indexOf(user._id) > -1;
-    console.log(userIsProjectContributor);
     return userIsProjectContributor;
   };
 
@@ -268,7 +267,7 @@ const ShowProjectComponent = ({
           </ModalFooter>
         </ModalContent>
       ) : (
-        <ModalContent mt="15%">
+        <ModalContent>
           <ModalHeader className="text-center">UNIRSE AL PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="white" />
           <ModalBody pb={6} fontSize={"0.85rem"}>

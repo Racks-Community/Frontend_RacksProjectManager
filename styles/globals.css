@@ -23,6 +23,11 @@
   background: linear-gradient(90deg, #2a2b2b 0, #33393f) !important;
 }
 
+.css-os14jl > option,
+.css-os14jl > optgroup {
+  background: #33393f !important;
+}
+
 /* CONNECT WALLET */
 
 .connect-wallet-container {
@@ -34,5 +39,5 @@
 /* PROJECTS */
 
 .projects-container {
-  min-height: 75vh;
+  min-height: 73vh;
 }

@@ -52,23 +52,39 @@ const CompleteProjectComponent = ({
     event.preventDefault();
 
     if (user.role === "admin" && participationIsValid) {
+      let contributors = [];
+      let weights = [];
+      for (const contr of participations) {
+        contributors.push(contr.address);
+        weights.push(contr.participation);
+      }
+
+      const projectData = {
+        totalReputationPointsReward: event?.target[0]?.value,
+        contributors: contributors,
+        participationWeights: weights,
+      };
+
       setLoading(true);
-      const res = await fetch(API_URL + "projects/" + project.address, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(projectData),
-      });
+      const res = await fetch(
+        API_URL + "projects/completed/" + project.address,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token"),
+          },
+          body: JSON.stringify(projectData),
+        }
+      );
 
       if (res?.ok) {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
-        notify("success", "Proyecto actualizado!");
+        notify("success", "Proyecto finalizado!");
       } else {
-        notify("error", "Error al actualizar Proyecto");
+        notify("error", "Error al finalizar Proyecto");
       }
       setIsOpen(false);
       setLoading(false);
@@ -127,7 +143,10 @@ const CompleteProjectComponent = ({
         <ModalContent>
           <ModalHeader className="text-center">FINALIZAR PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="teal" />
-          <form onSubmit={handleSubmit} autoComplete="off">
+          <form
+            onSubmit={(event) => handleSubmit(event, participations)}
+            autoComplete="off"
+          >
             <ModalBody pb={6}>
               <FormControl isRequired>
                 <FormLabel>Puntos de Reputación totales</FormLabel>
@@ -193,7 +212,7 @@ const CompleteProjectComponent = ({
               <Button
                 type="submit"
                 isLoading={loading}
-                loadingText="Finalizando"
+                loadingText="Finalizar"
                 isDisabled={!participationIsValid}
                 bg="white"
                 color="black"
