@@ -38,6 +38,7 @@
 
 /* PROJECTS */
 
-.projects-container {
-  min-height: 73vh;
+.projects-container,
+.profile-container {
+  min-height: 75vh;
 }

@@ -4,7 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 import CreateContributorComponent from "./CreateContributorComponent";
-import ProfileComponent from "./ProfileComponent";
+import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -73,20 +73,20 @@ function Navbar() {
         <Box p="6" pt="8">
           <Image
             src={`${process.env.NEXT_PUBLIC_URL}/Racks.png`}
-            onClick={() => router.replace("/")}
+            onClick={() => router.push("/")}
             style={{ cursor: "pointer" }}
             alt="Racks Labs"
             w="180px"
           />
         </Box>
         <Spacer />
-        <Box p="10" className="flex items-center">
+        <Box p="10" className="flex items-center" mt="-0.8rem">
           {user.role === "user" && user.contributor && (
             <>
               {user.verified ? (
                 <Image
                   src={selectedMRC}
-                  onClick={() => router.replace("/profile")}
+                  onClick={() => router.push("/profile")}
                   style={{ cursor: "pointer" }}
                   borderRadius="full"
                   boxSize="60px"
@@ -160,7 +160,7 @@ function Navbar() {
         setIsOpen={setIsOpenCreateContributorComponent}
         fetchUser={fetchUser}
       />
-      <ProfileComponent
+      <CompleteRegisterComponent
         isOpen={isOpenProfileComponent}
         setIsOpen={setIsOpenProfileComponent}
         fetchUser={fetchUser}

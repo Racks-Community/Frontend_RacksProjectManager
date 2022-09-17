@@ -8,6 +8,7 @@ import {
   RainbowKitProvider,
   createAuthenticationAdapter,
   RainbowKitAuthenticationProvider,
+  AvatarComponent,
   darkTheme,
 } from "@rainbow-me/rainbowkit";
 import { SiweMessage } from "siwe";
@@ -16,8 +17,8 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 import { ethers } from "ethers";
 import { wrapper } from "../store/store";
-import { useDispatch } from "react-redux";
-import { setUserInfo } from "../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserInfo, setUserInfo } from "../store/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
@@ -46,9 +47,29 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }) {
+  const user = useSelector(selectUserInfo);
   const [authenticationStatus, setAuthenticationStatus] = useState("loading");
   const [loginStatus, setLoginStatus] = useState(false);
+  const [imageURL, setImageURL] = useState("");
   const dispatch = useDispatch();
+
+  const CustomAvatar = ({ ensImage, size }) => {
+    return imageURL != "" ? (
+      <img
+        src={imageURL}
+        width={size}
+        height={size}
+        style={{ borderRadius: 999 }}
+      />
+    ) : (
+      <img
+        src={"./fallback.gif"}
+        width={size}
+        height={size}
+        style={{ borderRadius: 999 }}
+      />
+    );
+  };
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
@@ -72,6 +93,17 @@ function MyApp({ Component, pageProps }) {
       fetchAuthStatus();
     } else {
       setAuthenticationStatus("unauthenticated");
+    }
+    if (user.address) {
+      (async () => {
+        const jsonToken = await (await fetch(user.avatar)).json();
+        const imageURI = jsonToken.image;
+        const imageURIURL = imageURI.replace(
+          "ipfs://",
+          "https://ipfs.io/ipfs/"
+        );
+        setImageURL(imageURIURL);
+      })();
     }
   }, [loginStatus]);
 
@@ -128,6 +160,7 @@ function MyApp({ Component, pageProps }) {
       >
         <RainbowKitProvider
           chains={chains}
+          avatar={CustomAvatar}
           theme={darkTheme({
             accentColor: "#FEFE0E",
             overlayBlur: "small",
