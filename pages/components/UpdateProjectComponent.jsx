@@ -274,7 +274,6 @@ const UpdateProjectComponent = ({
                     <Button
                       onClick={() => handleDeleteProject()}
                       size={"sm"}
-                      loadingText="Actualizando"
                       bg="red"
                       color="white"
                       variant="solid"

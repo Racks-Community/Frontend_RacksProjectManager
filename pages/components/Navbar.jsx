@@ -23,7 +23,7 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("manualLogin");
-    dispatch(setUserInfo({}));
+    router.reload();
   };
 
   const fetchUser = async () => {
@@ -130,6 +130,24 @@ function Navbar() {
               }}
             >
               Contributor
+            </Button>
+          )}
+          {user.role === "admin" && (
+            <Button
+              onClick={() => router.push("/contributors")}
+              variant="outline"
+              mr="1rem"
+              bg="transparent"
+              borderColor={"#FEFE0E"}
+              color="white"
+              borderRadius={"none"}
+              _hover={{
+                bg: "#FEFE0E",
+                color: "black",
+                transition: "0.5s",
+              }}
+            >
+              Contributors
             </Button>
           )}
           {user.role === "admin" && localStorage.getItem("manualLogin") ? (

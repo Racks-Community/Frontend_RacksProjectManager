@@ -9,9 +9,12 @@ function ConnectWallet() {
       </Heading>
       <Container className="flex flex-col items-center justify-center connect-wallet-container">
         <Center>
-          <Heading as="h1" size="4xl" mx="auto" style={{ lineHeight: "5rem" }}>
+          <Heading as="h2" size="2xl" mx="auto" style={{ lineHeight: "5rem" }}>
             Contribuye con los desarrollos de
-            <Text style={{ color: "#FEFE0E" }}> Racks Community</Text>
+            <Text fontSize="5rem" style={{ color: "#FEFE0E" }}>
+              {" "}
+              Racks Community
+            </Text>
           </Heading>
         </Center>
         <Center mt="2rem">

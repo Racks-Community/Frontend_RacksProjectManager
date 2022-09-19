@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }) {
   const [imageURL, setImageURL] = useState("");
   const dispatch = useDispatch();
 
-  const CustomAvatar = ({ ensImage, size }) => {
+  const CustomAvatar = ({ size }) => {
     return imageURL != "" ? (
       <img
         src={imageURL}
@@ -85,7 +85,6 @@ function MyApp({ Component, pageProps }) {
         setAuthenticationStatus("authenticated");
         const data = await res.json();
         dispatch(setUserInfo(data.user));
-        setLoginStatus(true);
       }
     };
 
@@ -94,7 +93,7 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAuthenticationStatus("unauthenticated");
     }
-    if (user.address) {
+    if (user.avatar && user.role === "user") {
       (async () => {
         const jsonToken = await (await fetch(user.avatar)).json();
         const imageURI = jsonToken.image;
