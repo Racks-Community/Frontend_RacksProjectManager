@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../../store/userSlice";
 import {
   Modal,
   ModalContent,
@@ -12,13 +14,15 @@ import {
   Textarea,
   ModalFooter,
   Button,
+  Box,
 } from "@chakra-ui/react";
 import toast from "./Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
-  const [user, setUser] = useState({});
+  const user = useSelector(selectUserInfo);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
@@ -27,16 +31,21 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let nProjectsBefore = await fetchProjects();
-    const projectData = {
-      name: event?.target[0]?.value,
-      description: event?.target[1]?.value,
-      reputationLevel: event?.target[3]?.value,
-      colateralCost: event?.target[4]?.value,
-      maxContributorsNumber: event?.target[5]?.value,
-    };
-    if (event?.target[2]?.value != "") {
-      projectData.requirements = event?.target[2]?.value;
+
+    const formData = new FormData();
+    formData.append("name", event?.target[1]?.value);
+    formData.append("description", event?.target[2]?.value);
+    formData.append("reputationLevel", event?.target[4]?.value);
+    formData.append("colateralCost", event?.target[5]?.value);
+    formData.append("maxContributorsNumber", event?.target[6]?.value);
+    formData.append("owner", event?.target[1]?.value);
+    if (event?.target[0]?.value != "" && selectedFile != null) {
+      formData.append("imageURL", selectedFile);
     }
+    if (event?.target[3]?.value != "") {
+      formData.append("requirements", event?.target[2]?.value);
+    }
+    console.log(formData);
 
     if (user.role === "admin") {
       setLoading(true);
@@ -46,7 +55,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
-        body: JSON.stringify(projectData),
+        body: formData,
       });
 
       if (res?.ok) {
@@ -63,11 +72,11 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     }
   };
 
-  useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      setUser(JSON.parse(localStorage.getItem("user")));
-    }
-  }, []);
+  const changeFileHandler = (event) => {
+    setSelectedFile(event.target.files[0]);
+    const file = document.querySelector("#img-selector");
+    file.style.setProperty("--contentText", `"${event.target.files[0].name}"`);
+  };
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -77,7 +86,15 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
         <ModalCloseButton colorScheme="teal" />
         <form onSubmit={handleSubmit} autoComplete="off">
           <ModalBody pb={6}>
-            <FormControl isRequired>
+            <FormControl mt={2}>
+              <input
+                id="img-selector"
+                type="file"
+                accept="image/*"
+                onChange={changeFileHandler}
+              />
+            </FormControl>
+            <FormControl mt={-4} isRequired>
               <FormLabel>Nombre</FormLabel>
               <Input
                 type="text"
