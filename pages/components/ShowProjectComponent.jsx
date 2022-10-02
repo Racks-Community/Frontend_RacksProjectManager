@@ -25,8 +25,10 @@ import {
   Grid,
   GridItem,
   Center,
+  Link,
 } from "@chakra-ui/react";
 import toast from "./Toast";
+import { formatDate } from "../helpers/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -156,7 +158,7 @@ const ShowProjectComponent = ({
                   </Badge>
                 )}
                 {project.status === status.doing && (
-                  <Badge borderRadius="full" px="2" colorScheme="teal">
+                  <Badge borderRadius="full" px="2" colorScheme="yellow">
                     IN DEVELOPMENT
                   </Badge>
                 )}
@@ -178,9 +180,26 @@ const ShowProjectComponent = ({
                     fontSize="xs"
                     textTransform="uppercase"
                   >
-                    Requerimientos:{" "}
+                    Requerimientos:
                   </Text>
                   <Center>{project.requirements}</Center>
+                </Box>
+
+                <Box fontSize={"0.85rem"}>
+                  <Text
+                    color="gray"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                  >
+                    Github Repository:
+                  </Text>
+                  <Center>
+                    <Link href="project.githubRepository" isExternal>
+                      {project.githubRepository}
+                    </Link>
+                  </Center>
                 </Box>
 
                 <Grid templateColumns="repeat(4, 1fr)">
@@ -198,7 +217,6 @@ const ShowProjectComponent = ({
                     fontWeight="semibold"
                     letterSpacing="wide"
                     fontSize="xs"
-                    ml="3rem"
                     colSpan={1}
                   >
                     {project.reputationLevel}
@@ -218,7 +236,6 @@ const ShowProjectComponent = ({
                     fontWeight="semibold"
                     letterSpacing="wide"
                     fontSize="xs"
-                    ml="3rem"
                     mt="1"
                     colSpan={1}
                   >
@@ -239,7 +256,6 @@ const ShowProjectComponent = ({
                     fontWeight="semibold"
                     letterSpacing="wide"
                     fontSize="xs"
-                    ml="3rem"
                     mt="1"
                     colSpan={1}
                   >
@@ -247,6 +263,53 @@ const ShowProjectComponent = ({
                       "/" +
                       project.maxContributorsNumber}
                   </GridItem>
+                  {project.completed ? (
+                    <>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                        colSpan={3}
+                      >
+                        <Text color="gray">Completado el:</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        mt="1"
+                        colSpan={1}
+                      >
+                        {project.completedAt}
+                      </GridItem>
+                    </>
+                  ) : (
+                    <>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                        colSpan={3}
+                      >
+                        <Text color="gray">Creado el:</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        mt="1"
+                        colSpan={1}
+                      >
+                        {project.createdAt}
+                      </GridItem>
+                    </>
+                  )}
                 </Grid>
               </VStack>
             </Box>
@@ -259,6 +322,7 @@ const ShowProjectComponent = ({
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
+              size="sm"
               mt={-5}
               mb={1}
             >
@@ -298,6 +362,7 @@ const ShowProjectComponent = ({
               _hover={{
                 bg: "#dddfe2",
               }}
+              size="sm"
               mr={3}
               mt={-5}
               mb={1}
@@ -310,6 +375,7 @@ const ShowProjectComponent = ({
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
+              size="sm"
               mt={-5}
               mb={1}
             >

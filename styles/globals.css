@@ -5,12 +5,12 @@
 [data-theme="dark"],
 [data-theme="dark"] body {
   color: white;
-  background: linear-gradient(90deg, #0e0f13 0, #21262c);
+  background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f);
   font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
 }
 
 .bg-overlay {
-  background: linear-gradient(90deg, #0e0f13 0, #21262c);
+  background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f);
   height: 100vh;
   width: 100vw;
 }
@@ -25,22 +25,25 @@
 
 .css-os14jl > option,
 .css-os14jl > optgroup {
-  background: #33393f !important;
+  background: #2a2b2b !important;
 }
 
 /* CONNECT WALLET */
 
 .connect-wallet-container {
-  min-height: 70vh;
+  min-height: 76vh;
   min-width: 43rem;
   text-align: center;
 }
 
 /* PROJECTS */
 
-.projects-container,
+.projects-container {
+  min-height: 82.7vh;
+}
+
 .profile-container {
-  min-height: 75vh;
+  min-height: 81vh;
 }
 
 /* CREATE PROJECT COMPONENT */

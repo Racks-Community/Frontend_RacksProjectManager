@@ -34,6 +34,7 @@ import {
   FaUndo,
   FaTrashAlt,
 } from "react-icons/fa";
+import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
 import toast from "./components/Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -143,15 +144,6 @@ function Contributors() {
     setSelectedDeleteProject(val);
   };
 
-  const getMRCImageUrlFromMetadata = async (uri) => {
-    if (contributors.length != 0) {
-      const jsonToken = await (await fetch(uri)).json();
-      const imageURI = jsonToken.image;
-      const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-      return imageURIURL;
-    }
-  };
-
   const fetchContributors = async () => {
     if (user.role === "admin") {
       const res = await fetch(API_URL + "users", {
@@ -162,10 +154,7 @@ function Contributors() {
       });
       if (res?.ok) {
         const data = await res.json();
-        const contributorsData = data.docs.filter(
-          (contr) => contr.role === "user"
-        );
-        setContributors(contributorsData);
+        if (data.length > 0) setContributors(data);
       }
     }
   };
@@ -174,7 +163,7 @@ function Contributors() {
     const images = [];
     for (const contr of contributors) {
       if (contr.avatar) {
-        const imageURL = await getMRCImageUrlFromMetadata(contr.avatar);
+        const imageURL = await getMRCImageUrlFromAvatar(contr.avatar);
         images.push(imageURL);
       } else {
         images.push("#");
@@ -279,6 +268,7 @@ function Contributors() {
                               _hover={{
                                 bg: "#6d1c1c",
                               }}
+                              size="sm"
                               mr={3}
                             >
                               <FaSkullCrossbones />
@@ -320,6 +310,7 @@ function Contributors() {
                                 _hover={{
                                   bg: "#6d1c1c",
                                 }}
+                                size="sm"
                                 mr={3}
                                 mt={-5}
                                 mb={1}
@@ -346,6 +337,7 @@ function Contributors() {
                               _hover={{
                                 bg: "green",
                               }}
+                              size="sm"
                               mr={3}
                             >
                               <FaUndo />
@@ -387,6 +379,7 @@ function Contributors() {
                                 _hover={{
                                   bg: "green",
                                 }}
+                                size="sm"
                                 mr={3}
                                 mt={-5}
                                 mb={1}
@@ -414,6 +407,7 @@ function Contributors() {
                             _hover={{
                               bg: "#6d1c1c",
                             }}
+                            size="sm"
                           >
                             <FaTrashAlt />
                             <Text ml="1">Eliminar</Text>

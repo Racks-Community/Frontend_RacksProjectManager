@@ -110,6 +110,7 @@ const Admin = () => {
                 _hover={{
                   bg: "#dddfe2",
                 }}
+                size="sm"
                 mr={3}
               >
                 Login
@@ -120,6 +121,7 @@ const Admin = () => {
                 variant="outline"
                 borderRadius={"none"}
                 _hover={{ bg: "#dddfe236" }}
+                size="sm"
               >
                 Cancel
               </Button>

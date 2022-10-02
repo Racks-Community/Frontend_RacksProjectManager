@@ -7,10 +7,10 @@ function Footer() {
       <Divider
         w={"80%"}
         mx={"auto"}
-        mt="4rem"
+        mt="1.3rem"
         style={{ borderColor: "#FEFE0E" }}
       />
-      <Container py={"2rem"}>
+      <Container py={"1.5rem"}>
         <Text textAlign={"center"} fontSize={"1rem"}>
           <Link isExternal href="https://twitter.com/rackslabs">
             Racks Labs

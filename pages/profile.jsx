@@ -19,6 +19,11 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import toast from "./components/Toast";
+import {
+  getMRCImageUrlFromId,
+  getMRCImageUrlFromMetadata,
+  getMRCMetadataUrl,
+} from "./helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -40,7 +45,7 @@ function Profile() {
     event.preventDefault();
     const contributorData = {};
     if (event?.target[0]?.value != user.avatar)
-      contributorData.avatar = await getMRCUrl(event?.target[0]?.value);
+      contributorData.avatar = await getMRCMetadataUrl(event?.target[0]?.value);
     if (event?.target[1]?.value != user.email)
       contributorData.email = event?.target[1]?.value;
     if (event?.target[2]?.value != user.githubUsername)
@@ -86,40 +91,12 @@ function Profile() {
     }
   };
 
-  const getMRCUrl = async (tokenId) => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://polygon-rpc.com"
-    );
-    const MRC = new ethers.Contract(
-      "0xeF453154766505FEB9dBF0a58E6990fd6eB66969",
-      MrCryptoAbi,
-      provider
-    );
-    const uri = await MRC.tokenURI(tokenId);
-    uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return uri;
-  };
-
-  const getMRCImageUrl = async (tokenId) => {
-    const uri = await getMRCUrl(tokenId);
-    const tokenURIResponse = await (await fetch(uri)).json();
-    const imageURI = tokenURIResponse.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
-  };
-
-  const getMRCImageUrlFromMetadata = async (jsonToken) => {
-    const imageURI = jsonToken.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
-  };
-
   const handleOnChangeToken = async (event) => {
     if (event.target.value) {
       const tokenId = event.target.value;
-      const uri = await getMRCImageUrl(tokenId);
+      const uri = await getMRCImageUrlFromId(tokenId);
       setSelectedMRC(uri);
-      const metadataUri = await getMRCUrl(tokenId);
+      const metadataUri = await getMRCMetadataUrl(tokenId);
       const tokenJson = await (await fetch(metadataUri)).json();
       setprofileId(tokenJson.edition);
       setMRCBackgroundStyles(tokenJson.attributes[0].value);
@@ -146,7 +123,6 @@ function Profile() {
       ids.push(ethers.BigNumber.from(id).toNumber());
     }
     setMRCIds(ids);
-    await getMRCUrl(ids[0]);
   };
 
   const setMRCBackgroundStyles = (color) => {
@@ -188,10 +164,7 @@ function Profile() {
 
   return (
     <>
-      <Container
-        className="flex flex-col items-center profile-container"
-        mt={"-1.8rem"}
-      >
+      <Container className="flex flex-col items-center profile-container">
         <Box bg={MRCBackground} w="100vw" h="6rem">
           <Center>
             <Image
@@ -295,6 +268,7 @@ function Profile() {
                   _hover={{
                     bg: "#dddfe2",
                   }}
+                  size="sm"
                   w="9rem"
                   mt={8}
                 >

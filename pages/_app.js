@@ -22,11 +22,12 @@ import { selectUserInfo, setUserInfo } from "../store/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
+import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby],
+  [chain.goerli],
   [
     jsonRpcProvider({
       rpc: () => ({ http: process.env.NEXT_PUBLIC_RPC_URL }),
@@ -93,18 +94,16 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAuthenticationStatus("unauthenticated");
     }
-    if (user.avatar && user.role === "user") {
+  }, [loginStatus]);
+
+  useEffect(() => {
+    if (user.contributor && user.verified && user.avatar) {
       (async () => {
-        const jsonToken = await (await fetch(user.avatar)).json();
-        const imageURI = jsonToken.image;
-        const imageURIURL = imageURI.replace(
-          "ipfs://",
-          "https://ipfs.io/ipfs/"
-        );
-        setImageURL(imageURIURL);
+        const mrc = await getMRCImageUrlFromAvatar(user.avatar);
+        setImageURL(mrc);
       })();
     }
-  }, [loginStatus]);
+  }, [user]);
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {

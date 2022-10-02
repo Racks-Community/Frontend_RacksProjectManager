@@ -6,6 +6,7 @@ import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 import CreateContributorComponent from "./CreateContributorComponent";
 import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
+import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,7 +19,7 @@ function Navbar() {
     setIsOpenCreateContributorComponent,
   ] = useState(false);
   const [isOpenProfileComponent, setIsOpenProfileComponent] = useState(false);
-  const [selectedMRC, setSelectedMRC] = useState("#");
+  const [selectedMRC, setSelectedMRC] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,17 +52,10 @@ function Navbar() {
     }
   };
 
-  const getMRCImageUrl = async (uri) => {
-    const tokenURIResponse = await (await fetch(uri)).json();
-    const imageURI = tokenURIResponse.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
-  };
-
   useEffect(() => {
     if (user.contributor && user.verified && user.avatar) {
       (async () => {
-        const mrc = await getMRCImageUrl(user.avatar);
+        const mrc = await getMRCImageUrlFromAvatar(user.avatar);
         setSelectedMRC(mrc);
       })();
     }
@@ -70,7 +64,7 @@ function Navbar() {
   return (
     <>
       <Flex>
-        <Box p="6" pt="8">
+        <Box p="4" pt="4">
           <Image
             src={`${process.env.NEXT_PUBLIC_URL}/Racks.png`}
             onClick={() => router.push("/")}
@@ -80,20 +74,33 @@ function Navbar() {
           />
         </Box>
         <Spacer />
-        <Box p="10" className="flex items-center" mt="-0.8rem">
+        <Box pr="8" className="flex items-center">
           {user.role === "user" && user.contributor && (
             <>
               {user.verified ? (
-                <Image
-                  src={selectedMRC}
-                  onClick={() => router.push("/profile")}
-                  style={{ cursor: "pointer" }}
-                  borderRadius="full"
-                  boxSize="60px"
-                  mr="5"
-                  fallbackSrc={"./fallback.gif"}
-                  alt="PFP"
-                />
+                <>
+                  {user.avatar && selectedMRC ? (
+                    <Image
+                      src={selectedMRC}
+                      onClick={() => router.push("/profile")}
+                      style={{ cursor: "pointer" }}
+                      borderRadius="full"
+                      boxSize="60px"
+                      mr="5"
+                      alt="PFP"
+                    />
+                  ) : (
+                    <Image
+                      src={"./fallback.gif"}
+                      onClick={() => router.push("/profile")}
+                      style={{ cursor: "pointer" }}
+                      borderRadius="full"
+                      boxSize="60px"
+                      mr="5"
+                      alt="PFP"
+                    />
+                  )}
+                </>
               ) : (
                 <Button
                   onClick={handleProfileClick}
@@ -154,7 +161,6 @@ function Navbar() {
             <Button
               onClick={handleLogout}
               variant="solid"
-              mr="1rem"
               bg="#FEFE0E"
               color="black"
               borderRadius={"none"}
@@ -167,6 +173,7 @@ function Navbar() {
           ) : (
             <ConnectButton
               accountStatus="address"
+              chainStatus="icon"
               showBalance={false}
               variant="outline"
             />

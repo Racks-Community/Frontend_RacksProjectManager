@@ -7,6 +7,8 @@ import {
   Grid,
   GridItem,
   VStack,
+  Flex,
+  Spacer,
   Badge,
   Center,
   Divider,
@@ -17,6 +19,8 @@ import {
   PopoverCloseButton,
   PopoverHeader,
   PopoverBody,
+  Image,
+  HStack,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -24,6 +28,9 @@ import { selectUserInfo } from "../../store/userSlice";
 import CreateProjectComponent from "./CreateProjectComponent";
 import UpdateProjectComponent from "./UpdateProjectComponent";
 import ShowProjectComponent from "./ShowProjectComponent";
+import ShowContributorComponent from "./ShowContributorComponent";
+import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
+import { formatDate } from "../helpers/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -35,11 +42,15 @@ function Projects() {
     useState(false);
   const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
     useState(false);
+  const [isOpenShowContributorComponent, setIsOpenShowContributorComponent] =
+    useState(false);
   const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
   const [isOpenBlockedPopover, setIsOpenBlockedPopover] = useState(false);
   const [projects, setProjects] = useState([]);
+  const [contrImages, setContrImages] = useState(null);
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
+  const [contributorToShow, setContributorToShow] = useState({});
   const status = {
     created: "CREATED",
     doing: "DOING",
@@ -52,7 +63,25 @@ function Projects() {
     }
   };
 
-  const handleProjectClick = (project) => {
+  const handleShowContributorOpen = async (event, id) => {
+    if (id && event.target.alt === "PFP") {
+      const res = await fetch(API_URL + "users/id/" + id, {
+        method: "get",
+        headers: new Headers({
+          Authorization: localStorage.getItem("token"),
+        }),
+      });
+      if (res?.ok) {
+        const data = await res.json();
+        data.createdAt = formatDate(data.createdAt);
+        setContributorToShow(data);
+        setIsOpenShowContributorComponent(true);
+      }
+    }
+  };
+
+  const handleProjectClick = (event, project) => {
+    if (event.target.alt === "PFP") return;
     if (user.role === "admin") {
       setProjectToUpdate(project);
       setIsOpenUpdateProjectComponent(true);
@@ -80,6 +109,22 @@ function Projects() {
     setIsOpenBlockedPopover(false);
   };
 
+  const getMRCImageUrlFromContributor = async (id) => {
+    if (id) {
+      const res = await fetch(API_URL + "users/id/" + id, {
+        method: "get",
+        headers: new Headers({
+          Authorization: localStorage.getItem("token"),
+        }),
+      });
+      if (res?.ok) {
+        const data = await res.json();
+        const mrc = await getMRCImageUrlFromAvatar(data.avatar);
+        return mrc;
+      }
+    }
+  };
+
   const fetchProjects = async () => {
     const res = await fetch(API_URL + "projects", {
       method: "GET",
@@ -89,7 +134,24 @@ function Projects() {
     });
     if (res?.ok) {
       const data = await res.json();
+
+      const imgsMap = new Map();
+      for (const project of data) {
+        project.createdAt = formatDate(project.createdAt);
+        if (project.completed) {
+          project.completedAt = formatDate(project.completedAt);
+        }
+        for (const contr of project.contributors) {
+          if (!imgsMap.get(project.address))
+            imgsMap.set(project.address, new Map());
+          imgsMap
+            .get(project.address)
+            .set(contr, await getMRCImageUrlFromContributor(contr));
+        }
+      }
       setProjects(data);
+      setContrImages(imgsMap);
+
       return data.length;
     }
   };
@@ -126,7 +188,7 @@ function Projects() {
         {user.role === "admin" && (
           <Button
             onClick={handleDisplayCreateProject}
-            mb="3rem"
+            mb="1rem"
             mr="1rem"
             variant="outline"
             colorScheme="white"
@@ -142,12 +204,14 @@ function Projects() {
             onClose={onCloseBlockedPopover}
           >
             <PopoverTrigger>
-              <Grid templateColumns="repeat(4, 1fr)">
+              <Grid templateColumns="repeat(4, 1fr)" pb="5">
                 {projects.map((p) => (
                   <Box
                     p="6"
+                    pt="3"
+                    pb="2"
                     key={p.address}
-                    onClick={() => handleProjectClick(p)}
+                    onClick={(event) => handleProjectClick(event, p)}
                   >
                     <Box
                       w="17rem"
@@ -157,9 +221,20 @@ function Projects() {
                       overflow="hidden"
                       style={{ cursor: "pointer" }}
                     >
-                      <Box p="6">
+                      <Box p="6" pb="3">
+                        <Box>
+                          <Center>
+                            <Image
+                              w="150px"
+                              h="70px"
+                              objectFit="contain"
+                              src={p.imageURL}
+                              alt="Project img"
+                            />
+                          </Center>
+                        </Box>
                         <Box
-                          mt="1"
+                          mt="3"
                           ml="1"
                           fontWeight="semibold"
                           as="h4"
@@ -171,36 +246,107 @@ function Projects() {
                         <Divider
                           w={"95%"}
                           mx={"auto"}
-                          mt="2"
-                          mb="1rem"
                           style={{ borderColor: "#FEFE0E" }}
                         />
-
+                        <Flex mt="6px" mb="3px" pr="1">
+                          <Center>
+                            <Box>
+                              {p.status === status.created && (
+                                <Badge
+                                  borderRadius="full"
+                                  px="2"
+                                  colorScheme="green"
+                                >
+                                  NEW
+                                </Badge>
+                              )}
+                              {p.status === status.doing && (
+                                <Badge
+                                  borderRadius="full"
+                                  px="2"
+                                  colorScheme="yellow"
+                                >
+                                  DEV
+                                </Badge>
+                              )}
+                              {p.status === status.finished && (
+                                <Badge borderRadius="full" colorScheme="red">
+                                  COMPLETED
+                                </Badge>
+                              )}
+                            </Box>
+                          </Center>
+                          <Spacer />
+                          <Center>
+                            <HStack>
+                              {p.contributors.map((contr) => (
+                                <>
+                                  <Box key={contr}>
+                                    {contrImages ? (
+                                      <>
+                                        <Image
+                                          src={contrImages
+                                            .get(p.address)
+                                            .get(contr)}
+                                          onClick={(event) =>
+                                            handleShowContributorOpen(
+                                              event,
+                                              contr
+                                            )
+                                          }
+                                          style={{ cursor: "pointer" }}
+                                          borderRadius="full"
+                                          boxSize="30px"
+                                          alt="PFP"
+                                        />
+                                      </>
+                                    ) : (
+                                      <Image
+                                        src={"./fallback.gif"}
+                                        onClick={() => router.push("/profile")}
+                                        style={{ cursor: "pointer" }}
+                                        borderRadius="full"
+                                        boxSize="50px"
+                                        alt="PFP"
+                                      />
+                                    )}
+                                  </Box>
+                                  <Box key={contr}>
+                                    {contrImages ? (
+                                      <>
+                                        <Image
+                                          src={contrImages
+                                            .get(p.address)
+                                            .get(contr)}
+                                          onClick={(event) =>
+                                            handleShowContributorOpen(
+                                              event,
+                                              contr
+                                            )
+                                          }
+                                          style={{ cursor: "pointer" }}
+                                          borderRadius="full"
+                                          boxSize="30px"
+                                          alt="PFP"
+                                        />
+                                      </>
+                                    ) : (
+                                      <Image
+                                        src={"./fallback.gif"}
+                                        onClick={() => router.push("/profile")}
+                                        style={{ cursor: "pointer" }}
+                                        borderRadius="full"
+                                        boxSize="50px"
+                                        alt="PFP"
+                                      />
+                                    )}
+                                  </Box>
+                                </>
+                              ))}
+                            </HStack>
+                          </Center>
+                        </Flex>
                         <VStack alignItems="baseline">
-                          {p.status === status.created && (
-                            <Badge
-                              borderRadius="full"
-                              px="2"
-                              colorScheme="green"
-                            >
-                              NEW
-                            </Badge>
-                          )}
-                          {p.status === status.doing && (
-                            <Badge
-                              borderRadius="full"
-                              px="2"
-                              colorScheme="teal"
-                            >
-                              IN DEVELOPMENT
-                            </Badge>
-                          )}
-                          {p.status === status.finished && (
-                            <Badge borderRadius="full" px="2" colorScheme="red">
-                              COMPLETED
-                            </Badge>
-                          )}
-
                           <Box fontSize={"0.85rem"}>
                             <Center>{p.requirements}</Center>
                           </Box>
@@ -308,6 +454,11 @@ function Projects() {
         setIsOpen={setIsOpenShowProjectComponent}
         fetchProjects={fetchProjects}
         project={projectToShow}
+      />
+      <ShowContributorComponent
+        isOpen={isOpenShowContributorComponent}
+        setIsOpen={setIsOpenShowContributorComponent}
+        contributor={contributorToShow}
       />
     </>
   );

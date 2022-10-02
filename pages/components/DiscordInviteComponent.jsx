@@ -63,6 +63,7 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
             variant="outline"
             borderRadius={"none"}
             _hover={{ bg: "#dddfe236" }}
+            size="sm"
             mt={-5}
             mb={1}
           >

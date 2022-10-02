@@ -221,6 +221,7 @@ const CompleteProjectComponent = ({
                 _hover={{
                   bg: "#dddfe2",
                 }}
+                size="sm"
                 mr={3}
                 mt={-5}
                 mb={1}
@@ -233,6 +234,7 @@ const CompleteProjectComponent = ({
                 variant="outline"
                 borderRadius={"none"}
                 _hover={{ bg: "#dddfe236" }}
+                size="sm"
                 mt={-5}
                 mb={1}
               >

@@ -38,21 +38,19 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     formData.append("reputationLevel", event?.target[4]?.value);
     formData.append("colateralCost", event?.target[5]?.value);
     formData.append("maxContributorsNumber", event?.target[6]?.value);
-    formData.append("owner", event?.target[1]?.value);
+    formData.append("owner", user._id);
     if (event?.target[0]?.value != "" && selectedFile != null) {
       formData.append("imageURL", selectedFile);
     }
     if (event?.target[3]?.value != "") {
-      formData.append("requirements", event?.target[2]?.value);
+      formData.append("requirements", event?.target[3]?.value);
     }
-    console.log(formData);
 
     if (user.role === "admin") {
       setLoading(true);
       const res = await fetch(API_URL + "projects", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
         body: formData,
@@ -81,33 +79,40 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   return (
     <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxH={"92vh"} style={{ overflow: "hidden" }}>
         <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
-        <ModalCloseButton colorScheme="teal" />
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <ModalBody pb={6}>
-            <FormControl mt={2}>
+        <ModalCloseButton />
+        <form
+          onSubmit={handleSubmit}
+          autoComplete="off"
+          encType="multipart/form-data"
+        >
+          <ModalBody pb={5}>
+            <FormControl>
               <input
                 id="img-selector"
+                name="imageURL"
                 type="file"
                 accept="image/*"
                 onChange={changeFileHandler}
               />
             </FormControl>
-            <FormControl mt={-4} isRequired>
+            <FormControl mt={-5} isRequired>
               <FormLabel>Nombre</FormLabel>
               <Input
                 type="text"
+                name="name"
                 placeholder="Nombre"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={3} isRequired>
               <FormLabel>Descripción</FormLabel>
               <Textarea
                 type="text"
+                name="description"
                 placeholder="Descripción"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -115,41 +120,44 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={3} isRequired>
               <FormLabel>Requerimientos</FormLabel>
-              <Textarea
+              <Input
                 type="text"
+                name="requirements"
                 placeholder="Requerimientos"
                 focusBorderColor="white"
                 borderRadius={"none"}
-                resize={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={3} isRequired>
               <FormLabel>Nivel de Reputación</FormLabel>
               <Input
                 type="number"
+                name="reputationLevel"
                 placeholder="Reputación"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={3} isRequired>
               <FormLabel>Colateral</FormLabel>
               <Input
                 type="number"
+                name="colateralCost"
                 placeholder="Colateral"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={3} isRequired>
               <FormLabel>Número máximo de Contribuidores</FormLabel>
               <Input
                 type="number"
+                name="maxContributorsNumber"
                 placeholder="Número de Contribuidores"
                 focusBorderColor="white"
                 borderRadius={"none"}
@@ -169,9 +177,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               _hover={{
                 bg: "#dddfe2",
               }}
+              size="sm"
               mr={3}
-              mt={-5}
-              mb={1}
+              mt={-4}
             >
               Crear
             </Button>
@@ -181,8 +189,8 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
-              mt={-5}
-              mb={1}
+              size="sm"
+              mt={-4}
             >
               Cancelar
             </Button>
