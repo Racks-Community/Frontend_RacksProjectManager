@@ -41,6 +41,7 @@ const UpdateProjectComponent = ({
   const [isOpenCompleteProjectComponent, setIsOpenCompleteProjectComponent] =
     useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
@@ -76,29 +77,31 @@ const UpdateProjectComponent = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const projectData = {};
-    if (project.name !== event?.target[0]?.value)
-      projectData.name = event?.target[0]?.value;
-    if (project.description !== event?.target[1]?.value)
-      projectData.description = event?.target[1]?.value;
-    if (project.requirements !== event?.target[2]?.value)
-      projectData.requirements = event?.target[2]?.value;
-    if (project.reputationLevel !== Number(event?.target[3]?.value))
-      projectData.reputationLevel = Number(event?.target[3]?.value);
-    if (project.colateralCost !== Number(event?.target[4]?.value))
-      projectData.colateralCost = Number(event?.target[4]?.value);
-    if (project.maxContributorsNumber !== Number(event?.target[5]?.value))
-      projectData.maxContributorsNumber = Number(event?.target[5]?.value);
+    const formData = new FormData();
+
+    if (event?.target[0]?.value != "" && selectedFile != null)
+      formData.append("imageURL", selectedFile);
+    if (project.name !== event?.target[1]?.value)
+      formData.append("name", event?.target[1]?.value);
+    if (project.description !== event?.target[2]?.value)
+      formData.append("description", event?.target[2]?.value);
+    if (project.requirements !== event?.target[3]?.value)
+      formData.append("requirements", event?.target[3]?.value);
+    if (project.reputationLevel !== Number(event?.target[4]?.value))
+      formData.append("reputationLevel", Number(event?.target[4]?.value));
+    if (project.colateralCost !== Number(event?.target[5]?.value))
+      formData.append("colateralCost", Number(event?.target[5]?.value));
+    if (project.maxContributorsNumber !== Number(event?.target[6]?.value))
+      formData.append("maxContributorsNumber", Number(event?.target[6]?.value));
 
     if (user.role === "admin") {
       setLoading(true);
       const res = await fetch(API_URL + "projects/" + project.address, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
-        body: JSON.stringify(projectData),
+        body: formData,
       });
 
       if (res?.ok) {
@@ -114,6 +117,12 @@ const UpdateProjectComponent = ({
     }
   };
 
+  const changeFileHandler = (event) => {
+    setSelectedFile(event.target.files[0]);
+    const file = document.querySelector("#img-selector");
+    file.style.setProperty("--contentText", `"${event.target.files[0].name}"`);
+  };
+
   return (
     <>
       <Modal
@@ -127,8 +136,17 @@ const UpdateProjectComponent = ({
           <ModalHeader className="text-center">GESTIONAR PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="teal" />
           <form onSubmit={handleSubmit} autoComplete="off">
-            <ModalBody pb={6}>
-              <FormControl isRequired>
+            <ModalBody pb={5}>
+              <FormControl>
+                <input
+                  id="img-selector"
+                  name="imageURL"
+                  type="file"
+                  accept="image/*"
+                  onChange={changeFileHandler}
+                />
+              </FormControl>
+              <FormControl mt={-5} isRequired>
                 <FormLabel>Nombre</FormLabel>
                 <Input
                   type="text"
@@ -139,7 +157,7 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Descripción</FormLabel>
                 <Textarea
                   type="text"
@@ -151,7 +169,7 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Requerimientos</FormLabel>
                 <Textarea
                   type="text"
@@ -163,7 +181,7 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Nivel de Reputación</FormLabel>
                 <Input
                   type="number"
@@ -174,7 +192,7 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Colateral</FormLabel>
                 <Input
                   type="number"
@@ -185,7 +203,7 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={3} isRequired>
                 <FormLabel>Número máximo de Contribuidores</FormLabel>
                 <Input
                   type="number"

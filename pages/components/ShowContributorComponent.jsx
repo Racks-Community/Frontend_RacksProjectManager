@@ -111,7 +111,7 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
                       {contributor.githubUsername}
                     </Link>
                   </GridItem>
-                  {contributor.urlTwitter != "" && (
+                  {contributor.urlTwitter && contributor.urlTwitter != "" && (
                     <>
                       <GridItem
                         color="gray.500"

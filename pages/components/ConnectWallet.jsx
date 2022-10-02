@@ -7,7 +7,11 @@ function ConnectWallet() {
       <Heading as="h1" textAlign={"center"}>
         Racks Project Manager
       </Heading>
-      <Container className="flex flex-col items-center justify-center connect-wallet-container">
+      <Container
+        className="flex flex-col items-center justify-center connect-wallet-container"
+        mt="-1rem"
+        mb="2.7rem"
+      >
         <Center>
           <Heading
             as="h2"

@@ -191,7 +191,8 @@ function Contributors() {
     <>
       <Container
         className="flex flex-col items-center profile-container"
-        mt={"-1.8rem"}
+        mt="-1.8rem"
+        mb="3.2rem"
         maxW="95%"
       >
         <Center>

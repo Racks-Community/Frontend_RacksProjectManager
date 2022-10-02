@@ -57,6 +57,10 @@ function Projects() {
     finished: "FINISHED",
   };
 
+  const compareContributors = (contr1, contr2) => {
+    return contr1.reputationLevel - contr2.reputationLevel;
+  };
+
   const handleDisplayCreateProject = () => {
     if (user.role === "admin") {
       setIsOpenCreateProjectComponent(true);
@@ -141,6 +145,9 @@ function Projects() {
         if (project.completed) {
           project.completedAt = formatDate(project.completedAt);
         }
+        if (project.contributors.length > 4)
+          project.contributors = project.contributors.slice(0, 4);
+
         for (const contr of project.contributors) {
           if (!imgsMap.get(project.address))
             imgsMap.set(project.address, new Map());
@@ -166,7 +173,8 @@ function Projects() {
     <>
       <Container
         className="flex flex-col items-center projects-container"
-        mt={"-1rem"}
+        mt="-1rem"
+        mb={user.role === "admin" ? "-1.2rem" : "0"}
       >
         <Popover isOpen={isOpenProjectPopover} onClose={onCloseProjectPopover}>
           <PopoverTrigger>
@@ -280,68 +288,36 @@ function Projects() {
                           <Center>
                             <HStack>
                               {p.contributors.map((contr) => (
-                                <>
-                                  <Box key={contr}>
-                                    {contrImages ? (
-                                      <>
-                                        <Image
-                                          src={contrImages
-                                            .get(p.address)
-                                            .get(contr)}
-                                          onClick={(event) =>
-                                            handleShowContributorOpen(
-                                              event,
-                                              contr
-                                            )
-                                          }
-                                          style={{ cursor: "pointer" }}
-                                          borderRadius="full"
-                                          boxSize="30px"
-                                          alt="PFP"
-                                        />
-                                      </>
-                                    ) : (
+                                <Box key={contr}>
+                                  {contrImages ? (
+                                    <>
                                       <Image
-                                        src={"./fallback.gif"}
-                                        onClick={() => router.push("/profile")}
+                                        src={contrImages
+                                          .get(p.address)
+                                          .get(contr)}
+                                        onClick={(event) =>
+                                          handleShowContributorOpen(
+                                            event,
+                                            contr
+                                          )
+                                        }
                                         style={{ cursor: "pointer" }}
                                         borderRadius="full"
-                                        boxSize="50px"
+                                        boxSize="30px"
                                         alt="PFP"
                                       />
-                                    )}
-                                  </Box>
-                                  <Box key={contr}>
-                                    {contrImages ? (
-                                      <>
-                                        <Image
-                                          src={contrImages
-                                            .get(p.address)
-                                            .get(contr)}
-                                          onClick={(event) =>
-                                            handleShowContributorOpen(
-                                              event,
-                                              contr
-                                            )
-                                          }
-                                          style={{ cursor: "pointer" }}
-                                          borderRadius="full"
-                                          boxSize="30px"
-                                          alt="PFP"
-                                        />
-                                      </>
-                                    ) : (
-                                      <Image
-                                        src={"./fallback.gif"}
-                                        onClick={() => router.push("/profile")}
-                                        style={{ cursor: "pointer" }}
-                                        borderRadius="full"
-                                        boxSize="50px"
-                                        alt="PFP"
-                                      />
-                                    )}
-                                  </Box>
-                                </>
+                                    </>
+                                  ) : (
+                                    <Image
+                                      src={"./fallback.gif"}
+                                      onClick={() => router.push("/profile")}
+                                      style={{ cursor: "pointer" }}
+                                      borderRadius="full"
+                                      boxSize="50px"
+                                      alt="PFP"
+                                    />
+                                  )}
+                                </Box>
                               ))}
                             </HStack>
                           </Center>
@@ -415,6 +391,53 @@ function Projects() {
                                 "/" +
                                 p.maxContributorsNumber}
                             </GridItem>
+                            {p.completed ? (
+                              <>
+                                <GridItem
+                                  color="gray.500"
+                                  fontWeight="semibold"
+                                  letterSpacing="wide"
+                                  fontSize="xs"
+                                  textTransform="uppercase"
+                                  mt="1"
+                                  colSpan={2}
+                                >
+                                  <Text color="gray">Completado el:</Text>
+                                </GridItem>
+                                <GridItem
+                                  fontWeight="semibold"
+                                  letterSpacing="wide"
+                                  fontSize="xs"
+                                  mt="1"
+                                  colSpan={1}
+                                >
+                                  {p.completedAt}
+                                </GridItem>
+                              </>
+                            ) : (
+                              <>
+                                <GridItem
+                                  color="gray.500"
+                                  fontWeight="semibold"
+                                  letterSpacing="wide"
+                                  fontSize="xs"
+                                  textTransform="uppercase"
+                                  mt="1"
+                                  colSpan={2}
+                                >
+                                  <Text color="gray">Creado el:</Text>
+                                </GridItem>
+                                <GridItem
+                                  fontWeight="semibold"
+                                  letterSpacing="wide"
+                                  fontSize="xs"
+                                  mt="1"
+                                  colSpan={1}
+                                >
+                                  {p.createdAt}
+                                </GridItem>
+                              </>
+                            )}
                           </Grid>
                         </VStack>
                       </Box>

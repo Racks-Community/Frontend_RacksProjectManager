@@ -6,7 +6,7 @@ import { contractAddresses, MrCryptoAbi } from "../web3Constants";
 import { ethers } from "ethers";
 import {
   Container,
-  Heading,
+  Text,
   Box,
   Button,
   FormControl,
@@ -17,6 +17,7 @@ import {
   Select,
   Grid,
   GridItem,
+  VStack,
 } from "@chakra-ui/react";
 import toast from "./components/Toast";
 import {
@@ -24,6 +25,7 @@ import {
   getMRCImageUrlFromMetadata,
   getMRCMetadataUrl,
 } from "./helpers/MRCImages";
+import { formatDate } from "./helpers/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -35,8 +37,10 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [selectedMRC, setSelectedMRC] = useState("#");
   const [profileId, setprofileId] = useState(-1);
+  const [contrCreatedAt, setContrCreatedAt] = useState(null);
   const [MRCBackground, setMRCBackground] = useState("");
   const [MRCIds, setMRCIds] = useState([]);
+  const [MRCToken, setMRCToken] = useState(null);
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
   }, []);
@@ -100,6 +104,7 @@ function Profile() {
       const tokenJson = await (await fetch(metadataUri)).json();
       setprofileId(tokenJson.edition);
       setMRCBackgroundStyles(tokenJson.attributes[0].value);
+      setMRCToken(tokenJson);
     } else {
       setSelectedMRC("#");
     }
@@ -145,6 +150,23 @@ function Profile() {
     }
   };
 
+  const getTextColorOnBackground = () => {
+    if (MRCToken) {
+      const color = MRCToken.attributes[0].value;
+      if (
+        color === "Brown" ||
+        color === "Gray" ||
+        color === "Blue" ||
+        color === "Mint" ||
+        color === "Fuchsia"
+      ) {
+        return "#fff";
+      } else if (color === "Pink" || color === "Yellow" || color === "Orange") {
+        return "#000";
+      }
+    }
+  };
+
   useEffect(() => {
     if (user.contributor && profileId == -1) {
       (async () => {
@@ -152,6 +174,8 @@ function Profile() {
         setSelectedMRC(await getMRCImageUrlFromMetadata(tokenJson));
         setprofileId(tokenJson.edition);
         setMRCBackgroundStyles(tokenJson.attributes[0].value);
+        setMRCToken(tokenJson);
+        setContrCreatedAt(formatDate(user.createdAt));
       })();
     }
     if (user.role === "user" && MRCIds.length == 0) {
@@ -166,6 +190,24 @@ function Profile() {
     <>
       <Container className="flex flex-col items-center profile-container">
         <Box bg={MRCBackground} w="100vw" h="6rem">
+          <VStack
+            className="profile-reputation-text"
+            color={getTextColorOnBackground}
+          >
+            <Text>
+              {"Reputation Level " + user.reputationLevel} <br />
+              {user.reputationPoints + " Reputation Points"}
+            </Text>
+          </VStack>
+          <VStack
+            className="profile-projects-text"
+            color={getTextColorOnBackground}
+          >
+            <Text>
+              {"Total Projects: " + user.totalProjects} <br />
+              {"Joined at: " + contrCreatedAt}
+            </Text>
+          </VStack>
           <Center>
             <Image
               borderRadius="full"
@@ -178,7 +220,7 @@ function Profile() {
           </Center>
         </Box>
         <form onSubmit={handleSubmit} autoComplete="off">
-          <Grid templateColumns="repeat(2, 1fr)" w="30vw" mt="3.2rem">
+          <Grid templateColumns="repeat(2, 1fr)" w="30vw" mt="2.5rem">
             <GridItem colSpan={2}>
               <Center>
                 <Select
@@ -198,7 +240,7 @@ function Profile() {
                 </Select>
               </Center>
             </GridItem>
-            <GridItem colSpan={2}>
+            <GridItem colSpan={2} mt="-5">
               <FormControl isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -212,7 +254,7 @@ function Profile() {
               </FormControl>
             </GridItem>
 
-            <FormControl isRequired pr="3" pt="6  ">
+            <FormControl isRequired pr="3" pt="1.5">
               <FormLabel>Github</FormLabel>
               <Input
                 type="text"
@@ -223,7 +265,7 @@ function Profile() {
               />
             </FormControl>
 
-            <FormControl isRequired pl="3" pt="6">
+            <FormControl isRequired pl="3" pt="1.5">
               <FormLabel>Discord</FormLabel>
               <Input
                 type="text"
@@ -234,7 +276,7 @@ function Profile() {
               />
             </FormControl>
 
-            <FormControl pr="3" pt="6">
+            <FormControl pr="3" pt="1.5">
               <FormLabel>Twitter</FormLabel>
               <Input
                 type="text"
@@ -245,7 +287,7 @@ function Profile() {
               />
             </FormControl>
 
-            <FormControl pl="3" pt="6">
+            <FormControl pl="3" pt="1.5">
               <FormLabel>País</FormLabel>
               <Input
                 type="text"
@@ -269,8 +311,8 @@ function Profile() {
                     bg: "#dddfe2",
                   }}
                   size="sm"
-                  w="9rem"
-                  mt={8}
+                  w="8rem"
+                  mt={4}
                 >
                   Actualizar
                 </Button>
