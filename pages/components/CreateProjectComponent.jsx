@@ -46,28 +46,26 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       formData.append("requirements", event?.target[3]?.value);
     }
 
-    if (user.role === "admin") {
-      setLoading(true);
-      const res = await fetch(API_URL + "projects", {
-        method: "POST",
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-        body: formData,
-      });
+    setLoading(true);
+    const res = await fetch(API_URL + "projects", {
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+      body: formData,
+    });
 
-      if (res?.ok) {
-        const fetchProjectsInterval = setInterval(async () => {
-          let nProjects = await fetchProjects();
-          if (nProjects > nProjectsBefore) clearInterval(fetchProjectsInterval);
-        }, 1000);
-        notify("success", "Proyecto creado!");
-      } else {
-        notify("error", "Error al crear Proyecto");
-      }
-      setIsOpen(false);
-      setLoading(false);
+    if (res?.ok) {
+      const fetchProjectsInterval = setInterval(async () => {
+        let nProjects = await fetchProjects();
+        if (nProjects > nProjectsBefore) clearInterval(fetchProjectsInterval);
+      }, 1000);
+      notify("success", "Proyecto creado!");
+    } else {
+      notify("error", "Error al crear Proyecto");
     }
+    setIsOpen(false);
+    setLoading(false);
   };
 
   const changeFileHandler = (event) => {

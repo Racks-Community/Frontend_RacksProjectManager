@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
@@ -53,7 +53,7 @@ const UpdateProjectComponent = ({
 
   const handleDeleteProject = async () => {
     setIsOpenDeleteProjectPopover(false);
-    if (user.role === "admin") {
+    if (user.role === "admin" || project.owner === user._id) {
       setDeleteLoading(true);
       const res = await fetch(API_URL + "projects/" + project.address, {
         method: "DELETE",
@@ -94,7 +94,7 @@ const UpdateProjectComponent = ({
     if (project.maxContributorsNumber !== Number(event?.target[6]?.value))
       formData.append("maxContributorsNumber", Number(event?.target[6]?.value));
 
-    if (user.role === "admin") {
+    if (user.role === "admin" || project.owner === user._id) {
       setLoading(true);
       const res = await fetch(API_URL + "projects/" + project.address, {
         method: "PATCH",
@@ -261,6 +261,7 @@ const UpdateProjectComponent = ({
                     _hover={{
                       bg: "#e01d1d",
                     }}
+                    isDisabled={project.status === "DOING"}
                     mr={3}
                     mt={-5}
                     mb={1}
@@ -319,6 +320,7 @@ const UpdateProjectComponent = ({
                 _hover={{
                   bg: "#dddfe2",
                 }}
+                isDisabled={project.status === "DOING"}
                 mr={3}
                 mt={-5}
                 mb={1}

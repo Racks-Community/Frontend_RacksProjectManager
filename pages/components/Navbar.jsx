@@ -7,6 +7,7 @@ import CreateContributorComponent from "./CreateContributorComponent";
 import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
 import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
+import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -58,6 +59,14 @@ function Navbar() {
         const mrc = await getMRCImageUrlFromAvatar(user.avatar);
         setSelectedMRC(mrc);
       })();
+    }
+    if (
+      !localStorage.getItem("token") &&
+      !ObjectIsNotEmpty(user) &&
+      window.location.pathname != "/admin"
+    ) {
+      localStorage.removeItem("token");
+      router.push("/");
     }
   }, [user]);
 

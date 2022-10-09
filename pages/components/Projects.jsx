@@ -5,13 +5,6 @@ import {
   Box,
   Button,
   Grid,
-  GridItem,
-  VStack,
-  Flex,
-  Spacer,
-  Badge,
-  Center,
-  Divider,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -19,8 +12,6 @@ import {
   PopoverCloseButton,
   PopoverHeader,
   PopoverBody,
-  Image,
-  HStack,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -28,9 +19,10 @@ import { selectUserInfo } from "../../store/userSlice";
 import CreateProjectComponent from "./CreateProjectComponent";
 import UpdateProjectComponent from "./UpdateProjectComponent";
 import ShowProjectComponent from "./ShowProjectComponent";
-import ShowContributorComponent from "./ShowContributorComponent";
-import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
+import ApproveProjectComponent from "./ApproveProjectComponent";
+import Project from "./Project";
 import { formatDate } from "../helpers/FormatDate";
+import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -42,23 +34,24 @@ function Projects() {
     useState(false);
   const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
     useState(false);
-  const [isOpenShowContributorComponent, setIsOpenShowContributorComponent] =
+  const [isOpenApproveProjectComponent, setIsOpenApproveProjectComponent] =
     useState(false);
   const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
   const [isOpenBlockedPopover, setIsOpenBlockedPopover] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [contrImages, setContrImages] = useState(null);
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
-  const [contributorToShow, setContributorToShow] = useState({});
+  const [newProjects, setNewProjects] = useState([]);
+  const [devProjects, setDevProjects] = useState([]);
+  const [completedProjects, setCompletedProjects] = useState([]);
+  const [pendingProjects, setPendigProjects] = useState([]);
   const status = {
     created: "CREATED",
     doing: "DOING",
     finished: "FINISHED",
   };
-
-  const compareContributors = (contr1, contr2) => {
-    return contr1.reputationLevel - contr2.reputationLevel;
+  const approveStatus = {
+    pending: "PENDING",
+    active: "ACTIVE",
   };
 
   const handleDisplayCreateProject = () => {
@@ -87,8 +80,16 @@ function Projects() {
   const handleProjectClick = (event, project) => {
     if (event.target.alt === "PFP") return;
     if (user.role === "admin") {
-      setProjectToUpdate(project);
-      setIsOpenUpdateProjectComponent(true);
+      if (project.approveStatus === "PENDING") {
+        setProjectToShow(project);
+        setIsOpenApproveProjectComponent(true);
+      } else if (project.completed) {
+        setProjectToShow(project);
+        setIsOpenShowProjectComponent(true);
+      } else {
+        setProjectToUpdate(project);
+        setIsOpenUpdateProjectComponent(true);
+      }
     } else {
       const userIsProjectContributor =
         project.contributors.indexOf(user._id) > -1;
@@ -113,22 +114,6 @@ function Projects() {
     setIsOpenBlockedPopover(false);
   };
 
-  const getMRCImageUrlFromContributor = async (id) => {
-    if (id) {
-      const res = await fetch(API_URL + "users/id/" + id, {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (res?.ok) {
-        const data = await res.json();
-        const mrc = await getMRCImageUrlFromAvatar(data.avatar);
-        return mrc;
-      }
-    }
-  };
-
   const fetchProjects = async () => {
     const res = await fetch(API_URL + "projects", {
       method: "GET",
@@ -138,33 +123,38 @@ function Projects() {
     });
     if (res?.ok) {
       const data = await res.json();
-
-      const imgsMap = new Map();
-      for (const project of data) {
-        project.createdAt = formatDate(project.createdAt);
-        if (project.completed) {
-          project.completedAt = formatDate(project.completedAt);
-        }
-        if (project.contributors.length > 4)
-          project.contributors = project.contributors.slice(0, 4);
-
-        for (const contr of project.contributors) {
-          if (!imgsMap.get(project.address))
-            imgsMap.set(project.address, new Map());
-          imgsMap
-            .get(project.address)
-            .set(contr, await getMRCImageUrlFromContributor(contr));
-        }
-      }
-      setProjects(data);
-      setContrImages(imgsMap);
-
+      setNewProjects(
+        data.filter(
+          (project) =>
+            project.status === status.created &&
+            project.approveStatus === approveStatus.active
+        )
+      );
+      setDevProjects(
+        data.filter(
+          (project) =>
+            project.status === status.doing &&
+            project.approveStatus === approveStatus.active
+        )
+      );
+      setCompletedProjects(
+        data.filter(
+          (project) =>
+            project.status === status.finished &&
+            project.approveStatus === approveStatus.active
+        )
+      );
+      setPendigProjects(
+        data.filter(
+          (project) => project.approveStatus === approveStatus.pending
+        )
+      );
       return data.length;
     }
   };
 
   useEffect(() => {
-    if (user) {
+    if (ObjectIsNotEmpty(user)) {
       fetchProjects();
     }
   }, []);
@@ -173,12 +163,12 @@ function Projects() {
     <>
       <Container
         className="flex flex-col items-center projects-container"
-        mt="-1rem"
-        mb={user.role === "admin" ? "-1.2rem" : "0"}
+        mt="-1.2rem"
+        mb={"-1.2rem"}
       >
         <Popover isOpen={isOpenProjectPopover} onClose={onCloseProjectPopover}>
           <PopoverTrigger>
-            <Heading as="h1" mb="2rem">
+            <Heading as="h1" mb="1rem">
               Racks Project Manager
             </Heading>
           </PopoverTrigger>
@@ -206,265 +196,119 @@ function Projects() {
             Create Project
           </Button>
         )}
-        {projects.length != 0 ? (
-          <Popover
-            isOpen={isOpenBlockedPopover}
-            onClose={onCloseBlockedPopover}
-          >
-            <PopoverTrigger>
-              <Grid templateColumns="repeat(4, 1fr)" pb="5">
-                {projects.map((p) => (
-                  <Box
-                    p="6"
-                    pt="3"
-                    pb="2"
-                    key={p.address}
-                    onClick={(event) => handleProjectClick(event, p)}
-                  >
-                    <Box
-                      w="17rem"
-                      borderWidth="1px"
-                      borderRadius="lg"
-                      borderColor="#555"
-                      overflow="hidden"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Box p="6" pb="3">
-                        <Box>
-                          <Center>
-                            <Image
-                              w="150px"
-                              h="70px"
-                              objectFit="contain"
-                              src={p.imageURL}
-                              alt="Project img"
-                            />
-                          </Center>
-                        </Box>
-                        <Box
-                          mt="3"
-                          ml="1"
-                          fontWeight="semibold"
-                          as="h4"
-                          lineHeight="tight"
-                        >
-                          <Center>{p.name}</Center>
-                        </Box>
-
-                        <Divider
-                          w={"95%"}
-                          mx={"auto"}
-                          style={{ borderColor: "#FEFE0E" }}
-                        />
-                        <Flex mt="6px" mb="3px" pr="1">
-                          <Center>
-                            <Box>
-                              {p.status === status.created && (
-                                <Badge
-                                  borderRadius="full"
-                                  px="2"
-                                  colorScheme="green"
-                                >
-                                  NEW
-                                </Badge>
-                              )}
-                              {p.status === status.doing && (
-                                <Badge
-                                  borderRadius="full"
-                                  px="2"
-                                  colorScheme="yellow"
-                                >
-                                  DEV
-                                </Badge>
-                              )}
-                              {p.status === status.finished && (
-                                <Badge borderRadius="full" colorScheme="red">
-                                  COMPLETED
-                                </Badge>
-                              )}
-                            </Box>
-                          </Center>
-                          <Spacer />
-                          <Center>
-                            <HStack>
-                              {p.contributors.map((contr) => (
-                                <Box key={contr}>
-                                  {contrImages ? (
-                                    <>
-                                      <Image
-                                        src={contrImages
-                                          .get(p.address)
-                                          .get(contr)}
-                                        onClick={(event) =>
-                                          handleShowContributorOpen(
-                                            event,
-                                            contr
-                                          )
-                                        }
-                                        style={{ cursor: "pointer" }}
-                                        borderRadius="full"
-                                        boxSize="30px"
-                                        alt="PFP"
-                                      />
-                                    </>
-                                  ) : (
-                                    <Image
-                                      src={"./fallback.gif"}
-                                      onClick={() => router.push("/profile")}
-                                      style={{ cursor: "pointer" }}
-                                      borderRadius="full"
-                                      boxSize="50px"
-                                      alt="PFP"
-                                    />
-                                  )}
-                                </Box>
-                              ))}
-                            </HStack>
-                          </Center>
-                        </Flex>
-                        <VStack alignItems="baseline">
-                          <Box fontSize={"0.85rem"}>
-                            <Center>{p.requirements}</Center>
-                          </Box>
-
-                          <Grid templateColumns="repeat(3, 1fr)">
-                            <GridItem
-                              color="gray.500"
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              textTransform="uppercase"
-                              colSpan={2}
-                            >
-                              <Text color="gray">Reputation</Text>
-                            </GridItem>
-                            <GridItem
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              ml="3rem"
-                              colSpan={1}
-                            >
-                              {p.reputationLevel}
-                            </GridItem>
-                            <GridItem
-                              color="gray.500"
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              textTransform="uppercase"
-                              mt="1"
-                              colSpan={2}
-                            >
-                              <Text color="gray">Colateral (USDC)</Text>
-                            </GridItem>
-                            <GridItem
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              ml="3rem"
-                              mt="1"
-                              colSpan={1}
-                            >
-                              {p.colateralCost}
-                            </GridItem>
-                            <GridItem
-                              color="gray.500"
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              textTransform="uppercase"
-                              mt="1"
-                              colSpan={2}
-                            >
-                              <Text color="gray">N.Contributors</Text>
-                            </GridItem>
-                            <GridItem
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              ml="3rem"
-                              mt="1"
-                              colSpan={1}
-                            >
-                              {p.contributors.length +
-                                "/" +
-                                p.maxContributorsNumber}
-                            </GridItem>
-                            {p.completed ? (
-                              <>
-                                <GridItem
-                                  color="gray.500"
-                                  fontWeight="semibold"
-                                  letterSpacing="wide"
-                                  fontSize="xs"
-                                  textTransform="uppercase"
-                                  mt="1"
-                                  colSpan={2}
-                                >
-                                  <Text color="gray">Completado el:</Text>
-                                </GridItem>
-                                <GridItem
-                                  fontWeight="semibold"
-                                  letterSpacing="wide"
-                                  fontSize="xs"
-                                  mt="1"
-                                  colSpan={1}
-                                >
-                                  {p.completedAt}
-                                </GridItem>
-                              </>
-                            ) : (
-                              <>
-                                <GridItem
-                                  color="gray.500"
-                                  fontWeight="semibold"
-                                  letterSpacing="wide"
-                                  fontSize="xs"
-                                  textTransform="uppercase"
-                                  mt="1"
-                                  colSpan={2}
-                                >
-                                  <Text color="gray">Creado el:</Text>
-                                </GridItem>
-                                <GridItem
-                                  fontWeight="semibold"
-                                  letterSpacing="wide"
-                                  fontSize="xs"
-                                  mt="1"
-                                  colSpan={1}
-                                >
-                                  {p.createdAt}
-                                </GridItem>
-                              </>
-                            )}
-                          </Grid>
-                        </VStack>
-                      </Box>
-                    </Box>
-                  </Box>
-                ))}
-              </Grid>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverHeader borderColor="red">No disponible</PopoverHeader>
-              <PopoverBody>
-                El Proyecto no admite nuevos Contributors.
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <Text fontSize={"1rem"} ml="-1rem">
-            No Projects
-          </Text>
+        {newProjects.length > 0 && (
+          <Box mb="-1rem" w={"60vw"}>
+            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+              Proyectos Nuevos
+            </Text>
+            <Grid
+              templateColumns="repeat(4, 1fr)"
+              pb="1.65rem"
+              className={newProjects.length < 4 ? "flex-center" : ""}
+            >
+              {newProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={false}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
+          </Box>
         )}
+        {devProjects.length > 0 && (
+          <Box mb="-1rem" w={"60vw"}>
+            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+              Proyectos en Desarrollo
+            </Text>
+            <Grid
+              templateColumns="repeat(4, 1fr)"
+              pb="1.65rem"
+              className={devProjects.length < 4 ? "flex-center" : "grid-center"}
+            >
+              {devProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={false}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
+          </Box>
+        )}
+        {completedProjects.length > 0 && (
+          <Box mb="-1rem" w={"60vw"}>
+            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+              Proyectos Completados
+            </Text>
+            <Popover
+              isOpen={isOpenBlockedPopover}
+              onClose={onCloseBlockedPopover}
+            >
+              <PopoverTrigger>
+                <Grid
+                  templateColumns="repeat(4, 1fr)"
+                  pb="1.65rem"
+                  className={completedProjects.length < 4 ? "flex-center" : ""}
+                >
+                  {completedProjects.map((p) => (
+                    <Project
+                      project={p}
+                      handleProjectClick={handleProjectClick}
+                      privateProject={false}
+                      key={p.address}
+                    />
+                  ))}
+                </Grid>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
+                <PopoverBody>
+                  El Proyecto no admite nuevos Contributors.
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Box>
+        )}
+        {pendingProjects.length > 0 && user.role === "admin" && (
+          <Box mb="-1rem" w={"60vw"}>
+            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+              Proyectos Pendientes de Aprobación
+            </Text>
+            <Grid
+              templateColumns="repeat(4, 1fr)"
+              pb="1.65rem"
+              className={pendingProjects.length < 4 ? "flex-center" : ""}
+            >
+              {pendingProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={true}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
+          </Box>
+        )}
+        {newProjects.length == 0 &&
+          devProjects.length == 0 &&
+          completedProjects.length == 0 &&
+          pendingProjects.length == 0 && (
+            <Text fontSize={"1rem"} ml="-1rem" mb="68.8vh">
+              No Projects
+            </Text>
+          )}
       </Container>
       <CreateProjectComponent
         isOpen={isOpenCreateProjectComponent}
         setIsOpen={setIsOpenCreateProjectComponent}
         fetchProjects={fetchProjects}
+        interval={false}
       />
       <UpdateProjectComponent
         isOpen={isOpenUpdateProjectComponent}
@@ -478,10 +322,11 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
-      <ShowContributorComponent
-        isOpen={isOpenShowContributorComponent}
-        setIsOpen={setIsOpenShowContributorComponent}
-        contributor={contributorToShow}
+      <ApproveProjectComponent
+        isOpen={isOpenApproveProjectComponent}
+        setIsOpen={setIsOpenApproveProjectComponent}
+        fetchProjects={fetchProjects}
+        project={projectToShow}
       />
     </>
   );

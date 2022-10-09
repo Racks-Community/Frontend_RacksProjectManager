@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../store/userSlice";
 import { useRouter } from "next/router";
+import CreateProjectComponent from "./components/CreateProjectComponent";
+import UpdateProjectComponent from "./components/UpdateProjectComponent";
+import Project from "./components/Project";
 import { contractAddresses, MrCryptoAbi } from "../web3Constants";
 import { ethers } from "ethers";
 import {
-  Container,
+  Tooltip,
   Text,
+  Heading,
   Box,
   Button,
   FormControl,
@@ -26,6 +30,7 @@ import {
   getMRCMetadataUrl,
 } from "./helpers/MRCImages";
 import { formatDate } from "./helpers/FormatDate";
+import { ObjectIsNotEmpty } from "./helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -35,12 +40,18 @@ function Profile() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [isOpenCreateProjectComponent, setIsOpenCreateProjectComponent] =
+    useState(false);
+  const [isOpenUpdateProjectComponent, setIsOpenUpdateProjectComponent] =
+    useState(false);
   const [selectedMRC, setSelectedMRC] = useState("#");
   const [profileId, setprofileId] = useState(-1);
   const [contrCreatedAt, setContrCreatedAt] = useState(null);
   const [MRCBackground, setMRCBackground] = useState("");
   const [MRCIds, setMRCIds] = useState([]);
   const [MRCToken, setMRCToken] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [projectToUpdate, setProjectToUpdate] = useState({});
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
   }, []);
@@ -82,6 +93,10 @@ function Profile() {
     }
   };
 
+  const handleDisplayCreateProject = () => {
+    setIsOpenCreateProjectComponent(true);
+  };
+
   const fetchUser = async () => {
     const res = await fetch(API_URL + "token", {
       method: "get",
@@ -110,6 +125,24 @@ function Profile() {
     }
   };
 
+  const fetchProjects = async () => {
+    const res = await fetch(API_URL + "projects", {
+      method: "GET",
+      headers: new Headers({
+        Authorization: localStorage.getItem("token"),
+      }),
+    });
+    if (res?.ok) {
+      const data = await res.json();
+      data = data.filter((project) => project.owner === user._id);
+      for (const project of data) {
+        project.createdAt = formatDate(project.createdAt);
+      }
+      setProjects(data);
+      return data.length;
+    }
+  };
+
   const fetchMRC = async () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
@@ -128,6 +161,12 @@ function Profile() {
       ids.push(ethers.BigNumber.from(id).toNumber());
     }
     setMRCIds(ids);
+  };
+
+  const handleProjectClick = (event, project) => {
+    if (event.target.alt === "PFP") return;
+    setProjectToUpdate(project);
+    setIsOpenUpdateProjectComponent(true);
   };
 
   const setMRCBackgroundStyles = (color) => {
@@ -181,15 +220,19 @@ function Profile() {
     if (user.role === "user" && MRCIds.length == 0) {
       fetchMRC();
     }
-    if (!localStorage.getItem("token")) {
+    if (!localStorage.getItem("token") && !ObjectIsNotEmpty(user)) {
+      localStorage.removeItem("token");
       router.push("/");
+    }
+    if (ObjectIsNotEmpty(user)) {
+      fetchProjects();
     }
   }, [user]);
 
   return (
     <>
-      <Container className="flex flex-col items-center profile-container">
-        <Box bg={MRCBackground} w="100vw" h="6rem">
+      <Box className="flex flex-col items-center profile-container">
+        <Box bg={MRCBackground} className="profile-mrc-background">
           <VStack
             className="profile-reputation-text"
             color={getTextColorOnBackground}
@@ -204,7 +247,7 @@ function Profile() {
             color={getTextColorOnBackground}
           >
             <Text>
-              {"Total Projects: " + user.totalProjects} <br />
+              {"Projects Joined: " + user.totalProjects} <br />
               {"Joined at: " + contrCreatedAt}
             </Text>
           </VStack>
@@ -320,7 +363,65 @@ function Profile() {
             </GridItem>
           </Grid>
         </form>
-      </Container>
+        <Center mt="3rem">
+          <Heading as="h1" mb="1.5rem">
+            Tus Proyectos
+          </Heading>
+        </Center>
+        <Center>
+          <Tooltip
+            label="Solo puedes tener 3 Proyectos a la vez."
+            bg="#333"
+            hasArrow
+            shouldWrapChildren
+            isDisabled={projects.length < 3}
+          >
+            <Button
+              onClick={handleDisplayCreateProject}
+              variant="outline"
+              bg="transparent"
+              borderColor={"#FEFE0E"}
+              color="white"
+              borderRadius={"none"}
+              disabled={projects.length >= 3}
+              _hover={{
+                bg: "#FEFE0E",
+                color: "black",
+                transition: "0.5s",
+              }}
+            >
+              Crear Proyecto
+            </Button>
+          </Tooltip>
+        </Center>
+        {projects.length != 0 && (
+          <Grid
+            templateColumns="repeat(4, 1fr)"
+            className={projects.length < 4 ? "flex-center" : ""}
+            py="3"
+          >
+            {projects.map((p) => (
+              <Project
+                project={p}
+                handleProjectClick={handleProjectClick}
+                privateProject={true}
+                key={p.address}
+              />
+            ))}
+          </Grid>
+        )}
+      </Box>
+      <CreateProjectComponent
+        isOpen={isOpenCreateProjectComponent}
+        setIsOpen={setIsOpenCreateProjectComponent}
+        fetchProjects={fetchProjects}
+      />
+      <UpdateProjectComponent
+        isOpen={isOpenUpdateProjectComponent}
+        setIsOpen={setIsOpenUpdateProjectComponent}
+        fetchProjects={fetchProjects}
+        project={projectToUpdate}
+      />
     </>
   );
 }

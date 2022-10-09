@@ -39,11 +39,40 @@
 /* PROJECTS */
 
 .projects-container {
-  min-height: 82.7vh;
+  min-height: 82.9vh;
 }
 
 .profile-container {
   min-height: 81.05vh;
+}
+
+.projects-label {
+  margin-left: -10rem;
+}
+
+.project-box {
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+}
+
+.project-box::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, #040d11 0, #00020d);
+  z-index: -1;
+  transition: opacity 0.5s linear;
+  opacity: 0;
+}
+
+.project-box:hover::before {
+  opacity: 1;
 }
 
 /* CREATE PROJECT COMPONENT */
@@ -74,6 +103,11 @@
 
 /* PROFILE */
 
+.profile-mrc-background {
+  height: 6rem;
+  width: 100%;
+}
+
 .profile-reputation-text {
   position: absolute;
   top: 6.3rem;
@@ -93,4 +127,15 @@
   letter-spacing: 1px;
   font-weight: bold;
   text-align: end;
+}
+
+.flex-center {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-center {
+  align-content: center;
+  justify-content: center;
 }

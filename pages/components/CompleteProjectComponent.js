@@ -19,6 +19,9 @@ import {
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  Spinner,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import toast from "./Toast";
 
@@ -108,10 +111,14 @@ const CompleteProjectComponent = ({
           },
         }
       );
-
       if (res?.ok) {
         const data = await res.json();
         setParticipation(data);
+      } else {
+        if (res.status == 409)
+          notify("error", "El repositorio del proyecto está vacio.");
+        else notify("error", "Error al leer participación del Proyecto.");
+        setIsOpen(false);
       }
     }
   };
@@ -158,20 +165,21 @@ const CompleteProjectComponent = ({
                 />
               </FormControl>
 
-              {participations.length > 0 && (
+              {participations.length > 0 ? (
                 <Box>
                   {participations.map((contributor) => (
                     <Box key={contributor.address} pt={6} pb={2}>
                       <FormLabel mb={"2.5rem"}>{contributor.name}</FormLabel>
                       <Slider
                         colorScheme={participationIsValid ? "yellow" : "red"}
-                        aria-label="slider-ex-6"
+                        defaultValue={contributor.participation}
+                        aria-label="slider"
                         onChange={(val) =>
                           setParticipation(
-                            participations.map((c) =>
-                              c.address == contributor.address
-                                ? { ...c, participation: val }
-                                : { ...c }
+                            participations.map((contribution) =>
+                              contribution.address == contributor.address
+                                ? { ...contribution, participation: val }
+                                : { ...contribution }
                             )
                           )
                         }
@@ -192,10 +200,10 @@ const CompleteProjectComponent = ({
                           color="black"
                           fontWeight="semibold"
                           mt="-10"
-                          ml="-5"
+                          ml="-6"
                           w="12"
                         >
-                          {Math.round(contributor.participation * 10) / 10}%
+                          {contributor.participation}%
                         </SliderMark>
                         <SliderTrack>
                           <SliderFilledTrack />
@@ -205,6 +213,11 @@ const CompleteProjectComponent = ({
                     </Box>
                   ))}
                 </Box>
+              ) : (
+                <VStack mt="1rem">
+                  <Text>Cargando Participación...</Text>
+                  <Spinner size="lg" />
+                </VStack>
               )}
             </ModalBody>
 
@@ -213,7 +226,7 @@ const CompleteProjectComponent = ({
                 type="submit"
                 isLoading={loading}
                 loadingText="Finalizar"
-                isDisabled={!participationIsValid}
+                isDisabled={!participationIsValid || participations.length == 0}
                 bg="white"
                 color="black"
                 variant="solid"
