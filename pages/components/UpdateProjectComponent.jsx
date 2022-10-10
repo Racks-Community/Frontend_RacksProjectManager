@@ -253,7 +253,7 @@ const UpdateProjectComponent = ({
                   <Button
                     onClick={() => setIsOpenDeleteProjectPopover(true)}
                     isLoading={deleteLoading}
-                    loadingText="Eliminando"
+                    loadingText="Eliminar"
                     bg="red"
                     color="white"
                     variant="solid"
@@ -312,7 +312,7 @@ const UpdateProjectComponent = ({
               <Button
                 type="submit"
                 isLoading={loading}
-                loadingText="Actualizando"
+                loadingText="Actualizar"
                 bg="white"
                 color="black"
                 variant="solid"

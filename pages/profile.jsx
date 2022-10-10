@@ -345,7 +345,7 @@ function Profile() {
                 <Button
                   type="submit"
                   isLoading={loading}
-                  loadingText="Actualizando"
+                  loadingText="Actualizar"
                   bg="white"
                   color="black"
                   variant="solid"

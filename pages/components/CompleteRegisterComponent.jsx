@@ -220,7 +220,7 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
               <Button
                 type="submit"
                 isLoading={loading}
-                loadingText="Actualizando"
+                loadingText="Actualizar"
                 bg="white"
                 color="black"
                 variant="solid"

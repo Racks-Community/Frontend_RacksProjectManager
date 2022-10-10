@@ -37,7 +37,10 @@ function Projects() {
   const [isOpenApproveProjectComponent, setIsOpenApproveProjectComponent] =
     useState(false);
   const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
-  const [isOpenBlockedPopover, setIsOpenBlockedPopover] = useState(false);
+  const [isOpenCompletedPopover, setIsOpenCompletedPopover] = useState(false);
+  const [isOpenBlockedNewPopover, setIsOpenBlockedNewPopover] = useState(false);
+  const [isOpenBlockedDevPopover, setIsOpenBlockedDevPopover] = useState(false);
+  const [blockedPopoverBody, setBlockedPopoverBody] = useState("");
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
   const [newProjects, setNewProjects] = useState([]);
@@ -60,23 +63,6 @@ function Projects() {
     }
   };
 
-  const handleShowContributorOpen = async (event, id) => {
-    if (id && event.target.alt === "PFP") {
-      const res = await fetch(API_URL + "users/id/" + id, {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (res?.ok) {
-        const data = await res.json();
-        data.createdAt = formatDate(data.createdAt);
-        setContributorToShow(data);
-        setIsOpenShowContributorComponent(true);
-      }
-    }
-  };
-
   const handleProjectClick = (event, project) => {
     if (event.target.alt === "PFP") return;
     if (user.role === "admin") {
@@ -95,7 +81,14 @@ function Projects() {
         project.contributors.indexOf(user._id) > -1;
       if (user.contributor && user.verified) {
         if (project.completed && !userIsProjectContributor) {
-          setIsOpenBlockedPopover(true);
+          setIsOpenCompletedPopover(true);
+        } else if (user.reputationLevel < project.reputationLevel) {
+          onOpenBlockedPopover(project);
+        } else if (
+          project.contributors.length === project.maxContributorsNumber &&
+          !userIsProjectContributor
+        ) {
+          onOpenBlockedPopover(project);
         } else {
           setProjectToShow(project);
           setIsOpenShowProjectComponent(true);
@@ -110,8 +103,26 @@ function Projects() {
     setIsOpenProjectPopover(false);
   };
 
-  const onCloseBlockedPopover = () => {
-    setIsOpenBlockedPopover(false);
+  const onOpenBlockedPopover = (project) => {
+    if (user.reputationLevel < project.reputationLevel) {
+      setBlockedPopoverBody("Nivel de Reputación Insuficiente");
+    } else if (project.contributors.length === project.maxContributorsNumber) {
+      setBlockedPopoverBody("El Proyecto no admite nuevos Contributors");
+    }
+    project.status === "CREATED"
+      ? setIsOpenBlockedNewPopover(true)
+      : setIsOpenBlockedDevPopover(true);
+  };
+  const onCloseBlockedNewPopover = () => {
+    setIsOpenBlockedNewPopover(false);
+  };
+
+  const onCloseBlockedDevPopover = () => {
+    setIsOpenBlockedDevPopover(false);
+  };
+
+  const onCloseCompletedPopover = () => {
+    setIsOpenCompletedPopover(false);
   };
 
   const fetchProjects = async () => {
@@ -201,20 +212,33 @@ function Projects() {
             <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
               Proyectos Nuevos
             </Text>
-            <Grid
-              templateColumns="repeat(4, 1fr)"
-              pb="1.65rem"
-              className={newProjects.length < 4 ? "flex-center" : ""}
+            <Popover
+              isOpen={isOpenBlockedNewPopover}
+              onClose={onCloseBlockedNewPopover}
             >
-              {newProjects.map((p) => (
-                <Project
-                  project={p}
-                  handleProjectClick={handleProjectClick}
-                  privateProject={false}
-                  key={p.address}
-                />
-              ))}
-            </Grid>
+              <PopoverTrigger>
+                <Grid
+                  templateColumns="repeat(4, 1fr)"
+                  pb="1.65rem"
+                  className={newProjects.length < 4 ? "flex-center" : ""}
+                >
+                  {newProjects.map((p) => (
+                    <Project
+                      project={p}
+                      handleProjectClick={handleProjectClick}
+                      privateProject={false}
+                      key={p.address}
+                    />
+                  ))}
+                </Grid>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
+                <PopoverBody>{blockedPopoverBody}</PopoverBody>
+              </PopoverContent>
+            </Popover>
           </Box>
         )}
         {devProjects.length > 0 && (
@@ -222,20 +246,35 @@ function Projects() {
             <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
               Proyectos en Desarrollo
             </Text>
-            <Grid
-              templateColumns="repeat(4, 1fr)"
-              pb="1.65rem"
-              className={devProjects.length < 4 ? "flex-center" : "grid-center"}
+            <Popover
+              isOpen={isOpenBlockedDevPopover}
+              onClose={onCloseBlockedDevPopover}
             >
-              {devProjects.map((p) => (
-                <Project
-                  project={p}
-                  handleProjectClick={handleProjectClick}
-                  privateProject={false}
-                  key={p.address}
-                />
-              ))}
-            </Grid>
+              <PopoverTrigger>
+                <Grid
+                  templateColumns="repeat(4, 1fr)"
+                  pb="1.65rem"
+                  className={
+                    devProjects.length < 4 ? "flex-center" : "grid-center"
+                  }
+                >
+                  {devProjects.map((p) => (
+                    <Project
+                      project={p}
+                      handleProjectClick={handleProjectClick}
+                      privateProject={false}
+                      key={p.address}
+                    />
+                  ))}
+                </Grid>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
+                <PopoverBody>{blockedPopoverBody}</PopoverBody>
+              </PopoverContent>
+            </Popover>
           </Box>
         )}
         {completedProjects.length > 0 && (
@@ -244,8 +283,8 @@ function Projects() {
               Proyectos Completados
             </Text>
             <Popover
-              isOpen={isOpenBlockedPopover}
-              onClose={onCloseBlockedPopover}
+              isOpen={isOpenCompletedPopover}
+              onClose={onCloseCompletedPopover}
             >
               <PopoverTrigger>
                 <Grid
@@ -266,10 +305,10 @@ function Projects() {
               <PopoverContent>
                 <PopoverArrow />
                 <PopoverCloseButton />
-                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
-                <PopoverBody>
-                  El Proyecto no admite nuevos Contributors.
-                </PopoverBody>
+                <PopoverHeader borderColor="red">
+                  Proyecto Completado
+                </PopoverHeader>
+                <PopoverBody>El Proyecto ya está terminado.</PopoverBody>
               </PopoverContent>
             </Popover>
           </Box>

@@ -6,7 +6,11 @@
 [data-theme="dark"] body {
   color: white;
   background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 .bg-overlay {
@@ -138,4 +142,7 @@
 .grid-center {
   align-content: center;
   justify-content: center;
+}
+
+@media screen and (max-width: 770px) {
 }

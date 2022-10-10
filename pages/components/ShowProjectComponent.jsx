@@ -52,7 +52,11 @@ const ShowProjectComponent = ({
   };
 
   const handleJoinProjectClick = async () => {
-    if (user.role === "user" && project.address) {
+    if (
+      user.role === "user" &&
+      project.address &&
+      user.reputationLevel >= project.reputationLevel
+    ) {
       setLoading(true);
 
       const provider = new ethers.providers.Web3Provider(ethereum);
@@ -110,6 +114,9 @@ const ShowProjectComponent = ({
 
       setIsOpen(false);
       setLoading(false);
+    } else {
+      notify("error", "Reputación Insuficiente");
+      setIsOpen(false);
     }
   };
 

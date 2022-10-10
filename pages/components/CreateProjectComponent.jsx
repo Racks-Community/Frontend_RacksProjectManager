@@ -14,7 +14,9 @@ import {
   Textarea,
   ModalFooter,
   Button,
-  Box,
+  Grid,
+  Checkbox,
+  GridItem,
 } from "@chakra-ui/react";
 import toast from "./Toast";
 
@@ -36,14 +38,17 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     formData.append("name", event?.target[1]?.value);
     formData.append("description", event?.target[2]?.value);
     formData.append("reputationLevel", event?.target[4]?.value);
-    formData.append("colateralCost", event?.target[5]?.value);
-    formData.append("maxContributorsNumber", event?.target[6]?.value);
+    formData.append("colateralCost", event?.target[6]?.value);
+    formData.append("maxContributorsNumber", event?.target[7]?.value);
     formData.append("owner", user._id);
     if (event?.target[0]?.value != "" && selectedFile != null) {
       formData.append("imageURL", selectedFile);
     }
     if (event?.target[3]?.value != "") {
       formData.append("requirements", event?.target[3]?.value);
+    }
+    if (event?.target[5]?.checked) {
+      formData.append("visibleForAll", event?.target[5]?.checked);
     }
 
     setLoading(true);
@@ -129,16 +134,25 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               />
             </FormControl>
 
-            <FormControl mt={3} isRequired>
-              <FormLabel>Nivel de Reputación</FormLabel>
-              <Input
-                type="number"
-                name="reputationLevel"
-                placeholder="Reputación"
-                focusBorderColor="white"
-                borderRadius={"none"}
-              />
-            </FormControl>
+            <Grid templateColumns="repeat(2, 1fr)">
+              <GridItem>
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Nivel de Reputación</FormLabel>
+                  <Input
+                    type="number"
+                    name="reputationLevel"
+                    placeholder="Reputación"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl mt={"3.2rem"} ml={"4"} colSpan={1}>
+                  <Checkbox colorScheme="green">Visible para todos</Checkbox>
+                </FormControl>
+              </GridItem>
+            </Grid>
 
             <FormControl mt={3} isRequired>
               <FormLabel>Colateral</FormLabel>
@@ -167,7 +181,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             <Button
               type="submit"
               isLoading={loading}
-              loadingText="Creando"
+              loadingText="Crear"
               bg="white"
               color="black"
               variant="solid"

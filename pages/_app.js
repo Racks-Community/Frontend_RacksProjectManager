@@ -8,7 +8,6 @@ import {
   RainbowKitProvider,
   createAuthenticationAdapter,
   RainbowKitAuthenticationProvider,
-  AvatarComponent,
   darkTheme,
 } from "@rainbow-me/rainbowkit";
 import { SiweMessage } from "siwe";

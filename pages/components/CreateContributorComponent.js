@@ -250,7 +250,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
               <Button
                 type="submit"
                 isLoading={loading}
-                loadingText="Registrando"
+                loadingText="Registrarse"
                 bg="white"
                 color="black"
                 variant="solid"
