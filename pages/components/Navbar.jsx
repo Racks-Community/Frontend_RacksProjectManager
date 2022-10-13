@@ -73,17 +73,18 @@ function Navbar() {
   return (
     <>
       <Flex>
-        <Box p="4" pt="4">
+        <Box p="4" pt="4" className="navbar-logo-container">
           <Image
             src={`${process.env.NEXT_PUBLIC_URL}/Racks.png`}
             onClick={() => router.push("/")}
             style={{ cursor: "pointer" }}
             alt="Racks Labs"
             w="180px"
+            className="rackslabs-logo"
           />
         </Box>
         <Spacer />
-        <Box pr="8" className="flex items-center">
+        <Box pr="8" className="flex items-center navbar-buttons-container">
           {user.role === "user" && user.contributor && (
             <>
               {user.verified ? (
@@ -113,6 +114,7 @@ function Navbar() {
               ) : (
                 <Button
                   onClick={handleProfileClick}
+                  className="custom-buttons"
                   variant="outline"
                   mr="1rem"
                   bg="transparent"
@@ -133,6 +135,7 @@ function Navbar() {
           {user.role === "user" && user.address && !user.contributor && (
             <Button
               onClick={handleContributorClick}
+              className="custom-buttons"
               variant="outline"
               mr="1rem"
               bg="transparent"
@@ -151,6 +154,7 @@ function Navbar() {
           {user.role === "admin" && (
             <Button
               onClick={() => router.push("/contributors")}
+              className="custom-buttons"
               variant="outline"
               mr="1rem"
               bg="transparent"
@@ -169,6 +173,7 @@ function Navbar() {
           {user.role === "admin" && localStorage.getItem("manualLogin") ? (
             <Button
               onClick={handleLogout}
+              className="custom-buttons logoutBtn"
               variant="solid"
               bg="#FEFE0E"
               color="black"
@@ -180,12 +185,14 @@ function Navbar() {
               Logout
             </Button>
           ) : (
-            <ConnectButton
-              accountStatus="address"
-              chainStatus="icon"
-              showBalance={false}
-              variant="outline"
-            />
+            <div className={!user.address ? "connect-button" : "wallet-button"}>
+              <ConnectButton
+                accountStatus="address"
+                chainStatus="icon"
+                showBalance={false}
+                variant="outline"
+              />
+            </div>
           )}
         </Box>
       </Flex>

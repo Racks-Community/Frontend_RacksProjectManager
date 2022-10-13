@@ -134,7 +134,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
               />
             </FormControl>
 
-            <Grid templateColumns="repeat(2, 1fr)">
+            <Grid templateColumns="repeat(2, 1fr)" className="create-pj-grid">
               <GridItem>
                 <FormControl mt={3} isRequired>
                   <FormLabel>Nivel de Reputación</FormLabel>
@@ -148,7 +148,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 </FormControl>
               </GridItem>
               <GridItem>
-                <FormControl mt={"3.2rem"} ml={"4"} colSpan={1}>
+                <FormControl
+                  mt={"3.2rem"}
+                  ml={"4"}
+                  colSpan={1}
+                  className="visibility-check"
+                >
                   <Checkbox colorScheme="green">Visible para todos</Checkbox>
                 </FormControl>
               </GridItem>

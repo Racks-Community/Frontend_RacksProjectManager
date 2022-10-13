@@ -231,6 +231,7 @@ const UpdateProjectComponent = ({
                     project.contributors.length > 0
                   )
                 }
+                className="custom-buttons"
                 bg="#FEFE0E"
                 color="black"
                 variant="solid"
@@ -252,6 +253,7 @@ const UpdateProjectComponent = ({
                 <PopoverTrigger>
                   <Button
                     onClick={() => setIsOpenDeleteProjectPopover(true)}
+                    className="custom-buttons"
                     isLoading={deleteLoading}
                     loadingText="Eliminar"
                     bg="red"
@@ -311,6 +313,7 @@ const UpdateProjectComponent = ({
               </Popover>
               <Button
                 type="submit"
+                className="custom-buttons"
                 isLoading={loading}
                 loadingText="Actualizar"
                 bg="white"
@@ -329,6 +332,7 @@ const UpdateProjectComponent = ({
               </Button>
               <Button
                 onClick={() => setIsOpen(false)}
+                className="custom-buttons"
                 colorScheme="white"
                 variant="outline"
                 borderRadius={"none"}

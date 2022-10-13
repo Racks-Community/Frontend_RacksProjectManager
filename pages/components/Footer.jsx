@@ -10,8 +10,12 @@ function Footer() {
         mt="1.3rem"
         style={{ borderColor: "#FEFE0E" }}
       />
-      <Container py={"1.5rem"}>
-        <Text textAlign={"center"} fontSize={"1rem"}>
+      <Container className="footer-box">
+        <Text
+          textAlign={"center"}
+          fontSize={"1rem"}
+          className="footer-rackslabs"
+        >
           <Link isExternal href="https://twitter.com/rackslabs">
             Racks Labs
           </Link>

@@ -37,7 +37,12 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
   }, [contributor]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isCentered
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="modal"
+    >
       <ModalOverlay />
       <ModalContent w="25rem">
         <ModalHeader className="text-center">DETALLES CONTRIBUTOR</ModalHeader>

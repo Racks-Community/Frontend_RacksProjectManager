@@ -4,7 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 function ConnectWallet() {
   return (
     <>
-      <Heading as="h1" textAlign={"center"}>
+      <Heading as="h1" textAlign={"center"} className="rackspm-heading">
         Racks Project Manager
       </Heading>
       <Container
@@ -19,16 +19,24 @@ function ConnectWallet() {
             mx="auto"
             mt="0rem"
             style={{ lineHeight: "5rem" }}
+            className="connect-wallet-heading"
           >
             Contribuye con los desarrollos de
-            <Text fontSize="4rem" style={{ color: "#FEFE0E" }}>
-              {" "}
+            <Text
+              fontSize="4rem"
+              style={{ color: "#FEFE0E" }}
+              className="connect-wallet-text"
+            >
               Racks <br /> Community
             </Text>
           </Heading>
         </Center>
         <Center mt="1.5rem">
-          <Text fontSize="1.2rem" color="gray">
+          <Text
+            className="connect-wallet-subtext"
+            fontSize="1.2rem"
+            color="gray"
+          >
             Conecta una cartera con al menos un Mr.Crypto
           </Text>
         </Center>

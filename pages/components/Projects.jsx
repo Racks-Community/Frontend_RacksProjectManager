@@ -21,7 +21,6 @@ import UpdateProjectComponent from "./UpdateProjectComponent";
 import ShowProjectComponent from "./ShowProjectComponent";
 import ApproveProjectComponent from "./ApproveProjectComponent";
 import Project from "./Project";
-import { formatDate } from "../helpers/FormatDate";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -179,7 +178,7 @@ function Projects() {
       >
         <Popover isOpen={isOpenProjectPopover} onClose={onCloseProjectPopover}>
           <PopoverTrigger>
-            <Heading as="h1" mb="1rem">
+            <Heading as="h1" mb="1rem" className="rackspm-heading">
               Racks Project Manager
             </Heading>
           </PopoverTrigger>
@@ -197,6 +196,7 @@ function Projects() {
         {user.role === "admin" && (
           <Button
             onClick={handleDisplayCreateProject}
+            className="custom-buttons"
             mb="1rem"
             mr="1rem"
             variant="outline"
@@ -208,8 +208,8 @@ function Projects() {
           </Button>
         )}
         {newProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"}>
-            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+            <Text fontSize="2xl" as="kbd" className="project-section-title">
               Proyectos Nuevos
             </Text>
             <Popover
@@ -217,11 +217,7 @@ function Projects() {
               onClose={onCloseBlockedNewPopover}
             >
               <PopoverTrigger>
-                <Grid
-                  templateColumns="repeat(4, 1fr)"
-                  pb="1.65rem"
-                  className={newProjects.length < 4 ? "flex-center" : ""}
-                >
+                <Grid pb="1.65rem" className={"projects-section-flex"}>
                   {newProjects.map((p) => (
                     <Project
                       project={p}
@@ -242,8 +238,13 @@ function Projects() {
           </Box>
         )}
         {devProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"}>
-            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+            <Text
+              fontSize="2xl"
+              as="kbd"
+              alignSelf={"start"}
+              className="project-section-title"
+            >
               Proyectos en Desarrollo
             </Text>
             <Popover
@@ -251,13 +252,7 @@ function Projects() {
               onClose={onCloseBlockedDevPopover}
             >
               <PopoverTrigger>
-                <Grid
-                  templateColumns="repeat(4, 1fr)"
-                  pb="1.65rem"
-                  className={
-                    devProjects.length < 4 ? "flex-center" : "grid-center"
-                  }
-                >
+                <Grid pb="1.65rem" className={"projects-section-flex"}>
                   {devProjects.map((p) => (
                     <Project
                       project={p}
@@ -278,8 +273,13 @@ function Projects() {
           </Box>
         )}
         {completedProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"}>
-            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+            <Text
+              fontSize="2xl"
+              as="kbd"
+              alignSelf={"start"}
+              className="project-section-title"
+            >
               Proyectos Completados
             </Text>
             <Popover
@@ -287,11 +287,7 @@ function Projects() {
               onClose={onCloseCompletedPopover}
             >
               <PopoverTrigger>
-                <Grid
-                  templateColumns="repeat(4, 1fr)"
-                  pb="1.65rem"
-                  className={completedProjects.length < 4 ? "flex-center" : ""}
-                >
+                <Grid pb="1.65rem" className={"projects-section-flex"}>
                   {completedProjects.map((p) => (
                     <Project
                       project={p}
@@ -314,15 +310,16 @@ function Projects() {
           </Box>
         )}
         {pendingProjects.length > 0 && user.role === "admin" && (
-          <Box mb="-1rem" w={"60vw"}>
-            <Text fontSize="2xl" as="kbd" alignSelf={"start"}>
+          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+            <Text
+              fontSize="2xl"
+              as="kbd"
+              alignSelf={"start"}
+              className="project-section-title"
+            >
               Proyectos Pendientes de Aprobación
             </Text>
-            <Grid
-              templateColumns="repeat(4, 1fr)"
-              pb="1.65rem"
-              className={pendingProjects.length < 4 ? "flex-center" : ""}
-            >
+            <Grid pb="1.65rem" className={"projects-section-flex"}>
               {pendingProjects.map((p) => (
                 <Project
                   project={p}
@@ -367,6 +364,11 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
+      <style global jsx>{`
+        main {
+          height: auto;
+        }
+      `}</style>
     </>
   );
 }

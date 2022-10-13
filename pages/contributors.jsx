@@ -194,13 +194,14 @@ function Contributors() {
         mt="-1.8rem"
         mb="3.2rem"
         maxW="95%"
+        height={"100%"}
       >
         <Center>
-          <Heading as="h1" mb="2rem" mt="2rem">
+          <Heading as="h1" mb="2rem" mt="2rem" className="rackspm-heading">
             Contributors
           </Heading>
         </Center>
-        <TableContainer mt="3rem">
+        <TableContainer mt="3rem" className="contributors-table">
           <Table variant="simple" size="sm">
             <Thead>
               <Tr>

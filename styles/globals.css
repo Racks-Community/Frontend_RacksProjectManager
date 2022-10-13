@@ -9,8 +9,25 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
-  width: 100vw;
   overflow-x: hidden;
+  height: 100%;
+}
+
+[data-rk],
+#__next {
+  height: 100%;
+}
+
+[data-rk] ._9pm4ki3 {
+  top: 200px !important;
+}
+
+[data-rk] .ju367vaj {
+  background: none !important;
+}
+
+main {
+  height: 81.5%;
 }
 
 .bg-overlay {
@@ -35,19 +52,18 @@
 /* CONNECT WALLET */
 
 .connect-wallet-container {
-  min-height: 76vh;
-  min-width: 43rem;
+  height: 100%;
   text-align: center;
 }
 
 /* PROJECTS */
 
 .projects-container {
-  min-height: 82.9vh;
+  height: 100%;
 }
 
 .profile-container {
-  min-height: 81.05vh;
+  height: 100%;
 }
 
 .projects-label {
@@ -77,6 +93,13 @@
 
 .project-box:hover::before {
   opacity: 1;
+}
+
+.projects-section-flex {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 /* CREATE PROJECT COMPONENT */
@@ -133,16 +156,135 @@
   text-align: end;
 }
 
-.flex-center {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-}
-
 .grid-center {
   align-content: center;
   justify-content: center;
 }
 
-@media screen and (max-width: 770px) {
+/* FOOTER */
+
+.footer-box {
+  height: 7vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1500px) {
+  main {
+    height: 80%;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .projects-section-flex {
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .projects-container {
+    margin-top: 0 !important;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  main {
+    height: 77%;
+  }
+  /* CONNECT WALLET */
+  .rackspm-heading {
+    margin-top: 1rem;
+    margin-bottom: -2rem;
+    font-size: 6vw !important;
+  }
+  .connect-wallet-heading {
+    font-size: 5vw !important;
+    line-height: 12vw !important;
+  }
+  .connect-wallet-text {
+    font-size: 10vw !important;
+  }
+  .connect-wallet-subtext {
+    margin-top: -1vw;
+    font-size: 3.5vw !important;
+  }
+
+  /* FOOTER */
+  .footer-rackslabs {
+    font-size: 3.2vw !important;
+  }
+
+  /* NAVBAR */
+  .rackslabs-logo {
+    width: 30vw !important;
+  }
+  .connect-button button,
+  .custom-buttons {
+    width: 25vw !important;
+    height: 7vw !important;
+    font-size: 2.7vw !important;
+    padding: 0 2.5vw !important;
+  }
+  .wallet-button {
+    font-size: 2.7vw !important;
+  }
+  .logoutBtn {
+    width: 14vw !important;
+  }
+  .navbar-logo-container {
+    padding-left: 1.5vw !important;
+  }
+  .navbar-buttons-container {
+    padding-right: 4vw !important;
+  }
+
+  /* MODALS */
+  .chakra-modal__content {
+    transform: scale(0.8) !important;
+    overflow: scroll !important;
+  }
+  .create-pj-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .visibility-check {
+    margin-top: 1rem !important;
+    margin-left: 0 !important;
+  }
+
+  /* POPOVERS */
+  .chakra-popover__content {
+    transform: scale(0.8) !important;
+  }
+
+  /* PROYECTS */
+  .project-section-title {
+    align-self: center !important;
+    text-align: center;
+    font-size: 5.1vw !important;
+  }
+
+  /* CONTRIBUTORS */
+  .contributors-table {
+    transform: scale(0.95);
+    height: 75%;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .project-box {
+    transform: scale(0.85);
+  }
+}
+
+@media screen and (min-height: 740px) and (max-width: 520px) {
+  main {
+    height: 79%;
+  }
+}
+
+@media screen and (min-height: 1050px) {
+  main {
+    height: 82%;
+  }
 }

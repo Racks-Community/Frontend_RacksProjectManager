@@ -397,7 +397,7 @@ function Profile() {
         {projects.length != 0 && (
           <Grid
             templateColumns="repeat(4, 1fr)"
-            className={projects.length < 4 ? "flex-center" : ""}
+            className={"projects-section-flex"}
             py="3"
           >
             {projects.map((p) => (
@@ -422,6 +422,11 @@ function Profile() {
         fetchProjects={fetchProjects}
         project={projectToUpdate}
       />
+      <style global jsx>{`
+        main {
+          height: auto;
+        }
+      `}</style>
     </>
   );
 }
