@@ -19,7 +19,7 @@
 }
 
 [data-rk] ._9pm4ki3 {
-  top: 200px !important;
+  top: 0 !important;
 }
 
 [data-rk] .ju367vaj {
@@ -54,6 +54,10 @@ main {
 .connect-wallet-container {
   height: 100%;
   text-align: center;
+}
+
+.profile-picture {
+  cursor: pointer;
 }
 
 /* PROJECTS */
@@ -186,11 +190,31 @@ main {
   .projects-container {
     margin-top: 0 !important;
   }
+  .profile-form-grid {
+    width: 100% !important;
+    padding: 0 2rem !important;
+  }
+  .profile-reputation-text,
+  .profile-projects-text {
+    font-size: 2vw !important;
+    top: 7rem !important;
+    text-shadow: 1.2px 0 #000;
+    letter-spacing: 0.8px;
+  }
+  .profile-reputation-text {
+    left: 10vw;
+  }
+  .profile-projects-text {
+    right: 10vw;
+  }
 }
 
 @media screen and (max-width: 520px) {
   main {
     height: 77%;
+  }
+  [data-rk] ._9pm4ki3 {
+    top: 200px !important;
   }
   /* CONNECT WALLET */
   .rackspm-heading {
@@ -236,7 +260,12 @@ main {
     padding-left: 1.5vw !important;
   }
   .navbar-buttons-container {
-    padding-right: 4vw !important;
+    padding-right: 6vw !important;
+  }
+  .profile-picture {
+    width: 50px !important;
+    height: 50px !important;
+    margin-right: 3vw !important;
   }
 
   /* MODALS */
@@ -264,16 +293,59 @@ main {
     font-size: 5.1vw !important;
   }
 
+  /* PROFILE */
+  .profile-form select,
+  .profile-form label,
+  .profile-form input {
+    font-size: 0.7rem !important;
+  }
+  .profie-input-email {
+    margin-top: 0 !important;
+  }
+  .profile-reputation-text,
+  .profile-projects-text {
+    font-size: 0.7rem !important;
+    text-shadow: 1px 0 #000;
+    top: 22vw !important;
+    letter-spacing: 0.5px;
+  }
+
   /* CONTRIBUTORS */
   .contributors-table {
     transform: scale(0.95);
     height: 75%;
   }
+  .contributors-popover-select {
+    font-size: 0.7rem !important;
+  }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 500px) {
+  .profile-reputation-text,
+  .profile-projects-text {
+    top: 5rem !important;
+    font-size: 2.5vw !important;
+  }
+  .profile-reputation-text {
+    left: 3vw !important;
+  }
+  .profile-projects-text {
+    right: 3vw !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .profile-picture {
+    width: 45px !important;
+    height: 45px !important;
+  }
   .project-box {
     transform: scale(0.85);
+  }
+  .profile-reputation-text,
+  .profile-projects-text {
+    top: 4.5rem !important;
+    font-size: 2.3vw !important;
   }
 }
 

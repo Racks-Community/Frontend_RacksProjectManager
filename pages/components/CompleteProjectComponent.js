@@ -123,12 +123,18 @@ const CompleteProjectComponent = ({
     }
   };
 
+  const onCloseModal = () => {
+    setParticipation([]);
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     if (
       user.role === "admin" &&
       project.address &&
       project.status === "DOING" &&
-      project.contributors.length > 0
+      project.contributors.length > 0 &&
+      isOpen
     ) {
       fetchProjectParticipation();
     }
@@ -143,7 +149,7 @@ const CompleteProjectComponent = ({
       <Modal
         isCentered
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => onCloseModal()}
         size={"lg"}
       >
         <ModalOverlay />
@@ -242,7 +248,7 @@ const CompleteProjectComponent = ({
                 Finalizar
               </Button>
               <Button
-                onClick={() => setIsOpen(false)}
+                onClick={() => onCloseModal()}
                 colorScheme="white"
                 variant="outline"
                 borderRadius={"none"}

@@ -80,6 +80,7 @@ function MyApp({ Component, pageProps }) {
         }),
       });
       if (!res?.ok) {
+        localStorage.removeItem("token");
         setAuthenticationStatus("unauthenticated");
       } else {
         setAuthenticationStatus("authenticated");

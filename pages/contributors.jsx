@@ -470,6 +470,7 @@ function Contributors() {
                                     focusBorderColor="white"
                                     placeholder="Proyecto"
                                     mt={"1.5rem"}
+                                    className="contributors-popover-select"
                                   >
                                     {contributorProjects.map((project) => (
                                       <option

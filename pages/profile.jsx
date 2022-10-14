@@ -262,8 +262,17 @@ function Profile() {
             />
           </Center>
         </Box>
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <Grid templateColumns="repeat(2, 1fr)" w="30vw" mt="2.5rem">
+        <form
+          onSubmit={handleSubmit}
+          autoComplete="off"
+          className="profile-form"
+        >
+          <Grid
+            templateColumns="repeat(2, 1fr)"
+            w="30vw"
+            mt="2.5rem"
+            className="profile-form-grid"
+          >
             <GridItem colSpan={2}>
               <Center>
                 <Select
@@ -283,7 +292,7 @@ function Profile() {
                 </Select>
               </Center>
             </GridItem>
-            <GridItem colSpan={2} mt="-5">
+            <GridItem colSpan={2} mt="-5" className="profie-input-email">
               <FormControl isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -344,6 +353,7 @@ function Profile() {
               <Center>
                 <Button
                   type="submit"
+                  className="custom-buttons"
                   isLoading={loading}
                   loadingText="Actualizar"
                   bg="white"
@@ -364,7 +374,7 @@ function Profile() {
           </Grid>
         </form>
         <Center mt="3rem">
-          <Heading as="h1" mb="1.5rem">
+          <Heading as="h1" mb="1.5rem" className="rackspm-heading">
             Tus Proyectos
           </Heading>
         </Center>
@@ -378,6 +388,7 @@ function Profile() {
           >
             <Button
               onClick={handleDisplayCreateProject}
+              className="custom-buttons"
               variant="outline"
               bg="transparent"
               borderColor={"#FEFE0E"}

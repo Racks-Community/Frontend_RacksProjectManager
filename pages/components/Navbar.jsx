@@ -93,7 +93,7 @@ function Navbar() {
                     <Image
                       src={selectedMRC}
                       onClick={() => router.push("/profile")}
-                      style={{ cursor: "pointer" }}
+                      className="profile-picture"
                       borderRadius="full"
                       boxSize="60px"
                       mr="5"

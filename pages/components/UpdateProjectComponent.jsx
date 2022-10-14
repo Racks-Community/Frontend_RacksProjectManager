@@ -93,6 +93,8 @@ const UpdateProjectComponent = ({
       formData.append("colateralCost", Number(event?.target[5]?.value));
     if (project.maxContributorsNumber !== Number(event?.target[6]?.value))
       formData.append("maxContributorsNumber", Number(event?.target[6]?.value));
+    if (project.githubRepository !== event?.target[7]?.value)
+      formData.append("githubRepository", event?.target[7]?.value);
 
     if (user.role === "admin" || project.owner === user._id) {
       setLoading(true);
@@ -171,7 +173,7 @@ const UpdateProjectComponent = ({
 
               <FormControl mt={3} isRequired>
                 <FormLabel>Requerimientos</FormLabel>
-                <Textarea
+                <Input
                   type="text"
                   defaultValue={project.requirements}
                   placeholder="Requerimientos"
@@ -211,6 +213,18 @@ const UpdateProjectComponent = ({
                   placeholder="Número de Contribuidores"
                   focusBorderColor="white"
                   borderRadius={"none"}
+                />
+              </FormControl>
+
+              <FormControl mt={3} isRequired>
+                <FormLabel>Repositorio Github</FormLabel>
+                <Input
+                  type="text"
+                  defaultValue={project.githubRepository}
+                  placeholder="Github Repository"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                  resize={"none"}
                 />
               </FormControl>
             </ModalBody>
