@@ -29,7 +29,7 @@ const Loading = () => {
             objectFit="contain"
             src={"./IN_CODE_WE_TRUST.png"}
             alt="In Code We Trust"
-            mt={"1.6rem"}
+            className="loading-img"
           />
         </Center>
         <div className="loading-screen__wrapper">
@@ -96,6 +96,21 @@ const Loading = () => {
           height: 100%;
           background: linear-gradient(90deg, #6d6d04, #fefe0e);
           border-radius: inherit;
+        }
+
+        @media screen and (max-width: 1000px) {
+          .loading-img {
+            width: 80vw !important;
+          }
+          .loading-text {
+            font-size: 3.5vw;
+          }
+          .loading-screen .section-title {
+            font-size: 7vw;
+          }
+          .loading-screen__wrapper {
+            padding: 0 10vw;
+          }
         }
       `}</style>
     </>
