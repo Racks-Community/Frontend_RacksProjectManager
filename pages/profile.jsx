@@ -29,6 +29,7 @@ import {
   getMRCImageUrlFromMetadata,
   getMRCMetadataUrl,
 } from "./helpers/MRCImages";
+import Loading from "./components/Loading";
 import { formatDate } from "./helpers/FormatDate";
 import { ObjectIsNotEmpty } from "./helpers/ObjectIsNotEmpty";
 
@@ -231,6 +232,7 @@ function Profile() {
 
   return (
     <>
+      <Loading />
       <Box className="flex flex-col items-center profile-container">
         <Box bg={MRCBackground} className="profile-mrc-background">
           <VStack

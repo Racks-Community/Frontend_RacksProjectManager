@@ -132,7 +132,12 @@ const ShowProjectComponent = ({
   }, [project]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isCentered
+      autoFocus={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+    >
       <ModalOverlay />
       {userIsProjectCtr == true ? (
         <ModalContent>

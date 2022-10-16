@@ -58,7 +58,7 @@ const Admin = () => {
 
   return (
     <div className="bg-overlay">
-      <Modal isCentered isOpen={true} onClose={handleClose}>
+      <Modal isCentered autoFocus={false} isOpen={true} onClose={handleClose}>
         <ModalContent mt="-2rem">
           <ModalHeader className="text-center">ADMIN LOGIN</ModalHeader>
           <ModalCloseButton colorScheme="teal" />

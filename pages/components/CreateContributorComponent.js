@@ -166,7 +166,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   return (
     <>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered autoFocus={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader className="text-center">

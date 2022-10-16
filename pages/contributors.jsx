@@ -35,6 +35,7 @@ import {
   FaTrashAlt,
 } from "react-icons/fa";
 import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
+import Loading from "./components/Loading";
 import toast from "./components/Toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -140,7 +141,6 @@ function Contributors() {
   };
 
   const handleOnChangeProject = (val) => {
-    console.log(val);
     setSelectedDeleteProject(val);
   };
 
@@ -189,6 +189,7 @@ function Contributors() {
 
   return (
     <>
+      <Loading />
       <Container
         className="flex flex-col items-center profile-container"
         mt="-1.8rem"

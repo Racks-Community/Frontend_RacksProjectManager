@@ -22,6 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
 import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
+import { useRouter } from "next/router";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -52,6 +53,7 @@ function MyApp({ Component, pageProps }) {
   const [loginStatus, setLoginStatus] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const CustomAvatar = ({ size }) => {
     return imageURL != "" ? (
@@ -145,8 +147,7 @@ function MyApp({ Component, pageProps }) {
     },
     signOut: async () => {
       localStorage.removeItem("token");
-      dispatch(setUserInfo({}));
-      setLoginStatus(false);
+      router.reload();
     },
   });
 

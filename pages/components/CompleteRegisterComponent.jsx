@@ -136,7 +136,12 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   return (
     <>
-      <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        isCentered
+        autoFocus={false}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader className="text-center">

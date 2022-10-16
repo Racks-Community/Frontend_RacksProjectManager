@@ -41,7 +41,12 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
   }, [isOpen, user]);
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isCentered
+      autoFocus={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader className="text-center">INVITACIÓN DE DISCORD</ModalHeader>

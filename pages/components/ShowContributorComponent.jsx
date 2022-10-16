@@ -39,6 +39,7 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
   return (
     <Modal
       isCentered
+      autoFocus={false}
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
       className="modal"

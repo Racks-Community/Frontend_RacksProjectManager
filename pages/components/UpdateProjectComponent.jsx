@@ -93,7 +93,10 @@ const UpdateProjectComponent = ({
       formData.append("colateralCost", Number(event?.target[5]?.value));
     if (project.maxContributorsNumber !== Number(event?.target[6]?.value))
       formData.append("maxContributorsNumber", Number(event?.target[6]?.value));
-    if (project.githubRepository !== event?.target[7]?.value)
+    if (
+      project.githubRepository !== event?.target[7]?.value &&
+      user.role === "admin"
+    )
       formData.append("githubRepository", event?.target[7]?.value);
 
     if (user.role === "admin" || project.owner === user._id) {
@@ -129,6 +132,7 @@ const UpdateProjectComponent = ({
     <>
       <Modal
         isCentered
+        autoFocus={false}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         size={"lg"}
@@ -216,17 +220,19 @@ const UpdateProjectComponent = ({
                 />
               </FormControl>
 
-              <FormControl mt={3} isRequired>
-                <FormLabel>Repositorio Github</FormLabel>
-                <Input
-                  type="text"
-                  defaultValue={project.githubRepository}
-                  placeholder="Github Repository"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                  resize={"none"}
-                />
-              </FormControl>
+              {user.role === "admin" && (
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Repositorio Github</FormLabel>
+                  <Input
+                    type="text"
+                    defaultValue={project.githubRepository}
+                    placeholder="Github Repository"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                    resize={"none"}
+                  />
+                </FormControl>
+              )}
             </ModalBody>
 
             <ModalFooter

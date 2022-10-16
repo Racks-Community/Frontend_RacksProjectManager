@@ -21,6 +21,7 @@ import UpdateProjectComponent from "./UpdateProjectComponent";
 import ShowProjectComponent from "./ShowProjectComponent";
 import ApproveProjectComponent from "./ApproveProjectComponent";
 import Project from "./Project";
+import Loading from "./Loading";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -171,6 +172,7 @@ function Projects() {
 
   return (
     <>
+      <Loading />
       <Container
         className="flex flex-col items-center projects-container"
         mt="-1.2rem"

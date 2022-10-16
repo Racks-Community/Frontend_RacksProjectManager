@@ -148,6 +148,7 @@ const CompleteProjectComponent = ({
     <>
       <Modal
         isCentered
+        autoFocus={false}
         isOpen={isOpen}
         onClose={() => onCloseModal()}
         size={"lg"}

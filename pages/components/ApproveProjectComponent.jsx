@@ -69,7 +69,12 @@ const ApproveProjectComponent = ({
   };
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isCentered
+      autoFocus={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+    >
       <ModalOverlay />
       {user.role === "admin" && project.approveStatus === "PENDING" && (
         <ModalContent>

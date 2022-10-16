@@ -80,7 +80,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   };
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isCentered
+      autoFocus={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+    >
       <ModalOverlay />
       <ModalContent maxH={"92vh"} style={{ overflow: "hidden" }}>
         <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
