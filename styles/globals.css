@@ -5,7 +5,8 @@
 [data-theme="dark"],
 [data-theme="dark"] body {
   color: white;
-  background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f);
+  /* background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f); */
+  background: linear-gradient(90deg, #000000 0%, #070d10 50%, #141a1f);
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
@@ -46,7 +47,7 @@ main {
 }
 
 .bg-overlay {
-  background: linear-gradient(90deg, #05090b 0%, #070d10 50%, #141a1f);
+  background: linear-gradient(90deg, #000000 0%, #070d10 50%, #141a1f);
   height: 100vh;
   width: 100vw;
 }

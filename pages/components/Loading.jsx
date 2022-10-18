@@ -9,7 +9,7 @@ const Loading = () => {
         if (count <= 100) {
           document.getElementById("LoadingNumber").textContent = count + "%";
           document.getElementById("LoadingProgress").style.width = count + "%";
-          count == 99 ? count++ : (count += 3);
+          count += 5;
         } else {
           clearInterval(counting);
           document
@@ -94,6 +94,7 @@ const Loading = () => {
 
         .loading__progress {
           height: 100%;
+          width: 0%;
           background: linear-gradient(90deg, #6d6d04, #fefe0e);
           border-radius: inherit;
         }

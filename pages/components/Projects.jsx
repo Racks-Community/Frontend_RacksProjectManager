@@ -23,6 +23,7 @@ import ApproveProjectComponent from "./ApproveProjectComponent";
 import Project from "./Project";
 import Loading from "./Loading";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
+import { formatDate } from "../helpers/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -134,6 +135,13 @@ function Projects() {
     });
     if (res?.ok) {
       const data = await res.json();
+      data.map((project) => {
+        project.createdAt = formatDate(project.createdAt);
+        if (project.completed) {
+          project.completedAt = formatDate(project.completedAt);
+        }
+      });
+
       setNewProjects(
         data.filter(
           (project) =>
@@ -155,12 +163,13 @@ function Projects() {
             project.approveStatus === approveStatus.active
         )
       );
-      setPendigProjects(
-        data.filter(
-          (project) => project.approveStatus === approveStatus.pending
-        )
+      let pendingPjArray = data.filter(
+        (project) => project.approveStatus === approveStatus.pending
       );
-      return data.length;
+      setPendigProjects(pendingPjArray);
+      return user.role === "admin"
+        ? data.length - pendingPjArray.length
+        : data.length;
     }
   };
 
@@ -168,7 +177,7 @@ function Projects() {
     if (ObjectIsNotEmpty(user)) {
       fetchProjects();
     }
-  }, []);
+  }, [user]);
 
   return (
     <>

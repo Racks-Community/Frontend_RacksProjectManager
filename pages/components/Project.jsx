@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import ShowContributorComponent from "./ShowContributorComponent";
-import { formatDate } from "../helpers/FormatDate";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
+import { formatDate } from "../helpers/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -73,10 +73,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
 
   const fetchMRCImagesFromProject = async () => {
     const imgsMap = new Map();
-    project.createdAt = formatDate(project.createdAt);
-    if (project.completed) {
-      project.completedAt = formatDate(project.completedAt);
-    }
+
     if (project.contributors.length > 4)
       project.contributors = project.contributors.slice(0, 4);
 
@@ -295,7 +292,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                       mt="1"
                       colSpan={1}
                     >
-                      {project.completedAt}
+                      {project.completedAt.length <= 10 && project.completedAt}
                     </GridItem>
                   </>
                 ) : (
@@ -318,7 +315,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                       mt="1"
                       colSpan={1}
                     >
-                      {project.createdAt}
+                      {project.createdAt.length <= 10 && project.createdAt}
                     </GridItem>
                   </>
                 )}
