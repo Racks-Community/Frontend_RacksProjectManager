@@ -156,6 +156,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Nombre</FormLabel>
                 <Input
                   type="text"
+                  isDisabled={project.status !== "NEW"}
                   defaultValue={project.name}
                   placeholder="Nombre"
                   focusBorderColor="white"
@@ -191,6 +192,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Nivel de Reputación</FormLabel>
                 <Input
                   type="number"
+                  isDisabled={project.status !== "NEW"}
                   defaultValue={project.reputationLevel}
                   placeholder="Reputación"
                   focusBorderColor="white"
@@ -202,6 +204,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Colateral</FormLabel>
                 <Input
                   type="number"
+                  isDisabled={project.status !== "NEW"}
                   defaultValue={project.colateralCost}
                   placeholder="Colateral"
                   focusBorderColor="white"
@@ -225,6 +228,7 @@ const UpdateProjectComponent = ({
                   <FormLabel>Repositorio Github</FormLabel>
                   <Input
                     type="text"
+                    isDisabled={project.status !== "NEW"}
                     defaultValue={project.githubRepository}
                     placeholder="Github Repository"
                     focusBorderColor="white"
@@ -269,6 +273,7 @@ const UpdateProjectComponent = ({
                 isOpen={isOpenDeleteProjectPopover}
                 onClose={onCloseDeleteProjectPopover}
                 placement="top"
+                autoFocus={false}
               >
                 <PopoverTrigger>
                   <Button
@@ -343,7 +348,6 @@ const UpdateProjectComponent = ({
                 _hover={{
                   bg: "#dddfe2",
                 }}
-                isDisabled={project.status === "DOING"}
                 mr={3}
                 mt={-5}
                 mb={1}

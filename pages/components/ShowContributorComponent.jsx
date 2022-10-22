@@ -142,6 +142,29 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
                       </GridItem>
                     </>
                   )}
+                  {contributor.participationWeight > 0 && (
+                    <>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                      >
+                        <Text color="gray">Participación</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        ml="1rem"
+                        mt="1"
+                      >
+                        {contributor.participationWeight + "%"}
+                      </GridItem>
+                    </>
+                  )}
                   <GridItem
                     color="gray.500"
                     fontWeight="semibold"

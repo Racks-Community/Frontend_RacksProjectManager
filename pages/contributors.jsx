@@ -259,6 +259,7 @@ function Contributors() {
                           isOpen={isOpenBanPopoverId == contr.address}
                           onClose={handlePopoverClose}
                           placement="bottom"
+                          autoFocus={false}
                         >
                           <PopoverTrigger>
                             <Button
@@ -398,6 +399,7 @@ function Contributors() {
                         isOpen={isOpenDeletePopoverId == contr.address}
                         onClose={handlePopoverClose}
                         placement="bottom"
+                        autoFocus={false}
                       >
                         <PopoverTrigger>
                           <Button

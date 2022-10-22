@@ -1,18 +1,4 @@
-import {
-  Container,
-  Text,
-  Heading,
-  Box,
-  Button,
-  Grid,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
-} from "@chakra-ui/react";
+import { Container, Text, Heading, Box, Button, Grid } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
@@ -37,11 +23,6 @@ function Projects() {
     useState(false);
   const [isOpenApproveProjectComponent, setIsOpenApproveProjectComponent] =
     useState(false);
-  const [isOpenProjectPopover, setIsOpenProjectPopover] = useState(false);
-  const [isOpenCompletedPopover, setIsOpenCompletedPopover] = useState(false);
-  const [isOpenBlockedNewPopover, setIsOpenBlockedNewPopover] = useState(false);
-  const [isOpenBlockedDevPopover, setIsOpenBlockedDevPopover] = useState(false);
-  const [blockedPopoverBody, setBlockedPopoverBody] = useState("");
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
   const [newProjects, setNewProjects] = useState([]);
@@ -65,7 +46,14 @@ function Projects() {
   };
 
   const handleProjectClick = (event, project) => {
-    if (event.target.alt === "PFP") return;
+    // Ignore when clicking on contributor icons
+    if (
+      event.target.classList[0] === "all-contributors" ||
+      event.target.parentElement.classList[0] === "all-contributors"
+    )
+      return;
+    else if (event.target.alt === "PFP") return;
+
     if (user.role === "admin") {
       if (project.approveStatus === "PENDING") {
         setProjectToShow(project);
@@ -78,52 +66,9 @@ function Projects() {
         setIsOpenUpdateProjectComponent(true);
       }
     } else {
-      const userIsProjectContributor =
-        project.contributors.indexOf(user._id) > -1;
-      if (user.contributor && user.verified) {
-        if (project.completed && !userIsProjectContributor) {
-          setIsOpenCompletedPopover(true);
-        } else if (user.reputationLevel < project.reputationLevel) {
-          onOpenBlockedPopover(project);
-        } else if (
-          project.contributors.length === project.maxContributorsNumber &&
-          !userIsProjectContributor
-        ) {
-          onOpenBlockedPopover(project);
-        } else {
-          setProjectToShow(project);
-          setIsOpenShowProjectComponent(true);
-        }
-      } else {
-        setIsOpenProjectPopover(true);
-      }
+      setProjectToShow(project);
+      setIsOpenShowProjectComponent(true);
     }
-  };
-
-  const onCloseProjectPopover = () => {
-    setIsOpenProjectPopover(false);
-  };
-
-  const onOpenBlockedPopover = (project) => {
-    if (user.reputationLevel < project.reputationLevel) {
-      setBlockedPopoverBody("Nivel de Reputación Insuficiente");
-    } else if (project.contributors.length === project.maxContributorsNumber) {
-      setBlockedPopoverBody("El Proyecto no admite nuevos Contributors");
-    }
-    project.status === "CREATED"
-      ? setIsOpenBlockedNewPopover(true)
-      : setIsOpenBlockedDevPopover(true);
-  };
-  const onCloseBlockedNewPopover = () => {
-    setIsOpenBlockedNewPopover(false);
-  };
-
-  const onCloseBlockedDevPopover = () => {
-    setIsOpenBlockedDevPopover(false);
-  };
-
-  const onCloseCompletedPopover = () => {
-    setIsOpenCompletedPopover(false);
   };
 
   const fetchProjects = async () => {
@@ -173,9 +118,17 @@ function Projects() {
     }
   };
 
+  const clearProjectToShow = () => {
+    setProjectToShow({});
+  };
+
   useEffect(() => {
     if (ObjectIsNotEmpty(user)) {
       fetchProjects();
+    }
+    if (!localStorage.getItem("token") && !ObjectIsNotEmpty(user)) {
+      localStorage.removeItem("token");
+      router.reload();
     }
   }, [user]);
 
@@ -187,22 +140,9 @@ function Projects() {
         mt="-1.2rem"
         mb={"-1.2rem"}
       >
-        <Popover isOpen={isOpenProjectPopover} onClose={onCloseProjectPopover}>
-          <PopoverTrigger>
-            <Heading as="h1" mb="1rem" className="rackspm-heading">
-              Racks Project Manager
-            </Heading>
-          </PopoverTrigger>
-          <PopoverContent>
-            <PopoverArrow />
-            <PopoverCloseButton />
-            <PopoverHeader>Se un Contributor!</PopoverHeader>
-            <PopoverBody>
-              Para participar en un proyecto antes debe registrarse como
-              Contributor.
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+        <Heading as="h1" mb="1rem" className="rackspm-heading">
+          Racks Project Manager
+        </Heading>
 
         {user.role === "admin" && (
           <Button
@@ -219,112 +159,79 @@ function Projects() {
           </Button>
         )}
         {newProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
-            <Text fontSize="2xl" as="kbd" className="project-section-title">
-              Proyectos Nuevos
-            </Text>
-            <Popover
-              isOpen={isOpenBlockedNewPopover}
-              onClose={onCloseBlockedNewPopover}
-            >
-              <PopoverTrigger>
-                <Grid pb="1.65rem" className={"projects-section-flex"}>
-                  {newProjects.map((p) => (
-                    <Project
-                      project={p}
-                      handleProjectClick={handleProjectClick}
-                      privateProject={false}
-                      key={p.address}
-                    />
-                  ))}
-                </Grid>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
-                <PopoverBody>{blockedPopoverBody}</PopoverBody>
-              </PopoverContent>
-            </Popover>
-          </Box>
-        )}
-        {devProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+          <Box mb="-1rem" w={"80vw"} className="flex flex-col">
             <Text
               fontSize="2xl"
               as="kbd"
+              as="u"
+              className="project-section-title"
+            >
+              Proyectos Nuevos
+            </Text>
+            <Grid pb="1.65rem" className={"projects-section-flex"}>
+              {newProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={false}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
+          </Box>
+        )}
+        {devProjects.length > 0 && (
+          <Box mb="-1rem" w={"80vw"} className="flex flex-col">
+            <Text
+              fontSize="2xl"
+              as="kbd"
+              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
               Proyectos en Desarrollo
             </Text>
-            <Popover
-              isOpen={isOpenBlockedDevPopover}
-              onClose={onCloseBlockedDevPopover}
-            >
-              <PopoverTrigger>
-                <Grid pb="1.65rem" className={"projects-section-flex"}>
-                  {devProjects.map((p) => (
-                    <Project
-                      project={p}
-                      handleProjectClick={handleProjectClick}
-                      privateProject={false}
-                      key={p.address}
-                    />
-                  ))}
-                </Grid>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader borderColor="red">No disponible</PopoverHeader>
-                <PopoverBody>{blockedPopoverBody}</PopoverBody>
-              </PopoverContent>
-            </Popover>
+            <Grid pb="1.65rem" className={"projects-section-flex"}>
+              {devProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={false}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
           </Box>
         )}
         {completedProjects.length > 0 && (
-          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+          <Box mb="-1rem" w={"80vw"} className="flex flex-col">
             <Text
               fontSize="2xl"
               as="kbd"
+              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
               Proyectos Completados
             </Text>
-            <Popover
-              isOpen={isOpenCompletedPopover}
-              onClose={onCloseCompletedPopover}
-            >
-              <PopoverTrigger>
-                <Grid pb="1.65rem" className={"projects-section-flex"}>
-                  {completedProjects.map((p) => (
-                    <Project
-                      project={p}
-                      handleProjectClick={handleProjectClick}
-                      privateProject={false}
-                      key={p.address}
-                    />
-                  ))}
-                </Grid>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader borderColor="red">
-                  Proyecto Completado
-                </PopoverHeader>
-                <PopoverBody>El Proyecto ya está terminado.</PopoverBody>
-              </PopoverContent>
-            </Popover>
+            <Grid pb="1.65rem" className={"projects-section-flex"}>
+              {completedProjects.map((p) => (
+                <Project
+                  project={p}
+                  handleProjectClick={handleProjectClick}
+                  privateProject={false}
+                  key={p.address}
+                />
+              ))}
+            </Grid>
           </Box>
         )}
         {pendingProjects.length > 0 && user.role === "admin" && (
-          <Box mb="-1rem" w={"60vw"} className="flex flex-col">
+          <Box mb="-1rem" w={"80vw"} className="flex flex-col">
             <Text
               fontSize="2xl"
               as="kbd"
+              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
@@ -368,6 +275,7 @@ function Projects() {
         setIsOpen={setIsOpenShowProjectComponent}
         fetchProjects={fetchProjects}
         project={projectToShow}
+        clearProject={clearProjectToShow}
       />
       <ApproveProjectComponent
         isOpen={isOpenApproveProjectComponent}

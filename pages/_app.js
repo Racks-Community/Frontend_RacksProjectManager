@@ -83,6 +83,7 @@ function MyApp({ Component, pageProps }) {
       });
       if (!res?.ok) {
         localStorage.removeItem("token");
+        router.reload();
         setAuthenticationStatus("unauthenticated");
       } else {
         setAuthenticationStatus("authenticated");

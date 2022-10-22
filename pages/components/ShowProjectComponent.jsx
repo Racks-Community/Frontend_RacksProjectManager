@@ -28,7 +28,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import toast from "./Toast";
-import { formatDate } from "../helpers/FormatDate";
+import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -38,10 +38,14 @@ const ShowProjectComponent = ({
   setIsOpen,
   fetchProjects,
   project,
+  clearProject,
 }) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
-  const [userIsProjectCtr, setUserIsProjectCtr] = useState(false);
+  const [openJoinProject, setOpenJoinProject] = useState(false);
+  const [openFundProject, setOpenFundProject] = useState(false);
+  const [isProjectContributor, setIsProjectContributor] = useState(false);
+  const [errorCodeJoinProject, setErrorCodeJoinProject] = useState("NONE");
   const notify = React.useCallback((type, message) => {
     toast({ type, message });
   }, []);
@@ -49,6 +53,13 @@ const ShowProjectComponent = ({
     created: "CREATED",
     doing: "DOING",
     finished: "FINISHED",
+  };
+  const errorCode = {
+    completed: "PROJECT_COMPLETED",
+    reputation: "NO_ENOUGH_REPUTATION",
+    full: "PROJECT_FULL",
+    contributor: "NO_CONTRIBUTOR",
+    none: "NONE",
   };
 
   const handleJoinProjectClick = async () => {
@@ -120,7 +131,14 @@ const ShowProjectComponent = ({
     }
   };
 
-  const isProjectContributor = () => {
+  const handleCloseShowProject = () => {
+    setOpenJoinProject(false);
+    setErrorCodeJoinProject(errorCode.none);
+    clearProject();
+    setIsOpen(false);
+  };
+
+  const checkProjectContributor = () => {
     if (!project.address) return false;
     const userIsProjectContributor =
       project.contributors.indexOf(user._id) > -1 || user.role === "admin";
@@ -128,24 +146,35 @@ const ShowProjectComponent = ({
   };
 
   useEffect(() => {
-    setUserIsProjectCtr(isProjectContributor());
-  }, [project]);
+    if (ObjectIsNotEmpty(project)) {
+      setIsProjectContributor(checkProjectContributor());
+
+      if (project.completed) setErrorCodeJoinProject(errorCode.completed);
+      else if (user.contributor && !user.verified)
+        setErrorCodeJoinProject(errorCode.contributor);
+      else if (project.reputationLevel > user.reputationLevel)
+        setErrorCodeJoinProject(errorCode.reputation);
+      else if (project.maxContributorsNumber == project.contributors.length)
+        setErrorCodeJoinProject(errorCode.full);
+    }
+  }, [project, user]);
 
   return (
     <Modal
       isCentered
       autoFocus={false}
       isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={handleCloseShowProject}
+      destroyOnClose={true}
     >
       <ModalOverlay />
-      {userIsProjectCtr == true ? (
+      {!openJoinProject && ObjectIsNotEmpty(project) ? (
         <ModalContent>
           <ModalHeader className="text-center">
             DETALLES DEL PROYECTO
           </ModalHeader>
           <ModalCloseButton colorScheme="white" />
-          <ModalBody pb={6}>
+          <ModalBody>
             <Box p="4">
               <Box
                 mt="1"
@@ -197,22 +226,49 @@ const ShowProjectComponent = ({
                   <Text>{project.requirements}</Text>
                 </Box>
 
-                <Box fontSize={"0.85rem"}>
-                  <Text
-                    color="gray"
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    textTransform="uppercase"
-                  >
-                    Github Repository:
-                  </Text>
-                  <Center>
-                    <Link href="project.githubRepository" isExternal>
-                      {project.githubRepository}
-                    </Link>
-                  </Center>
-                </Box>
+                {isProjectContributor && (
+                  <>
+                    <Box fontSize={"0.85rem"}>
+                      <Text
+                        color="gray"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                      >
+                        Github Repository:
+                      </Text>
+                      <Center>
+                        <Link href="project.githubRepository" isExternal>
+                          {project.githubRepository}
+                        </Link>
+                      </Center>
+                    </Box>
+
+                    <Box fontSize={"0.85rem"}>
+                      <Text
+                        color="gray"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                      >
+                        Address:
+                      </Text>
+                      <Center>
+                        <Link
+                          href={
+                            "https://goerli.etherscan.io/address/" +
+                            project.address
+                          }
+                          isExternal
+                        >
+                          {project.address}
+                        </Link>
+                      </Center>
+                    </Box>
+                  </>
+                )}
 
                 <Grid templateColumns="repeat(4, 1fr)">
                   <GridItem
@@ -328,14 +384,53 @@ const ShowProjectComponent = ({
           </ModalBody>
 
           <ModalFooter>
+            {!project.completed && (
+              <Button
+                onClick={() => setOpenFundProject(true)}
+                variant="outline"
+                bg="transparent"
+                borderColor={"#FEFE0E"}
+                color="white"
+                borderRadius={"none"}
+                _hover={{
+                  bg: "#FEFE0E",
+                  color: "black",
+                  transition: "0.5s",
+                }}
+                size="sm"
+                mb={1}
+                mr={3}
+              >
+                Invertir
+              </Button>
+            )}
+
+            {!project.completed && !isProjectContributor && (
+              <Button
+                onClick={() => setOpenJoinProject(true)}
+                disabled={project.completed || isProjectContributor}
+                bg="white"
+                color="black"
+                variant="solid"
+                borderRadius={"none"}
+                _hover={{
+                  bg: "#dddfe2",
+                }}
+                size="sm"
+                mb={1}
+                mr={3}
+              >
+                Unirme
+              </Button>
+            )}
+
             <Button
-              onClick={() => setIsOpen(false)}
+              onClick={handleCloseShowProject}
               colorScheme="white"
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
               size="sm"
-              mt={-5}
               mb={1}
             >
               Cerrar
@@ -346,49 +441,68 @@ const ShowProjectComponent = ({
         <ModalContent>
           <ModalHeader className="text-center">UNIRSE AL PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="white" />
-          <ModalBody pb={6} fontSize={"0.85rem"}>
-            <Text>
-              Para participar en este proyecto debes transferir
-              {" " + project.colateralCost} USDC como fianza.
-            </Text>
-            <br />
-            <Text>Esta será devuelta al finalizar el proyecto.</Text>
-            <Text>
-              Se perderá el derecho a devolución del colateral si se filtra
-              información del proyecto o realiza cualquier acción grave que
-              perjudique o cause daños al desarrollo del proyecto.
-            </Text>
-            <br />
-            <Text>¿Está seguro de querer unirse a este proyecto?</Text>
+          <ModalBody fontSize={"0.85rem"}>
+            {(errorCodeJoinProject == errorCode.completed ||
+              errorCodeJoinProject == errorCode.full) && (
+              <Center>El Proyecto no admite nuevos Contributors</Center>
+            )}
+            {errorCodeJoinProject == errorCode.contributor && (
+              <Center>
+                Para participar en un proyecto antes debe registrarse como
+                Contributor.
+              </Center>
+            )}
+            {errorCodeJoinProject == errorCode.reputation && (
+              <Center textAlign={"center"}>
+                No tiene suficiente reputación para participar en este proyecto.
+              </Center>
+            )}
+            {errorCodeJoinProject == errorCode.none && (
+              <>
+                <Text>
+                  Para participar en este proyecto debes transferir
+                  {" " + project.colateralCost} USDC como fianza.
+                </Text>
+                <br />
+                <Text>Esta será devuelta al finalizar el proyecto.</Text>
+                <Text>
+                  Se perderá el derecho a devolución del colateral si se filtra
+                  información del proyecto o realiza cualquier acción grave que
+                  perjudique o cause daños al desarrollo del proyecto.
+                </Text>
+                <br />
+                <Text>¿Está seguro de querer unirse a este proyecto?</Text>
+              </>
+            )}
           </ModalBody>
 
           <ModalFooter>
+            {errorCodeJoinProject === errorCode.none && (
+              <Button
+                onClick={() => handleJoinProjectClick()}
+                isLoading={loading}
+                loadingText="Unirme"
+                bg="white"
+                color="black"
+                variant="solid"
+                borderRadius={"none"}
+                _hover={{
+                  bg: "#dddfe2",
+                }}
+                size="sm"
+                mr={3}
+                mb={1}
+              >
+                Unirme
+              </Button>
+            )}
             <Button
-              onClick={() => handleJoinProjectClick()}
-              isLoading={loading}
-              loadingText="Unirme"
-              bg="white"
-              color="black"
-              variant="solid"
-              borderRadius={"none"}
-              _hover={{
-                bg: "#dddfe2",
-              }}
-              size="sm"
-              mr={3}
-              mt={-5}
-              mb={1}
-            >
-              Unirme
-            </Button>
-            <Button
-              onClick={() => setIsOpen(false)}
+              onClick={handleCloseShowProject}
               colorScheme="white"
               variant="outline"
               borderRadius={"none"}
               _hover={{ bg: "#dddfe236" }}
               size="sm"
-              mt={-5}
               mb={1}
             >
               Cancelar
