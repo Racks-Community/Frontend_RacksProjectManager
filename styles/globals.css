@@ -124,6 +124,8 @@ main {
   cursor: pointer;
   z-index: 1;
   position: relative;
+  transition: opacity 0.5s linear;
+  box-shadow: 0px 1px 8px 0px rgba(255, 255, 0, 0.7);
 }
 .project-box::before {
   position: absolute;
@@ -135,7 +137,11 @@ main {
   background: linear-gradient(90deg, #040d11 0, #00020d);
   z-index: -1;
   transition: opacity 0.5s linear;
+  box-shadow: inset 0px 1px 8px 0px rgba(255, 255, 0, 0.7);
   opacity: 0;
+}
+.project-box:hover {
+  box-shadow: none;
 }
 .project-box:hover::before {
   opacity: 1;
@@ -219,7 +225,7 @@ main {
 /* FOOTER */
 
 .footer-box {
-  height: 7vh;
+  height: 6vh;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -407,7 +407,7 @@ function Profile() {
             </Button>
           </Tooltip>
         </Center>
-        {projects.length != 0 && (
+        {projects.length > 0 && (
           <Grid
             templateColumns="repeat(4, 1fr)"
             className={"projects-section-flex"}
@@ -435,11 +435,13 @@ function Profile() {
         fetchProjects={fetchProjects}
         project={projectToUpdate}
       />
-      <style global jsx>{`
-        main {
-          height: auto;
-        }
-      `}</style>
+      {projects.length > 0 && (
+        <style global jsx>{`
+          main {
+            height: auto;
+          }
+        `}</style>
+      )}
     </>
   );
 }

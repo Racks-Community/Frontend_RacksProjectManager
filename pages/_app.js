@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const { chains, provider } = configureChains(
-  [chain.goerli],
+  [chain.goerli], // DEV
   [
     jsonRpcProvider({
       rpc: () => ({ http: process.env.NEXT_PUBLIC_RPC_URL }),
