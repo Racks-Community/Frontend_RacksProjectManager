@@ -23,6 +23,7 @@ function Projects() {
     useState(false);
   const [isOpenApproveProjectComponent, setIsOpenApproveProjectComponent] =
     useState(false);
+  const [sectionsNumber, setSectionsNumber] = useState(0);
   const [projectToUpdate, setProjectToUpdate] = useState({});
   const [projectToShow, setProjectToShow] = useState({});
   const [newProjects, setNewProjects] = useState([]);
@@ -86,32 +87,39 @@ function Projects() {
           project.completedAt = formatDate(project.completedAt);
         }
       });
+      let nSections = 0;
+      const newPjArray = data.filter(
+        (project) =>
+          project.status === status.created &&
+          project.approveStatus === approveStatus.active
+      );
+      setNewProjects(newPjArray);
+      if (newPjArray.length > 0) nSections++;
 
-      setNewProjects(
-        data.filter(
-          (project) =>
-            project.status === status.created &&
-            project.approveStatus === approveStatus.active
-        )
+      const devPjArray = data.filter(
+        (project) =>
+          project.status === status.doing &&
+          project.approveStatus === approveStatus.active
       );
-      setDevProjects(
-        data.filter(
-          (project) =>
-            project.status === status.doing &&
-            project.approveStatus === approveStatus.active
-        )
+      setDevProjects(devPjArray);
+      if (devPjArray.length > 0) nSections++;
+
+      const completedPjArray = data.filter(
+        (project) =>
+          project.status === status.finished &&
+          project.approveStatus === approveStatus.active
       );
-      setCompletedProjects(
-        data.filter(
-          (project) =>
-            project.status === status.finished &&
-            project.approveStatus === approveStatus.active
-        )
-      );
-      let pendingPjArray = data.filter(
+      setCompletedProjects(completedPjArray);
+      if (completedPjArray.length > 0) nSections++;
+
+      const pendingPjArray = data.filter(
         (project) => project.approveStatus === approveStatus.pending
       );
       setPendigProjects(pendingPjArray);
+      if (pendingPjArray.length > 0) nSections++;
+
+      setSectionsNumber(nSections);
+
       return user.role === "admin"
         ? data.length - pendingPjArray.length
         : data.length;
@@ -235,7 +243,7 @@ function Projects() {
               alignSelf={"start"}
               className="project-section-title"
             >
-              Proyectos Pendientes de Aprobación
+              Proyectos Pendientes
             </Text>
             <Grid pb="1.65rem" className={"projects-section-flex"}>
               {pendingProjects.map((p) => (
@@ -283,11 +291,13 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
-      <style global jsx>{`
-        main {
-          height: auto;
-        }
-      `}</style>
+      {sectionsNumber > 1 && (
+        <style global jsx>{`
+          main {
+            height: auto;
+          }
+        `}</style>
+      )}
     </>
   );
 }

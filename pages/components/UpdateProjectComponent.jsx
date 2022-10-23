@@ -192,7 +192,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Nivel de Reputación</FormLabel>
                 <Input
                   type="number"
-                  isDisabled={project.status !== "NEW"}
+                  isDisabled={project.status !== "CREATED"}
                   defaultValue={project.reputationLevel}
                   placeholder="Reputación"
                   focusBorderColor="white"
@@ -204,7 +204,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Colateral</FormLabel>
                 <Input
                   type="number"
-                  isDisabled={project.status !== "NEW"}
+                  isDisabled={project.status !== "CREATED"}
                   defaultValue={project.colateralCost}
                   placeholder="Colateral"
                   focusBorderColor="white"
@@ -228,7 +228,7 @@ const UpdateProjectComponent = ({
                   <FormLabel>Repositorio Github</FormLabel>
                   <Input
                     type="text"
-                    isDisabled={project.status !== "NEW"}
+                    isDisabled={project.status !== "CREATED"}
                     defaultValue={project.githubRepository}
                     placeholder="Github Repository"
                     focusBorderColor="white"

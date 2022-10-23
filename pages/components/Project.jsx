@@ -267,7 +267,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                     </Center>
                   </Box>
 
-                  <Grid templateColumns="repeat(3, 1fr)">
+                  <Grid templateColumns="repeat(3, 1fr)" w={"100%"}>
                     <GridItem
                       color="gray.500"
                       fontWeight="semibold"
@@ -282,7 +282,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                       fontWeight="semibold"
                       letterSpacing="wide"
                       fontSize="xs"
-                      ml="4.8rem"
+                      textAlign={"end"}
                       colSpan={1}
                     >
                       {project.reputationLevel}
@@ -302,7 +302,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                       fontWeight="semibold"
                       letterSpacing="wide"
                       fontSize="xs"
-                      ml="4rem"
+                      textAlign={"end"}
                       mt="1"
                       colSpan={1}
                     >
@@ -323,13 +323,34 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                       fontWeight="semibold"
                       letterSpacing="wide"
                       fontSize="xs"
-                      ml="4.2rem"
+                      textAlign={"end"}
                       mt="1"
                       colSpan={1}
                     >
                       {project.contributors.length +
                         "/" +
                         project.maxContributorsNumber}
+                    </GridItem>
+                    <GridItem
+                      color="gray.500"
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      textTransform="uppercase"
+                      mt="1"
+                      colSpan={2}
+                    >
+                      <Text color="gray">Fondos:</Text>
+                    </GridItem>
+                    <GridItem
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      mt="1"
+                      textAlign={"end"}
+                      colSpan={1}
+                    >
+                      {project.funds + " USDT"}
                     </GridItem>
                     {project.completed ? (
                       <>
@@ -349,7 +370,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                           letterSpacing="wide"
                           fontSize="xs"
                           mt="1"
-                          ml="1.2rem"
+                          textAlign={"end"}
                           colSpan={1}
                         >
                           {project.completedAt.length <= 10 &&
@@ -374,7 +395,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                           letterSpacing="wide"
                           fontSize="xs"
                           mt="1"
-                          ml="1.3rem"
+                          textAlign={"end"}
                           colSpan={1}
                         >
                           {project.createdAt.length <= 10 && project.createdAt}

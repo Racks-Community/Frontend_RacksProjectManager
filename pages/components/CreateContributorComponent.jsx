@@ -25,6 +25,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import toast from "./Toast";
+import { getMRCImageUrlFromId, getMRCMetadataUrl } from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -43,7 +44,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const contributorData = {
-      avatar: await getMRCUrl(event?.target[0]?.value),
+      avatar: await getMRCMetadataUrl(event?.target[0]?.value),
       email: event?.target[1]?.value,
       githubUsername: event?.target[2]?.value,
       discord: event?.target[3]?.value,
@@ -101,31 +102,9 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     }
   };
 
-  const getMRCUrl = async (tokenId) => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://polygon-rpc.com"
-    );
-    const MRC = new ethers.Contract(
-      "0xeF453154766505FEB9dBF0a58E6990fd6eB66969",
-      MrCryptoAbi,
-      provider
-    );
-    const uri = await MRC.tokenURI(tokenId);
-    uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return uri;
-  };
-
-  const getMRCImageUrl = async (tokenId) => {
-    const uri = await getMRCUrl(tokenId);
-    const tokenURIResponse = await (await fetch(uri)).json();
-    const imageURI = tokenURIResponse.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
-  };
-
   const handleOnChangeToken = async (event) => {
     if (event.target.value) {
-      const uri = await getMRCImageUrl(event.target.value);
+      const uri = await getMRCImageUrlFromId(event.target.value);
       setSelectedMRC(uri);
     } else {
       setSelectedMRC("#");
@@ -150,7 +129,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
       ids.push(ethers.BigNumber.from(id).toNumber());
     }
     setMRCIds(ids);
-    await getMRCUrl(ids[0]);
+    await getMRCMetadataUrl(ids[0]);
   };
 
   const onClose = () => {

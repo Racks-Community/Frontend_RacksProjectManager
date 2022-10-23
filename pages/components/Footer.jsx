@@ -7,7 +7,7 @@ function Footer() {
       <Divider
         w={"80%"}
         mx={"auto"}
-        mt="1.3rem"
+        mt="2rem"
         style={{ borderColor: "#FEFE0E" }}
       />
       <Container className="footer-box">
