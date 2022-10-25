@@ -156,7 +156,7 @@ const UpdateProjectComponent = ({
                 <FormLabel>Nombre</FormLabel>
                 <Input
                   type="text"
-                  isDisabled={project.status !== "NEW"}
+                  isDisabled={project.status !== "CREATED"}
                   defaultValue={project.name}
                   placeholder="Nombre"
                   focusBorderColor="white"

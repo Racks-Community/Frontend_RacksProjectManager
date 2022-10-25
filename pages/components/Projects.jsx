@@ -155,7 +155,6 @@ function Projects() {
         {user.role === "admin" && (
           <Button
             onClick={handleDisplayCreateProject}
-            className="custom-buttons"
             mb="1rem"
             mr="1rem"
             variant="outline"
@@ -291,7 +290,7 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
-      {sectionsNumber > 1 && (
+      {sectionsNumber !== 1 && (
         <style global jsx>{`
           main {
             height: auto;
