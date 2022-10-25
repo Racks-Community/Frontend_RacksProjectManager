@@ -44,3 +44,5 @@ export function ThemeProvider({ children }) {
     </NextThemeProvider>
   );
 }
+
+export default ThemeProvider;

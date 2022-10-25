@@ -1,4 +1,4 @@
-import { contractAddresses, MrCryptoAbi } from "../../web3Constants";
+import { MrCryptoAbi } from "../../web3Constants";
 import { ethers } from "ethers";
 
 export const getMRCImageUrlFromAvatar = async (uri) => {
@@ -35,3 +35,5 @@ export const getMRCMetadataUrl = async (tokenId) => {
   uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
   return uri;
 };
+
+export default getMRCImageUrlFromAvatar;

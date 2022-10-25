@@ -29,3 +29,5 @@ export const initParticleSlider = () => {
   psScript.setAttribute("id", "ParticleSlider");
   document.body.appendChild(psScript);
 };
+
+export default initParticleSlider;

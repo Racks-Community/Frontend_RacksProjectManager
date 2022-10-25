@@ -7,3 +7,5 @@ export const formatDate = (originalDate) => {
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   return formattedDate;
 };
+
+export default formatDate;
