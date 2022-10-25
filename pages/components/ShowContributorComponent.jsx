@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { selectUserInfo } from "../../store/userSlice";
 import {
   Modal,
   ModalContent,
@@ -24,7 +22,6 @@ import {
 import { getMRCImageUrlFromMetadata } from "../helpers/MRCImages";
 
 const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
-  const user = useSelector(selectUserInfo);
   const [contributorMRC, setContributorMRC] = useState(null);
 
   useEffect(() => {

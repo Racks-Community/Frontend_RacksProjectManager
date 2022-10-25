@@ -264,7 +264,6 @@ function Contributors() {
                           <PopoverTrigger>
                             <Button
                               onClick={() => handleBanPopoverOpen(contr)}
-                              size={"sm"}
                               bg="black"
                               color="white"
                               variant="solid"
@@ -304,7 +303,6 @@ function Contributors() {
                             >
                               <Button
                                 onClick={() => handleBanContributor(contr)}
-                                size={"sm"}
                                 isLoading={banLoading}
                                 loadingText="Baneando"
                                 bg="black"
@@ -333,7 +331,6 @@ function Contributors() {
                           <PopoverTrigger>
                             <Button
                               onClick={() => handleBanPopoverOpen(contr)}
-                              size={"sm"}
                               bg="#444"
                               color="white"
                               variant="solid"
@@ -373,7 +370,6 @@ function Contributors() {
                             >
                               <Button
                                 onClick={() => handleBanContributor(contr)}
-                                size={"sm"}
                                 isLoading={banLoading}
                                 loadingText="Desbaneando"
                                 bg="black"
@@ -404,7 +400,6 @@ function Contributors() {
                         <PopoverTrigger>
                           <Button
                             onClick={() => handleDeletePopoverOpen(contr)}
-                            size={"sm"}
                             bg="red"
                             color="white"
                             variant="solid"

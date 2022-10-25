@@ -167,12 +167,7 @@ function Projects() {
         )}
         {newProjects.length > 0 && (
           <Box mb="-1rem" w={"80vw"} className="flex flex-col">
-            <Text
-              fontSize="2xl"
-              as="kbd"
-              as="u"
-              className="project-section-title"
-            >
+            <Text fontSize="2xl" as="kbd" className="project-section-title">
               Proyectos Nuevos
             </Text>
             <Grid pb="1.65rem" className={"projects-section-flex"}>
@@ -192,7 +187,6 @@ function Projects() {
             <Text
               fontSize="2xl"
               as="kbd"
-              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
@@ -215,7 +209,6 @@ function Projects() {
             <Text
               fontSize="2xl"
               as="kbd"
-              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
@@ -238,7 +231,6 @@ function Projects() {
             <Text
               fontSize="2xl"
               as="kbd"
-              as="u"
               alignSelf={"start"}
               className="project-section-title"
             >
