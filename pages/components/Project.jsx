@@ -130,7 +130,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                 onClick={(event) => handleProjectClick(event, project)}
               >
                 <Box p="6" pb="3">
-                  {/* <Box>
+                  <Box>
                     <Center>
                       <Image
                         w="150px"
@@ -140,7 +140,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                         alt="Project img"
                       />
                     </Center>
-                  </Box> */}
+                  </Box>
                   <Box
                     mt="3"
                     ml="1"
