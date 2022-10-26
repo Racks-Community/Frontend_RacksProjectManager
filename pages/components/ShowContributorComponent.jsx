@@ -29,7 +29,7 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
     if (contributor.avatar) {
       (async () => {
         const tokenJson = await (await fetch(contributor.avatar)).json();
-        setContributorMRC(await getMRCImageUrlFromMetadata(tokenJson));
+        setContributorMRC(getMRCImageUrlFromMetadata(tokenJson));
       })();
     }
   }, [contributor]);

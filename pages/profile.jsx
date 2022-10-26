@@ -208,7 +208,7 @@ function Profile() {
     if (user.contributor && profileId == -1) {
       (async () => {
         const tokenJson = await (await fetch(user.avatar)).json();
-        setSelectedMRC(await getMRCImageUrlFromMetadata(tokenJson));
+        setSelectedMRC(getMRCImageUrlFromMetadata(tokenJson));
         setprofileId(tokenJson.edition);
         setMRCBackgroundStyles(tokenJson.attributes[0].value);
         setMRCToken(tokenJson);

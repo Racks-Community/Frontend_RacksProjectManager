@@ -16,7 +16,7 @@ export const getMRCImageUrlFromId = async (tokenId) => {
   return imageURIURL;
 };
 
-export const getMRCImageUrlFromMetadata = async (jsonToken) => {
+export const getMRCImageUrlFromMetadata = (jsonToken) => {
   const imageURI = jsonToken.image;
   const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
   return imageURIURL;
@@ -36,4 +36,4 @@ export const getMRCMetadataUrl = async (tokenId) => {
   return uri;
 };
 
-export default getMRCImageUrlFromAvatar;
+export default getMRCImageUrlFromMetadata;
