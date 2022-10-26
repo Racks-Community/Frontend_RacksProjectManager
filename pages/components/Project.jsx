@@ -130,17 +130,17 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                 onClick={(event) => handleProjectClick(event, project)}
               >
                 <Box p="6" pb="3">
-                  <Box>
+                  {/* <Box>
                     <Center>
-                      {/* <Image
+                      <Image
                         w="150px"
                         h="70px"
                         objectFit="contain"
                         src={project.imageURL}
                         alt="Project img"
-                      /> */}
+                      />
                     </Center>
-                  </Box>
+                  </Box> */}
                   <Box
                     mt="3"
                     ml="1"
