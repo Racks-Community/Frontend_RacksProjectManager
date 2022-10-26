@@ -20,14 +20,17 @@ const init = function () {
 };
 
 export const initParticleSlider = () => {
-  var psScript = document.createElement("script");
-  psScript.addEventListener
-    ? psScript.addEventListener("load", init, false)
-    : (psScript.onload = init);
-  psScript.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/23500/ps-0.9.js";
-  psScript.setAttribute("type", "text/javascript");
-  psScript.setAttribute("id", "ParticleSlider");
-  document.body.appendChild(psScript);
+  if (typeof window !== "undefined") {
+    var psScript = document.createElement("script");
+    psScript.addEventListener
+      ? psScript.addEventListener("load", init, false)
+      : (psScript.onload = init);
+    psScript.src =
+      "https://s3-us-west-2.amazonaws.com/s.cdpn.io/23500/ps-0.9.js";
+    psScript.setAttribute("type", "text/javascript");
+    psScript.setAttribute("id", "ParticleSlider");
+    document.body.appendChild(psScript);
+  }
 };
 
 export default initParticleSlider;
