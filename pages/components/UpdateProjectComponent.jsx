@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import toast from "./Toast";
 import CompleteProjectComponent from "./CompleteProjectComponent";
+import ObjectIsNotEmpty from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -128,256 +129,262 @@ const UpdateProjectComponent = ({
     file.style.setProperty("--contentText", `"${event.target.files[0].name}"`);
   };
 
-  return (
-    <>
-      <Modal
-        isCentered
-        autoFocus={false}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        size={"lg"}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader className="text-center">GESTIONAR PROYECTO</ModalHeader>
-          <ModalCloseButton colorScheme="teal" />
-          <form onSubmit={handleSubmit} autoComplete="off">
-            <ModalBody pb={5}>
-              <FormControl>
-                <input
-                  id="img-selector"
-                  name="imageURL"
-                  type="file"
-                  accept="image/*"
-                  onChange={changeFileHandler}
-                />
-              </FormControl>
-              <FormControl mt={-5} isRequired>
-                <FormLabel>Nombre</FormLabel>
-                <Input
-                  type="text"
-                  isDisabled={project.status !== "CREATED"}
-                  defaultValue={project.name}
-                  placeholder="Nombre"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                />
-              </FormControl>
-
-              <FormControl mt={3} isRequired>
-                <FormLabel>Descripción</FormLabel>
-                <Textarea
-                  type="text"
-                  defaultValue={project.description}
-                  placeholder="Descripción"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                  resize={"none"}
-                />
-              </FormControl>
-
-              <FormControl mt={3} isRequired>
-                <FormLabel>Requerimientos</FormLabel>
-                <Input
-                  type="text"
-                  defaultValue={project.requirements}
-                  placeholder="Requerimientos"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                  resize={"none"}
-                />
-              </FormControl>
-
-              <FormControl mt={3} isRequired>
-                <FormLabel>Nivel de Reputación</FormLabel>
-                <Input
-                  type="number"
-                  isDisabled={project.status !== "CREATED"}
-                  defaultValue={project.reputationLevel}
-                  placeholder="Reputación"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                />
-              </FormControl>
-
-              <FormControl mt={3} isRequired>
-                <FormLabel>Colateral</FormLabel>
-                <Input
-                  type="number"
-                  isDisabled={project.status !== "CREATED"}
-                  defaultValue={project.colateralCost}
-                  placeholder="Colateral"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                />
-              </FormControl>
-
-              <FormControl mt={3} isRequired>
-                <FormLabel>Número máximo de Contribuidores</FormLabel>
-                <Input
-                  type="number"
-                  defaultValue={project.maxContributorsNumber}
-                  placeholder="Número de Contribuidores"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                />
-              </FormControl>
-
-              {user.role === "admin" && (
-                <FormControl mt={3} isRequired>
-                  <FormLabel>Repositorio Github</FormLabel>
+  if (ObjectIsNotEmpty(project)) {
+    return (
+      <>
+        <Modal
+          isCentered
+          autoFocus={false}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          size={"lg"}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader className="text-center">
+              GESTIONAR PROYECTO
+            </ModalHeader>
+            <ModalCloseButton colorScheme="teal" />
+            <form onSubmit={handleSubmit} autoComplete="off">
+              <ModalBody pb={5}>
+                <FormControl>
+                  <input
+                    id="img-selector"
+                    name="imageURL"
+                    type="file"
+                    accept="image/*"
+                    onChange={changeFileHandler}
+                  />
+                </FormControl>
+                <FormControl mt={-5} isRequired>
+                  <FormLabel>Nombre</FormLabel>
                   <Input
                     type="text"
                     isDisabled={project.status !== "CREATED"}
-                    defaultValue={project.githubRepository}
-                    placeholder="Github Repository"
+                    defaultValue={project.name}
+                    placeholder="Nombre"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                  />
+                </FormControl>
+
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Descripción</FormLabel>
+                  <Textarea
+                    type="text"
+                    defaultValue={project.description}
+                    placeholder="Descripción"
                     focusBorderColor="white"
                     borderRadius={"none"}
                     resize={"none"}
                   />
                 </FormControl>
-              )}
-            </ModalBody>
 
-            <ModalFooter
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Button
-                onClick={() => {
-                  setIsOpen(false);
-                  setIsOpenCompleteProjectComponent(true);
-                }}
-                isDisabled={
-                  !(
-                    project.status === "DOING" &&
-                    project.contributors.length > 0
-                  )
-                }
-                className="custom-buttons"
-                bg="#FEFE0E"
-                color="black"
-                variant="solid"
-                borderRadius={"none"}
-                _hover={{
-                  bg: "#d6cb02",
-                }}
-                mr={3}
-                mt={-5}
-                mb={1}
-              >
-                Finalizar
-              </Button>
-              <Popover
-                isOpen={isOpenDeleteProjectPopover}
-                onClose={onCloseDeleteProjectPopover}
-                placement="top"
-                autoFocus={false}
-              >
-                <PopoverTrigger>
-                  <Button
-                    onClick={() => setIsOpenDeleteProjectPopover(true)}
-                    className="custom-buttons"
-                    isLoading={deleteLoading}
-                    loadingText="Eliminar"
-                    bg="red"
-                    color="white"
-                    variant="solid"
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Requerimientos</FormLabel>
+                  <Input
+                    type="text"
+                    defaultValue={project.requirements}
+                    placeholder="Requerimientos"
+                    focusBorderColor="white"
                     borderRadius={"none"}
-                    _hover={{
-                      bg: "#e01d1d",
-                    }}
-                    isDisabled={project.status === "DOING"}
-                    mr={3}
-                    mt={-5}
-                    mb={1}
-                  >
-                    Eliminar
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    Eliminar Proyecto
-                  </PopoverHeader>
-                  <PopoverBody align="center">
-                    ¿Está seguro de que quiere eliminar este proyecto?
-                  </PopoverBody>
-                  <PopoverFooter
-                    border="0"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    p={4}
-                    mt={3}
-                  >
+                    resize={"none"}
+                  />
+                </FormControl>
+
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Nivel de Reputación</FormLabel>
+                  <Input
+                    type="number"
+                    isDisabled={project.status !== "CREATED"}
+                    defaultValue={project.reputationLevel}
+                    placeholder="Reputación"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                  />
+                </FormControl>
+
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Colateral</FormLabel>
+                  <Input
+                    type="number"
+                    isDisabled={project.status !== "CREATED"}
+                    defaultValue={project.colateralCost}
+                    placeholder="Colateral"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                  />
+                </FormControl>
+
+                <FormControl mt={3} isRequired>
+                  <FormLabel>Número máximo de Contribuidores</FormLabel>
+                  <Input
+                    type="number"
+                    defaultValue={project.maxContributorsNumber}
+                    placeholder="Número de Contribuidores"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                  />
+                </FormControl>
+
+                {user.role === "admin" && (
+                  <FormControl mt={3} isRequired>
+                    <FormLabel>Repositorio Github</FormLabel>
+                    <Input
+                      type="text"
+                      isDisabled={project.status !== "CREATED"}
+                      defaultValue={project.githubRepository}
+                      placeholder="Github Repository"
+                      focusBorderColor="white"
+                      borderRadius={"none"}
+                      resize={"none"}
+                    />
+                  </FormControl>
+                )}
+              </ModalBody>
+
+              <ModalFooter
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsOpenCompleteProjectComponent(true);
+                  }}
+                  isDisabled={
+                    !(
+                      project.status === "DOING" &&
+                      project.contributors.length > 0
+                    )
+                  }
+                  className="custom-buttons"
+                  bg="#FEFE0E"
+                  color="black"
+                  variant="solid"
+                  borderRadius={"none"}
+                  _hover={{
+                    bg: "#d6cb02",
+                  }}
+                  mr={3}
+                  mt={-5}
+                  mb={1}
+                >
+                  Finalizar
+                </Button>
+                <Popover
+                  isOpen={isOpenDeleteProjectPopover}
+                  onClose={onCloseDeleteProjectPopover}
+                  placement="top"
+                  autoFocus={false}
+                >
+                  <PopoverTrigger>
                     <Button
-                      onClick={() => handleDeleteProject()}
-                      size={"sm"}
+                      onClick={() => setIsOpenDeleteProjectPopover(true)}
+                      className="custom-buttons"
+                      isLoading={deleteLoading}
+                      loadingText="Eliminar"
                       bg="red"
                       color="white"
                       variant="solid"
-                      borderRadius={"xl"}
+                      borderRadius={"none"}
                       _hover={{
                         bg: "#e01d1d",
                       }}
+                      isDisabled={project.status === "DOING"}
                       mr={3}
                       mt={-5}
                       mb={1}
                     >
-                      Confirmar
+                      Eliminar
                     </Button>
-                  </PopoverFooter>
-                </PopoverContent>
-              </Popover>
-              <Button
-                type="submit"
-                className="custom-buttons"
-                isLoading={loading}
-                loadingText="Actualizar"
-                bg="white"
-                color="black"
-                variant="solid"
-                borderRadius={"none"}
-                _hover={{
-                  bg: "#dddfe2",
-                }}
-                mr={3}
-                mt={-5}
-                mb={1}
-              >
-                Actualizar
-              </Button>
-              <Button
-                onClick={() => setIsOpen(false)}
-                className="custom-buttons"
-                colorScheme="white"
-                variant="outline"
-                borderRadius={"none"}
-                _hover={{ bg: "#dddfe236" }}
-                mt={-5}
-                mb={1}
-              >
-                Cancelar
-              </Button>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
-      <CompleteProjectComponent
-        isOpen={isOpenCompleteProjectComponent}
-        setIsOpen={setIsOpenCompleteProjectComponent}
-        fetchProjects={fetchProjects}
-        project={project}
-      />
-    </>
-  );
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      Eliminar Proyecto
+                    </PopoverHeader>
+                    <PopoverBody align="center">
+                      ¿Está seguro de que quiere eliminar este proyecto?
+                    </PopoverBody>
+                    <PopoverFooter
+                      border="0"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      p={4}
+                      mt={3}
+                    >
+                      <Button
+                        onClick={() => handleDeleteProject()}
+                        size={"sm"}
+                        bg="red"
+                        color="white"
+                        variant="solid"
+                        borderRadius={"xl"}
+                        _hover={{
+                          bg: "#e01d1d",
+                        }}
+                        mr={3}
+                        mt={-5}
+                        mb={1}
+                      >
+                        Confirmar
+                      </Button>
+                    </PopoverFooter>
+                  </PopoverContent>
+                </Popover>
+                <Button
+                  type="submit"
+                  className="custom-buttons"
+                  isLoading={loading}
+                  loadingText="Actualizar"
+                  bg="white"
+                  color="black"
+                  variant="solid"
+                  borderRadius={"none"}
+                  _hover={{
+                    bg: "#dddfe2",
+                  }}
+                  mr={3}
+                  mt={-5}
+                  mb={1}
+                >
+                  Actualizar
+                </Button>
+                <Button
+                  onClick={() => setIsOpen(false)}
+                  className="custom-buttons"
+                  colorScheme="white"
+                  variant="outline"
+                  borderRadius={"none"}
+                  _hover={{ bg: "#dddfe236" }}
+                  mt={-5}
+                  mb={1}
+                >
+                  Cancelar
+                </Button>
+              </ModalFooter>
+            </form>
+          </ModalContent>
+        </Modal>
+        <CompleteProjectComponent
+          isOpen={isOpenCompleteProjectComponent}
+          setIsOpen={setIsOpenCompleteProjectComponent}
+          fetchProjects={fetchProjects}
+          project={project}
+        />
+      </>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default UpdateProjectComponent;

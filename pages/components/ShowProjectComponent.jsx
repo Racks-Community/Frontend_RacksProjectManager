@@ -168,412 +168,416 @@ const ShowProjectComponent = ({
     }
   }, [project, user]);
 
-  return (
-    <>
-      <Modal
-        isCentered
-        autoFocus={false}
-        isOpen={isOpen}
-        onClose={handleCloseShowProject}
-        destroyOnClose={true}
-      >
-        <ModalOverlay />
-        {!openJoinProject && ObjectIsNotEmpty(project) ? (
-          <ModalContent>
-            <ModalHeader className="text-center">
-              DETALLES DEL PROYECTO
-            </ModalHeader>
-            <ModalCloseButton colorScheme="white" />
-            <ModalBody>
-              <Box p="4" pt="0" mt="-4">
-                <Box>
-                  <Center>
-                    <Image
-                      w="150px"
-                      h="70px"
-                      objectFit="contain"
-                      src={project.imageURL}
-                      alt="Project img"
-                    />
-                  </Center>
-                </Box>
-                <Box
-                  mt="1"
-                  ml="1"
-                  fontWeight="semibold"
-                  as="h4"
-                  lineHeight="tight"
-                >
-                  <Center>{project.name}</Center>
-                </Box>
-                <Divider
-                  w={"95%"}
-                  mx={"auto"}
-                  mt="2"
-                  mb="1rem"
-                  style={{ borderColor: "#FEFE0E" }}
-                />
-                <VStack alignItems="baseline">
-                  {project.status === status.created && (
-                    <Badge borderRadius="full" px="2" colorScheme="green">
-                      NEW
-                    </Badge>
-                  )}
-                  {project.status === status.doing && (
-                    <Badge borderRadius="full" px="2" colorScheme="yellow">
-                      IN DEVELOPMENT
-                    </Badge>
-                  )}
-                  {project.status === status.finished && (
-                    <Badge borderRadius="full" px="2" colorScheme="red">
-                      COMPLETED
-                    </Badge>
-                  )}
-
-                  <Box fontSize={"0.85rem"}>
-                    <Center>{project.description}</Center>
+  if (ObjectIsNotEmpty(project)) {
+    return (
+      <>
+        <Modal
+          isCentered
+          autoFocus={false}
+          isOpen={isOpen}
+          onClose={handleCloseShowProject}
+          destroyOnClose={true}
+        >
+          <ModalOverlay />
+          {!openJoinProject && ObjectIsNotEmpty(project) ? (
+            <ModalContent>
+              <ModalHeader className="text-center">
+                DETALLES DEL PROYECTO
+              </ModalHeader>
+              <ModalCloseButton colorScheme="white" />
+              <ModalBody>
+                <Box p="4" pt="0" mt="-4">
+                  <Box>
+                    <Center>
+                      <Image
+                        w="150px"
+                        h="70px"
+                        objectFit="contain"
+                        src={project.imageURL}
+                        alt="Project img"
+                      />
+                    </Center>
                   </Box>
-
-                  <Box fontSize={"0.85rem"}>
-                    <Text
-                      color="gray"
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      textTransform="uppercase"
-                    >
-                      Requerimientos:
-                    </Text>
-                    <Text>{project.requirements}</Text>
+                  <Box
+                    mt="1"
+                    ml="1"
+                    fontWeight="semibold"
+                    as="h4"
+                    lineHeight="tight"
+                  >
+                    <Center>{project.name}</Center>
                   </Box>
+                  <Divider
+                    w={"95%"}
+                    mx={"auto"}
+                    mt="2"
+                    mb="1rem"
+                    style={{ borderColor: "#FEFE0E" }}
+                  />
+                  <VStack alignItems="baseline">
+                    {project.status === status.created && (
+                      <Badge borderRadius="full" px="2" colorScheme="green">
+                        NEW
+                      </Badge>
+                    )}
+                    {project.status === status.doing && (
+                      <Badge borderRadius="full" px="2" colorScheme="yellow">
+                        IN DEVELOPMENT
+                      </Badge>
+                    )}
+                    {project.status === status.finished && (
+                      <Badge borderRadius="full" px="2" colorScheme="red">
+                        COMPLETED
+                      </Badge>
+                    )}
 
-                  {isProjectContributor && (
-                    <>
-                      <Box fontSize={"0.85rem"}>
-                        <Text
-                          color="gray"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                        >
-                          Github Repository:
-                        </Text>
-                        <Center>
-                          <Link href="project.githubRepository" isExternal>
-                            {project.githubRepository}
-                          </Link>
-                        </Center>
-                      </Box>
+                    <Box fontSize={"0.85rem"}>
+                      <Center>{project.description}</Center>
+                    </Box>
 
-                      <Box fontSize={"0.85rem"}>
-                        <Text
-                          color="gray"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                        >
-                          Address:
-                        </Text>
-                        <Center>
-                          <Link
-                            href={
-                              "https://goerli.etherscan.io/address/" +
-                              project.address
-                            }
-                            isExternal
+                    <Box fontSize={"0.85rem"}>
+                      <Text
+                        color="gray"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                      >
+                        Requerimientos:
+                      </Text>
+                      <Text>{project.requirements}</Text>
+                    </Box>
+
+                    {isProjectContributor && (
+                      <>
+                        <Box fontSize={"0.85rem"}>
+                          <Text
+                            color="gray"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
                           >
-                            {project.address}
-                          </Link>
-                        </Center>
-                      </Box>
-                    </>
-                  )}
+                            Github Repository:
+                          </Text>
+                          <Center>
+                            <Link href="project.githubRepository" isExternal>
+                              {project.githubRepository}
+                            </Link>
+                          </Center>
+                        </Box>
 
-                  <Grid templateColumns="repeat(4, 1fr)" w={"100%"}>
-                    <GridItem
-                      color="gray.500"
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      textTransform="uppercase"
-                      colSpan={3}
-                    >
-                      <Text color="gray">Reputation</Text>
-                    </GridItem>
-                    <GridItem
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      colSpan={1}
-                      textAlign={"end"}
-                    >
-                      {project.reputationLevel}
-                    </GridItem>
-                    <GridItem
-                      color="gray.500"
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      textTransform="uppercase"
-                      mt="1"
-                      colSpan={3}
-                    >
-                      <Text color="gray">Colateral (USDC)</Text>
-                    </GridItem>
-                    <GridItem
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      mt="1"
-                      colSpan={1}
-                      textAlign={"end"}
-                    >
-                      {project.colateralCost}
-                    </GridItem>
-                    <GridItem
-                      color="gray.500"
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      textTransform="uppercase"
-                      mt="1"
-                      colSpan={3}
-                    >
-                      <Text color="gray">N.Contributors</Text>
-                    </GridItem>
-                    <GridItem
-                      fontWeight="semibold"
-                      letterSpacing="wide"
-                      fontSize="xs"
-                      mt="1"
-                      colSpan={1}
-                      textAlign={"end"}
-                    >
-                      {project.contributors.length +
-                        "/" +
-                        project.maxContributorsNumber}
-                    </GridItem>
-                    {project.funds > 0 && (
-                      <>
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          mt="1"
-                          colSpan={3}
-                        >
-                          <Text color="gray">Fondos:</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          mt="1"
-                          colSpan={1}
-                          textAlign={"end"}
-                        >
-                          {project.funds + " USDT"}
-                        </GridItem>
+                        <Box fontSize={"0.85rem"}>
+                          <Text
+                            color="gray"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Address:
+                          </Text>
+                          <Center>
+                            <Link
+                              href={
+                                "https://goerli.etherscan.io/address/" +
+                                project.address
+                              }
+                              isExternal
+                            >
+                              {project.address}
+                            </Link>
+                          </Center>
+                        </Box>
                       </>
                     )}
-                    {project.completed ? (
-                      <>
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          mt="1"
-                          colSpan={3}
-                        >
-                          <Text color="gray">Completado el:</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          mt="1"
-                          colSpan={1}
-                          textAlign={"end"}
-                        >
-                          {project.completedAt}
-                        </GridItem>
-                      </>
-                    ) : (
-                      <>
-                        <GridItem
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                          mt="1"
-                          colSpan={3}
-                        >
-                          <Text color="gray">Creado el:</Text>
-                        </GridItem>
-                        <GridItem
-                          fontWeight="semibold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          mt="1"
-                          colSpan={1}
-                          textAlign={"end"}
-                        >
-                          {project.createdAt}
-                        </GridItem>
-                      </>
-                    )}
-                  </Grid>
-                </VStack>
-              </Box>
-            </ModalBody>
 
-            <ModalFooter>
-              {!project.completed && (
+                    <Grid templateColumns="repeat(4, 1fr)" w={"100%"}>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        colSpan={3}
+                      >
+                        <Text color="gray">Reputation</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        colSpan={1}
+                        textAlign={"end"}
+                      >
+                        {project.reputationLevel}
+                      </GridItem>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                        colSpan={3}
+                      >
+                        <Text color="gray">Colateral (USDC)</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        mt="1"
+                        colSpan={1}
+                        textAlign={"end"}
+                      >
+                        {project.colateralCost}
+                      </GridItem>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                        colSpan={3}
+                      >
+                        <Text color="gray">N.Contributors</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        mt="1"
+                        colSpan={1}
+                        textAlign={"end"}
+                      >
+                        {project.contributors.length +
+                          "/" +
+                          project.maxContributorsNumber}
+                      </GridItem>
+                      {project.funds > 0 && (
+                        <>
+                          <GridItem
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            mt="1"
+                            colSpan={3}
+                          >
+                            <Text color="gray">Fondos:</Text>
+                          </GridItem>
+                          <GridItem
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            mt="1"
+                            colSpan={1}
+                            textAlign={"end"}
+                          >
+                            {project.funds + " USDT"}
+                          </GridItem>
+                        </>
+                      )}
+                      {project.completed ? (
+                        <>
+                          <GridItem
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            mt="1"
+                            colSpan={3}
+                          >
+                            <Text color="gray">Completado el:</Text>
+                          </GridItem>
+                          <GridItem
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            mt="1"
+                            colSpan={1}
+                            textAlign={"end"}
+                          >
+                            {project.completedAt}
+                          </GridItem>
+                        </>
+                      ) : (
+                        <>
+                          <GridItem
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            mt="1"
+                            colSpan={3}
+                          >
+                            <Text color="gray">Creado el:</Text>
+                          </GridItem>
+                          <GridItem
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            mt="1"
+                            colSpan={1}
+                            textAlign={"end"}
+                          >
+                            {project.createdAt}
+                          </GridItem>
+                        </>
+                      )}
+                    </Grid>
+                  </VStack>
+                </Box>
+              </ModalBody>
+
+              <ModalFooter>
+                {!project.completed && (
+                  <Button
+                    onClick={handleOpenFundProjectComponent}
+                    variant="outline"
+                    bg="transparent"
+                    borderColor={"#FEFE0E"}
+                    color="white"
+                    borderRadius={"none"}
+                    _hover={{
+                      bg: "#FEFE0E",
+                      color: "black",
+                      transition: "0.5s",
+                    }}
+                    size="sm"
+                    mb={1}
+                    mr={3}
+                  >
+                    Invertir
+                  </Button>
+                )}
+
+                {!project.completed && !isProjectContributor && (
+                  <Button
+                    onClick={() => setOpenJoinProject(true)}
+                    disabled={project.completed || isProjectContributor}
+                    bg="white"
+                    color="black"
+                    variant="solid"
+                    borderRadius={"none"}
+                    _hover={{
+                      bg: "#dddfe2",
+                    }}
+                    size="sm"
+                    mb={1}
+                    mr={3}
+                  >
+                    Unirme
+                  </Button>
+                )}
+
                 <Button
-                  onClick={handleOpenFundProjectComponent}
+                  onClick={handleCloseShowProject}
+                  colorScheme="white"
                   variant="outline"
-                  bg="transparent"
-                  borderColor={"#FEFE0E"}
-                  color="white"
                   borderRadius={"none"}
-                  _hover={{
-                    bg: "#FEFE0E",
-                    color: "black",
-                    transition: "0.5s",
-                  }}
+                  _hover={{ bg: "#dddfe236" }}
                   size="sm"
                   mb={1}
-                  mr={3}
                 >
-                  Invertir
+                  Cerrar
                 </Button>
-              )}
-
-              {!project.completed && !isProjectContributor && (
-                <Button
-                  onClick={() => setOpenJoinProject(true)}
-                  disabled={project.completed || isProjectContributor}
-                  bg="white"
-                  color="black"
-                  variant="solid"
-                  borderRadius={"none"}
-                  _hover={{
-                    bg: "#dddfe2",
-                  }}
-                  size="sm"
-                  mb={1}
-                  mr={3}
-                >
-                  Unirme
-                </Button>
-              )}
-
-              <Button
-                onClick={handleCloseShowProject}
-                colorScheme="white"
-                variant="outline"
-                borderRadius={"none"}
-                _hover={{ bg: "#dddfe236" }}
-                size="sm"
-                mb={1}
-              >
-                Cerrar
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        ) : (
-          <ModalContent>
-            <ModalHeader className="text-center">
-              UNIRSE AL PROYECTO
-            </ModalHeader>
-            <ModalCloseButton colorScheme="white" />
-            <ModalBody fontSize={"0.85rem"}>
-              {(errorCodeJoinProject == errorCode.completed ||
-                errorCodeJoinProject == errorCode.full) && (
-                <Center>El Proyecto no admite nuevos Contributors</Center>
-              )}
-              {errorCodeJoinProject == errorCode.contributor && (
-                <Center>
-                  Para participar en un proyecto antes debe registrarse como
-                  Contributor.
-                </Center>
-              )}
-              {errorCodeJoinProject == errorCode.reputation && (
-                <Center textAlign={"center"}>
-                  No tiene suficiente reputación para participar en este
-                  proyecto.
-                </Center>
-              )}
-              {errorCodeJoinProject == errorCode.none && (
-                <>
-                  <Text>
-                    Para participar en este proyecto debes transferir
-                    {" " + project.colateralCost} USDC como fianza.
-                  </Text>
-                  <br />
-                  <Text>Esta será devuelta al finalizar el proyecto.</Text>
-                  <Text>
-                    Se perderá el derecho a devolución del colateral si se
-                    filtra información del proyecto o realiza cualquier acción
-                    grave que perjudique o cause daños al desarrollo del
+              </ModalFooter>
+            </ModalContent>
+          ) : (
+            <ModalContent>
+              <ModalHeader className="text-center">
+                UNIRSE AL PROYECTO
+              </ModalHeader>
+              <ModalCloseButton colorScheme="white" />
+              <ModalBody fontSize={"0.85rem"}>
+                {(errorCodeJoinProject == errorCode.completed ||
+                  errorCodeJoinProject == errorCode.full) && (
+                  <Center>El Proyecto no admite nuevos Contributors</Center>
+                )}
+                {errorCodeJoinProject == errorCode.contributor && (
+                  <Center>
+                    Para participar en un proyecto antes debe registrarse como
+                    Contributor.
+                  </Center>
+                )}
+                {errorCodeJoinProject == errorCode.reputation && (
+                  <Center textAlign={"center"}>
+                    No tiene suficiente reputación para participar en este
                     proyecto.
-                  </Text>
-                  <br />
-                  <Text>¿Está seguro de querer unirse a este proyecto?</Text>
-                </>
-              )}
-            </ModalBody>
+                  </Center>
+                )}
+                {errorCodeJoinProject == errorCode.none && (
+                  <>
+                    <Text>
+                      Para participar en este proyecto debes transferir
+                      {" " + project.colateralCost} USDC como fianza.
+                    </Text>
+                    <br />
+                    <Text>Esta será devuelta al finalizar el proyecto.</Text>
+                    <Text>
+                      Se perderá el derecho a devolución del colateral si se
+                      filtra información del proyecto o realiza cualquier acción
+                      grave que perjudique o cause daños al desarrollo del
+                      proyecto.
+                    </Text>
+                    <br />
+                    <Text>¿Está seguro de querer unirse a este proyecto?</Text>
+                  </>
+                )}
+              </ModalBody>
 
-            <ModalFooter>
-              {errorCodeJoinProject === errorCode.none && (
+              <ModalFooter>
+                {errorCodeJoinProject === errorCode.none && (
+                  <Button
+                    onClick={() => handleJoinProjectClick()}
+                    isLoading={loading}
+                    loadingText="Unirme"
+                    bg="white"
+                    color="black"
+                    variant="solid"
+                    borderRadius={"none"}
+                    _hover={{
+                      bg: "#dddfe2",
+                    }}
+                    size="sm"
+                    mr={3}
+                    mb={1}
+                  >
+                    Unirme
+                  </Button>
+                )}
                 <Button
-                  onClick={() => handleJoinProjectClick()}
-                  isLoading={loading}
-                  loadingText="Unirme"
-                  bg="white"
-                  color="black"
-                  variant="solid"
+                  onClick={handleCloseShowProject}
+                  colorScheme="white"
+                  variant="outline"
                   borderRadius={"none"}
-                  _hover={{
-                    bg: "#dddfe2",
-                  }}
+                  _hover={{ bg: "#dddfe236" }}
                   size="sm"
-                  mr={3}
                   mb={1}
                 >
-                  Unirme
+                  Cancelar
                 </Button>
-              )}
-              <Button
-                onClick={handleCloseShowProject}
-                colorScheme="white"
-                variant="outline"
-                borderRadius={"none"}
-                _hover={{ bg: "#dddfe236" }}
-                size="sm"
-                mb={1}
-              >
-                Cancelar
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        )}
-      </Modal>
-      <FundProjectComponent
-        isOpen={openFundProject}
-        setIsOpen={setOpenFundProject}
-        fetchProjects={fetchProjects}
-        project={projectToFund}
-      />
-    </>
-  );
+              </ModalFooter>
+            </ModalContent>
+          )}
+        </Modal>
+        <FundProjectComponent
+          isOpen={openFundProject}
+          setIsOpen={setOpenFundProject}
+          fetchProjects={fetchProjects}
+          project={projectToFund}
+        />
+      </>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default ShowProjectComponent;

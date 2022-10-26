@@ -33,177 +33,191 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
     }
   }, [contributor]);
 
-  return (
-    <Modal
-      isCentered
-      autoFocus={false}
-      isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
-      className="modal"
-    >
-      <ModalOverlay />
-      <ModalContent w="25rem">
-        <ModalHeader className="text-center">DETALLES CONTRIBUTOR</ModalHeader>
-        <ModalCloseButton colorScheme="white" />
-        <ModalBody pb={4}>
-          <Box>
-            <Center>
-              <Image
-                borderRadius="full"
-                boxSize="100px"
-                src={contributorMRC}
-                fallbackSrc={"./fallback.gif"}
-                alt="MRC"
-                mb="3"
+  if (ObjectIsNotEmpty(contributor)) {
+    return (
+      <Modal
+        isCentered
+        autoFocus={false}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="modal"
+      >
+        <ModalOverlay />
+        <ModalContent w="25rem">
+          <ModalHeader className="text-center">
+            DETALLES CONTRIBUTOR
+          </ModalHeader>
+          <ModalCloseButton colorScheme="white" />
+          <ModalBody pb={4}>
+            <Box>
+              <Center>
+                <Image
+                  borderRadius="full"
+                  boxSize="100px"
+                  src={contributorMRC}
+                  fallbackSrc={"./fallback.gif"}
+                  alt="MRC"
+                  mb="3"
+                />
+              </Center>
+              <Box
+                mt="1"
+                ml="1"
+                fontWeight="semibold"
+                as="h4"
+                lineHeight="tight"
+              >
+                <Center>{contributor.discord}</Center>
+              </Box>
+              <Divider
+                w={"95%"}
+                mx={"auto"}
+                mt="2"
+                mb="1rem"
+                style={{ borderColor: "#FEFE0E" }}
               />
-            </Center>
-            <Box mt="1" ml="1" fontWeight="semibold" as="h4" lineHeight="tight">
-              <Center>{contributor.discord}</Center>
-            </Box>
-            <Divider
-              w={"95%"}
-              mx={"auto"}
-              mt="2"
-              mb="1rem"
-              style={{ borderColor: "#FEFE0E" }}
-            />
-            <Center>
-              <VStack alignItems="center">
-                <Badge borderRadius="full" px="2" mb="1" colorScheme="yellow">
-                  {"Reputation Level " + contributor.reputationLevel}
-                </Badge>
-                <Grid templateColumns="repeat(2, 1fr)">
-                  <GridItem
-                    color="gray.500"
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    textTransform="uppercase"
-                  >
-                    <Text color="gray">Proyectos Totales:</Text>
-                  </GridItem>
-                  <GridItem
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    ml="1rem"
-                  >
-                    {contributor.totalProjects}
-                  </GridItem>
-                  <GridItem
-                    color="gray.500"
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    textTransform="uppercase"
-                    mt="1"
-                  >
-                    <Text color="gray">Github</Text>
-                  </GridItem>
-                  <GridItem
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    ml="1rem"
-                    mt="1"
-                  >
-                    <Link
-                      href={"https://github.com/" + contributor.githubUsername}
-                      isExternal
+              <Center>
+                <VStack alignItems="center">
+                  <Badge borderRadius="full" px="2" mb="1" colorScheme="yellow">
+                    {"Reputation Level " + contributor.reputationLevel}
+                  </Badge>
+                  <Grid templateColumns="repeat(2, 1fr)">
+                    <GridItem
+                      color="gray.500"
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      textTransform="uppercase"
                     >
-                      {contributor.githubUsername}
-                    </Link>
-                  </GridItem>
-                  {contributor.urlTwitter && contributor.urlTwitter != "" && (
-                    <>
-                      <GridItem
-                        color="gray.500"
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                        mt="1"
+                      <Text color="gray">Proyectos Totales:</Text>
+                    </GridItem>
+                    <GridItem
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      ml="1rem"
+                    >
+                      {contributor.totalProjects}
+                    </GridItem>
+                    <GridItem
+                      color="gray.500"
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      textTransform="uppercase"
+                      mt="1"
+                    >
+                      <Text color="gray">Github</Text>
+                    </GridItem>
+                    <GridItem
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      ml="1rem"
+                      mt="1"
+                    >
+                      <Link
+                        href={
+                          "https://github.com/" + contributor.githubUsername
+                        }
+                        isExternal
                       >
-                        <Text color="gray">Twitter</Text>
-                      </GridItem>
-                      <GridItem
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        ml="1rem"
-                        mt="1"
-                      >
-                        <Link href={contributor.urlTwitter} isExternal>
-                          {contributor.urlTwitter}
-                        </Link>
-                      </GridItem>
-                    </>
-                  )}
-                  {contributor.participationWeight > 0 && (
-                    <>
-                      <GridItem
-                        color="gray.500"
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                        mt="1"
-                      >
-                        <Text color="gray">Participación</Text>
-                      </GridItem>
-                      <GridItem
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        ml="1rem"
-                        mt="1"
-                      >
-                        {contributor.participationWeight + "%"}
-                      </GridItem>
-                    </>
-                  )}
-                  <GridItem
-                    color="gray.500"
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    textTransform="uppercase"
-                    mt="1"
-                  >
-                    <Text color="gray">Contributor desde:</Text>
-                  </GridItem>
-                  <GridItem
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    ml="1rem"
-                    mt="1"
-                  >
-                    {contributor.createdAt}
-                  </GridItem>
-                </Grid>
-              </VStack>
-            </Center>
-          </Box>
-        </ModalBody>
+                        {contributor.githubUsername}
+                      </Link>
+                    </GridItem>
+                    {contributor.urlTwitter && contributor.urlTwitter != "" && (
+                      <>
+                        <GridItem
+                          color="gray.500"
+                          fontWeight="semibold"
+                          letterSpacing="wide"
+                          fontSize="xs"
+                          textTransform="uppercase"
+                          mt="1"
+                        >
+                          <Text color="gray">Twitter</Text>
+                        </GridItem>
+                        <GridItem
+                          fontWeight="semibold"
+                          letterSpacing="wide"
+                          fontSize="xs"
+                          ml="1rem"
+                          mt="1"
+                        >
+                          <Link href={contributor.urlTwitter} isExternal>
+                            {contributor.urlTwitter}
+                          </Link>
+                        </GridItem>
+                      </>
+                    )}
+                    {contributor.participationWeight > 0 && (
+                      <>
+                        <GridItem
+                          color="gray.500"
+                          fontWeight="semibold"
+                          letterSpacing="wide"
+                          fontSize="xs"
+                          textTransform="uppercase"
+                          mt="1"
+                        >
+                          <Text color="gray">Participación</Text>
+                        </GridItem>
+                        <GridItem
+                          fontWeight="semibold"
+                          letterSpacing="wide"
+                          fontSize="xs"
+                          ml="1rem"
+                          mt="1"
+                        >
+                          {contributor.participationWeight + "%"}
+                        </GridItem>
+                      </>
+                    )}
+                    <GridItem
+                      color="gray.500"
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      textTransform="uppercase"
+                      mt="1"
+                    >
+                      <Text color="gray">Contributor desde:</Text>
+                    </GridItem>
+                    <GridItem
+                      fontWeight="semibold"
+                      letterSpacing="wide"
+                      fontSize="xs"
+                      ml="1rem"
+                      mt="1"
+                    >
+                      {contributor.createdAt}
+                    </GridItem>
+                  </Grid>
+                </VStack>
+              </Center>
+            </Box>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button
-            onClick={() => setIsOpen(false)}
-            colorScheme="white"
-            variant="outline"
-            borderRadius={"none"}
-            _hover={{ bg: "#dddfe236" }}
-            size="sm"
-            mt={-5}
-            mb={1}
-          >
-            Cerrar
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
+          <ModalFooter>
+            <Button
+              onClick={() => setIsOpen(false)}
+              colorScheme="white"
+              variant="outline"
+              borderRadius={"none"}
+              _hover={{ bg: "#dddfe236" }}
+              size="sm"
+              mt={-5}
+              mb={1}
+            >
+              Cerrar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default ShowContributorComponent;
