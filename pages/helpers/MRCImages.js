@@ -1,5 +1,6 @@
 import { MrCryptoAbi } from "../../web3Constants";
 import { ethers } from "ethers";
+import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
 
 export const getMRCImageUrlFromAvatar = async (uri) => {
   const tokenURIResponse = await (await fetch(uri)).json();
@@ -17,9 +18,11 @@ export const getMRCImageUrlFromId = async (tokenId) => {
 };
 
 export const getMRCImageUrlFromMetadata = (jsonToken) => {
-  const imageURI = jsonToken.image;
-  const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-  return imageURIURL;
+  if (ObjectIsNotEmpty(jsonToken)) {
+    const imageURI = jsonToken.image;
+    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+    return imageURIURL;
+  }
 };
 
 export const getMRCMetadataUrl = async (tokenId) => {
