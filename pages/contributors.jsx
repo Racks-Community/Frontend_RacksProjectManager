@@ -36,7 +36,7 @@ import {
 } from "react-icons/fa";
 import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
 import Loading from "./components/Loading";
-import toast from "./components/Toast";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -51,9 +51,6 @@ function Contributors() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [contributorProjects, setContributorProjects] = useState([]);
   const [selectedDeleteProject, setSelectedDeleteProject] = useState([]);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handlePopoverClose = () => {
     setIsOpenBanPopoverId("");
@@ -88,9 +85,9 @@ function Contributors() {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
-        notify("success", "Contributor eliminado del Proyecto");
+        toast.success("Contributor eliminado del Proyecto");
       } else {
-        notify("error", "Error al eliminar Contributor del Proyecto");
+        toast.error("Error al eliminar Contributor del Proyecto");
       }
       handlePopoverClose();
       setDeleteLoading(false);
@@ -113,9 +110,9 @@ function Contributors() {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
-        notify("success", "Contributor actualizado");
+        toast.success("Contributor actualizado");
       } else {
-        notify("error", "Error al actualizar Contributor");
+        toast.error("Error al actualizar Contributor");
       }
       handlePopoverClose();
       setBanLoading(false);

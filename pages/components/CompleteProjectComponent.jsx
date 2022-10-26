@@ -23,7 +23,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -37,9 +37,6 @@ const CompleteProjectComponent = ({
   const [loading, setLoading] = useState(false);
   const [participationIsValid, setParticipationIsValid] = useState(true);
   const [participations, setParticipation] = useState([]);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const checkParticipationIsValid = () => {
     let total = 0;
@@ -85,9 +82,9 @@ const CompleteProjectComponent = ({
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
-        notify("success", "Proyecto finalizado!");
+        toast.success("Proyecto finalizado!");
       } else {
-        notify("error", "Error al finalizar Proyecto");
+        toast.error("Error al finalizar Proyecto");
       }
       setIsOpen(false);
       setLoading(false);
@@ -116,8 +113,8 @@ const CompleteProjectComponent = ({
         setParticipation(data);
       } else {
         if (res.status == 409)
-          notify("error", "El repositorio del proyecto está vacio.");
-        else notify("error", "Error al leer participación del Proyecto.");
+          toast.error("El repositorio del proyecto está vacio.");
+        else toast.error("Error al leer participación del Proyecto.");
         setIsOpen(false);
       }
     }

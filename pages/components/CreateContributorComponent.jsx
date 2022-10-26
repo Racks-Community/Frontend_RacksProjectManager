@@ -24,7 +24,7 @@ import {
   Image,
   Center,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 import { getMRCImageUrlFromId, getMRCMetadataUrl } from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -37,9 +37,6 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const [loading, setLoading] = useState(false);
   const [isOpenDiscordInviteComponent, setIsOpenDiscordInviteComponent] =
     useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -79,7 +76,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
             setTimeout(async () => {
               await fetchUser();
             }, 1000);
-            notify("success", "Bienvenido a Racks Labs como Contributor!");
+            toast.success("Bienvenido a Racks Labs como Contributor!");
             setTimeout(async () => {
               setIsOpenDiscordInviteComponent(true);
             }, 1000);
@@ -92,10 +89,10 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
               Authorization: localStorage.getItem("token"),
             },
           });
-          notify("error", "Error al registrarse como Contributor");
+          toast.error("Error al registrarse como Contributor");
         }
       } else {
-        notify("error", "Error al registrarse como Contributor");
+        toast.error("Error al registrarse como Contributor");
       }
       setIsOpen(false);
       setLoading(false);

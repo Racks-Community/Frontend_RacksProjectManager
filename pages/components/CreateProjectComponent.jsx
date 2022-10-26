@@ -18,7 +18,7 @@ import {
   Checkbox,
   GridItem,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -26,9 +26,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const user = useSelector(selectUserInfo);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,9 +62,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
         let nProjects = await fetchProjects();
         if (nProjects > nProjectsBefore) clearInterval(fetchProjectsInterval);
       }, 1000);
-      notify("success", "Proyecto creado!");
+      toast.success("Proyecto creado!");
     } else {
-      notify("error", "Error al crear Proyecto");
+      toast.error("Error al crear Proyecto");
     }
     setIsOpen(false);
     setLoading(false);

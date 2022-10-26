@@ -23,7 +23,7 @@ import {
   GridItem,
   VStack,
 } from "@chakra-ui/react";
-import toast from "./components/Toast";
+import { toast } from "react-toastify";
 import {
   getMRCImageUrlFromId,
   getMRCImageUrlFromMetadata,
@@ -53,9 +53,6 @@ function Profile() {
   const [MRCToken, setMRCToken] = useState(null);
   const [projects, setProjects] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState({});
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -86,9 +83,9 @@ function Profile() {
         setTimeout(async () => {
           await fetchUser();
         }, 1000);
-        notify("success", "Perfil de Contributor actualizada!");
+        toast.success("Perfil de Contributor actualizada!");
       } else {
-        notify("error", "Error al actualizar el perfil");
+        toast.error("Error al actualizar el perfil");
       }
       setLoading(false);
     }

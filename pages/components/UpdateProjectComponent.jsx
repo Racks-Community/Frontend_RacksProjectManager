@@ -24,7 +24,7 @@ import {
   PopoverBody,
   PopoverFooter,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 import CompleteProjectComponent from "./CompleteProjectComponent";
 import ObjectIsNotEmpty from "../helpers/ObjectIsNotEmpty";
 
@@ -44,9 +44,6 @@ const UpdateProjectComponent = ({
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const onCloseDeleteProjectPopover = () => {
     setIsOpenDeleteProjectPopover(false);
@@ -67,9 +64,9 @@ const UpdateProjectComponent = ({
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
-        notify("success", "Proyecto eliminado");
+        toast.success("Proyecto eliminado");
       } else {
-        notify("error", "Error al eliminar Proyecto");
+        toast.error("Error al eliminar Proyecto");
       }
       setIsOpen(false);
       setDeleteLoading(false);
@@ -114,9 +111,9 @@ const UpdateProjectComponent = ({
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
-        notify("success", "Proyecto actualizado!");
+        toast.success("Proyecto actualizado!");
       } else {
-        notify("error", "Error al actualizar Proyecto");
+        toast.error("Error al actualizar Proyecto");
       }
       setIsOpen(false);
       setLoading(false);

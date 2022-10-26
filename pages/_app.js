@@ -182,6 +182,7 @@ function MyApp({ Component, pageProps }) {
               pauseOnVisibilityChange
               closeOnClick
               pauseOnHover
+              theme="dark"
               toastStyle={{ backgroundColor: "#333", color: "white" }}
             />
           </ThemeProvider>

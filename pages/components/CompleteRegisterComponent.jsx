@@ -20,7 +20,7 @@ import {
   Select,
   Image,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -32,9 +32,6 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const [selectedMRC, setSelectedMRC] = useState("#");
   const [isOpenDiscordInviteComponent, setIsOpenDiscordInviteComponent] =
     useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,12 +61,12 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
         setTimeout(async () => {
           await fetchUser();
         }, 1000);
-        notify("success", "Perfil de Contributor actualizado!");
+        toast.success("Perfil de Contributor actualizado!");
         setTimeout(async () => {
           if (sendDiscordInvite) setIsOpenDiscordInviteComponent(true);
         }, 1000);
       } else {
-        notify("error", "Error al actualizar el perfil");
+        toast.error("Error al actualizar el perfil");
       }
       setIsOpen(false);
       setLoading(false);

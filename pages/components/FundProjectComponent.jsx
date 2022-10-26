@@ -20,7 +20,7 @@ import {
   ModalFooter,
   Button,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -33,9 +33,6 @@ const FundProjectComponent = ({
 }) => {
   const user = useSelector(selectUserInfo);
   const [loading, setLoading] = useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -84,16 +81,13 @@ const FundProjectComponent = ({
           );
           if (res?.ok) {
             await fetchProjects();
-            notify(
-              "success",
-              "Ha invertido " + amount + " USDT en el Proyecto!"
-            );
+            toast.success("Ha invertido " + amount + " USDT en el Proyecto!");
           } else {
-            notify("error", "Error al invertir en el Proyecto");
+            toast.error("Error al invertir en el Proyecto");
           }
         }
       } catch (error) {
-        notify("error", "Error al invertir en el Proyecto");
+        toast.error("Error al invertir en el Proyecto");
       }
       setIsOpen(false);
       setLoading(false);

@@ -20,7 +20,7 @@ import {
   Center,
   Link,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -34,9 +34,6 @@ const ApproveProjectComponent = ({
   const user = useSelector(selectUserInfo);
   const [loadingApprove, setLoadingApprove] = useState(false);
   const [loadingReject, setLoadingReject] = useState(false);
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
 
   const handleApproveProjectClick = async (approve) => {
     if (user.role === "admin" && project.approveStatus === "PENDING") {
@@ -55,12 +52,12 @@ const ApproveProjectComponent = ({
           await fetchProjects();
         }, 1000);
         approve
-          ? notify("success", "Proyecto aprobado")
-          : notify("success", "Proyecto rechazado");
+          ? toast.success("Proyecto aprobado")
+          : toast.success("Proyecto rechazado");
       } else {
         approve
-          ? notify("error", "Error al aprobar el Proyecto")
-          : notify("error", "Error al rechazar el Proyecto");
+          ? toast.error("Error al aprobar el Proyecto")
+          : toast.error("Error al rechazar el Proyecto");
       }
 
       setIsOpen(false);

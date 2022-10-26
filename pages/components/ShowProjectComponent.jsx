@@ -28,7 +28,7 @@ import {
   Link,
   Image,
 } from "@chakra-ui/react";
-import toast from "./Toast";
+import { toast } from "react-toastify";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 import FundProjectComponent from "./FundProjectComponent";
 
@@ -49,9 +49,7 @@ const ShowProjectComponent = ({
   const [openFundProject, setOpenFundProject] = useState(false);
   const [isProjectContributor, setIsProjectContributor] = useState(false);
   const [errorCodeJoinProject, setErrorCodeJoinProject] = useState("NONE");
-  const notify = React.useCallback((type, message) => {
-    toast({ type, message });
-  }, []);
+
   const status = {
     created: "CREATED",
     doing: "DOING",
@@ -88,7 +86,7 @@ const ShowProjectComponent = ({
       try {
         const isContributor = await racksPM.isWalletContributor(user.address);
         if (!isContributor) {
-          notify("error", "Necesitas ser Contributor");
+          toast.error("Necesitas ser Contributor");
           setIsOpen(false);
           setLoading(false);
           return;
@@ -120,16 +118,16 @@ const ShowProjectComponent = ({
           setTimeout(async () => {
             await fetchProjects();
           }, 1500);
-          notify("success", "Se ha unido a un nuevo Proyecto!");
+          toast.success("Se ha unido a un nuevo Proyecto!");
         }
       } catch (error) {
-        notify("error", "Error al unirse al Proyecto");
+        toast.error("Error al unirse al Proyecto");
       }
 
       setIsOpen(false);
       setLoading(false);
     } else {
-      notify("error", "Reputación Insuficiente");
+      toast.error("Reputación Insuficiente");
       setIsOpen(false);
     }
   };
