@@ -75,7 +75,7 @@ function Navbar() {
       <Flex>
         <Box p="4" pt="4" className="navbar-logo-container">
           <Image
-            src={`${process.env.NEXT_PUBLIC_URL}/Racks.png`}
+            src={"./Racks.png"}
             onClick={() => router.push("/")}
             style={{ cursor: "pointer" }}
             alt="Racks Labs"
