@@ -140,7 +140,9 @@ const ShowProjectComponent = ({
   };
 
   const handleOpenFundProjectComponent = () => {
-    handleCloseShowProject();
+    setOpenJoinProject(false);
+    setErrorCodeJoinProject(errorCode.none);
+    setIsOpen(false);
     setOpenFundProject(true);
   };
 
@@ -165,6 +167,10 @@ const ShowProjectComponent = ({
         setErrorCodeJoinProject(errorCode.full);
     }
   }, [project, user]);
+
+  useEffect(() => {
+    console.log(openFundProject);
+  }, [openFundProject]);
 
   if (ObjectIsNotEmpty(project)) {
     return (
@@ -434,7 +440,7 @@ const ShowProjectComponent = ({
               </ModalBody>
 
               <ModalFooter>
-                {!project.completed && (
+                {!project.completed && project.status == "DOING" && (
                   <Button
                     onClick={handleOpenFundProjectComponent}
                     variant="outline"
