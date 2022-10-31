@@ -25,8 +25,6 @@ const Loading = () => {
       <div className="loading-screen" id="LoadingScreen">
         <Center w="100%" h="80%">
           <Image
-            boxSize="1000px"
-            objectFit="contain"
             src={"./IN_CODE_WE_TRUST.png"}
             alt="In Code We Trust"
             className="loading-img"
@@ -73,6 +71,12 @@ const Loading = () => {
           left: 0;
           width: 100%;
           padding: 0 140px;
+        }
+
+        .loading-img {
+          object-fit: contain;
+          width: 1000px;
+          height: 1000px;
         }
 
         .loading-text {
