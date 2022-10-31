@@ -56,9 +56,11 @@ const Loading = () => {
           transition: all 1s ease-in-out;
         }
 
-        .loading-screen--hidden {
+         {
+          /* .loading-screen--hidden {
           opacity: 0;
           pointer-events: none;
+        } */
         }
 
         .loading-screen__wrapper {
@@ -74,9 +76,9 @@ const Loading = () => {
         }
 
         .loading-img {
-          object-fit: contain;
-          width: 1000px;
-          height: 1000px;
+          object-fit: contain !important;
+          width: 1000px !important;
+          height: 1000px !important;
         }
 
         .loading-text {
