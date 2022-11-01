@@ -75,7 +75,7 @@ const ApproveProjectComponent = ({
       <ModalOverlay />
       {user.role === "admin" && project.approveStatus === "PENDING" && (
         <ModalContent>
-          <ModalHeader className="text-center">Aprobar PROYECTO</ModalHeader>
+          <ModalHeader className="text-center">APROBAR PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="white" />
           <ModalBody pb={0}>
             <Box p="4">

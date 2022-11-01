@@ -81,7 +81,7 @@ const FundProjectComponent = ({
           );
           if (res?.ok) {
             await fetchProjects();
-            toast.success("Ha donado " + amount + " USDT en el Proyecto!");
+            toast.success("Ha donado " + amount + " USDT al Proyecto!");
           } else {
             toast.error("Error al donar al Proyecto");
           }
