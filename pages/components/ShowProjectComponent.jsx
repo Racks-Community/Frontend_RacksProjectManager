@@ -453,7 +453,7 @@ const ShowProjectComponent = ({
                     mb={1}
                     mr={3}
                   >
-                    Invertir
+                    Donar
                   </Button>
                 )}
 

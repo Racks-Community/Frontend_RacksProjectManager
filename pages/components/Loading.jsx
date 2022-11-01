@@ -12,9 +12,9 @@ const Loading = () => {
           count += 5;
         } else {
           clearInterval(counting);
-          document
-            .getElementById("LoadingScreen")
-            .classList.add("loading-screen--hidden");
+          // document
+          //   .getElementById("LoadingScreen")
+          //   .classList.add("loading-screen--hidden");
         }
       }, 35);
     }
@@ -76,6 +76,7 @@ const Loading = () => {
         .loading-img {
           object-fit: contain !important;
           width: 1000px !important;
+          z-index: 200;
         }
 
         .loading-text {

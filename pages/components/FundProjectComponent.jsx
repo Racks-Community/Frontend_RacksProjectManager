@@ -81,13 +81,13 @@ const FundProjectComponent = ({
           );
           if (res?.ok) {
             await fetchProjects();
-            toast.success("Ha invertido " + amount + " USDT en el Proyecto!");
+            toast.success("Ha donado " + amount + " USDT en el Proyecto!");
           } else {
-            toast.error("Error al invertir en el Proyecto");
+            toast.error("Error al donar al Proyecto");
           }
         }
       } catch (error) {
-        toast.error("Error al invertir en el Proyecto");
+        toast.error("Error al donar al Proyecto");
       }
       setIsOpen(false);
       setLoading(false);
@@ -104,14 +104,12 @@ const FundProjectComponent = ({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader className="text-center">
-            INVERTIR EN PROYECTO
-          </ModalHeader>
+          <ModalHeader className="text-center">DONAR AL PROYECTO</ModalHeader>
           <ModalCloseButton colorScheme="teal" />
           <form onSubmit={handleSubmit} autoComplete="off">
             <ModalBody pb={6}>
               <FormControl mt={4} isRequired>
-                <FormLabel>Cantidad a Invertir</FormLabel>
+                <FormLabel>Cantidad a Donar</FormLabel>
                 <Input
                   type="number"
                   min="1"
@@ -126,7 +124,7 @@ const FundProjectComponent = ({
               <Button
                 type="submit"
                 isLoading={loading}
-                loadingText="Invertir"
+                loadingText="Donar"
                 variant="outline"
                 bg="transparent"
                 borderColor={"#FEFE0E"}
@@ -141,7 +139,7 @@ const FundProjectComponent = ({
                 mr={3}
                 mb={1}
               >
-                Invertir
+                Donar
               </Button>
               <Button
                 onClick={() => setIsOpen(false)}
