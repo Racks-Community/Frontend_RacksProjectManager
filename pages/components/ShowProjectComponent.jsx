@@ -124,11 +124,11 @@ const ShowProjectComponent = ({
         toast.error("Error al unirse al Proyecto");
       }
 
-      setIsOpen(false);
       setLoading(false);
+      handleCloseShowProject();
     } else {
       toast.error("Reputación Insuficiente");
-      setIsOpen(false);
+      handleCloseShowProject();
     }
   };
 
@@ -167,10 +167,6 @@ const ShowProjectComponent = ({
         setErrorCodeJoinProject(errorCode.full);
     }
   }, [project, user]);
-
-  useEffect(() => {
-    console.log(openFundProject);
-  }, [openFundProject]);
 
   if (ObjectIsNotEmpty(project)) {
     return (
