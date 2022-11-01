@@ -12,9 +12,9 @@ const Loading = () => {
           count += 5;
         } else {
           clearInterval(counting);
-          // document
-          //   .getElementById("LoadingScreen")
-          //   .classList.add("loading-screen--hidden");
+          document
+            .getElementById("LoadingScreen")
+            .classList.add("loading-screen--hidden");
         }
       }, 35);
     }
