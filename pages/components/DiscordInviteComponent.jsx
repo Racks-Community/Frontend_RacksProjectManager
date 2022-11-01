@@ -33,6 +33,8 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
       if (res?.ok) {
         const data = await res.json();
         setDiscordInvite(data);
+      } else {
+        setDiscordInvite(undefined);
       }
     }
   };
@@ -55,12 +57,12 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
         <ModalBody pb={6}>
           <Box p="4">
             <Center>
-              {discordInvite.length > 0 ? (
+              {discordInvite == undefined ? (
+                <Text>Error al generar invitación</Text>
+              ) : (
                 <Link href={discordInvite} isExternal>
                   {discordInvite}
                 </Link>
-              ) : (
-                <Text>Error al generar invitación</Text>
               )}
             </Center>
           </Box>
