@@ -13,6 +13,7 @@ import {
   Box,
   Center,
   Link,
+  Text,
 } from "@chakra-ui/react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -31,13 +32,13 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
       });
       if (res?.ok) {
         const data = await res.json();
-        return data;
+        setDiscordInvite(data);
       }
     }
   };
 
   useEffect(() => {
-    getDiscordInvite().then((invite) => setDiscordInvite(invite));
+    if (isOpen) getDiscordInvite();
   }, [isOpen, user]);
 
   return (
@@ -54,9 +55,13 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
         <ModalBody pb={6}>
           <Box p="4">
             <Center>
-              <Link href={discordInvite} isExternal>
-                {discordInvite}
-              </Link>
+              {discordInvite.length > 0 ? (
+                <Link href={discordInvite} isExternal>
+                  {discordInvite}
+                </Link>
+              ) : (
+                <Text>Error al generar invitación</Text>
+              )}
             </Center>
           </Box>
         </ModalBody>

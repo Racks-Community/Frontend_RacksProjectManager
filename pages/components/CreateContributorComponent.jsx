@@ -77,9 +77,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
               await fetchUser();
             }, 1000);
             toast.success("Bienvenido a Racks Labs como Contributor!");
-            setTimeout(async () => {
-              setIsOpenDiscordInviteComponent(true);
-            }, 1000);
+            setIsOpenDiscordInviteComponent(true);
           }
         } catch (error) {
           await fetch(API_URL + "users/contributor/" + user.address, {
