@@ -149,7 +149,7 @@ function Projects() {
         mb={"-1.2rem"}
       >
         <Heading as="h1" mb="1rem" className="rackspm-heading">
-          Racks Project Manager
+          Racks Community
         </Heading>
 
         {user.role === "admin" && (
