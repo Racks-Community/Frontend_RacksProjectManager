@@ -74,12 +74,12 @@ const ShowProjectComponent = ({
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const racksPM = new ethers.Contract(
-        contractAddresses[CHAIN_ID].RacksProjectManager[0],
+        contractAddresses[CHAIN_ID].RacksProjectManager,
         RacksPmAbi,
         signer
       );
       const mockErc20 = new ethers.Contract(
-        contractAddresses[CHAIN_ID].MockErc20[0],
+        contractAddresses[CHAIN_ID].MockErc20,
         MockErc20Abi,
         signer
       );

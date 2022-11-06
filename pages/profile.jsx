@@ -145,7 +145,7 @@ function Profile() {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const MRC = new ethers.Contract(
-      contractAddresses[CHAIN_ID].MRCRYPTO[0],
+      contractAddresses[CHAIN_ID].MRCRYPTO,
       MrCryptoAbi,
       signer
     );

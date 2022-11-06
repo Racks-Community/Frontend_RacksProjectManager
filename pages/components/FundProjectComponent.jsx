@@ -46,7 +46,7 @@ const FundProjectComponent = ({
       const account = (await provider.send("eth_requestAccounts", []))[0];
 
       const mockErc20 = new ethers.Contract(
-        contractAddresses[CHAIN_ID].MockErc20[0],
+        contractAddresses[CHAIN_ID].MockErc20,
         MockErc20Abi,
         signer
       );
