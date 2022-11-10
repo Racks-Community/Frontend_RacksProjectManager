@@ -377,7 +377,7 @@ const ShowProjectComponent = ({
                             colSpan={1}
                             textAlign={"end"}
                           >
-                            {project.funds + " USDT"}
+                            {project.funds + " USDC"}
                           </GridItem>
                         </>
                       )}

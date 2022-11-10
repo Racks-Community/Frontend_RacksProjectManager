@@ -359,7 +359,7 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                         textAlign={"end"}
                         colSpan={1}
                       >
-                        {project.funds + " USDT"}
+                        {project.funds + " USDC"}
                       </GridItem>
                       {project.completed ? (
                         <>
