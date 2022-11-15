@@ -83,19 +83,21 @@ const UpdateProjectComponent = ({
       formData.append("name", event?.target[1]?.value);
     if (project.description !== event?.target[2]?.value)
       formData.append("description", event?.target[2]?.value);
-    if (project.requirements !== event?.target[3]?.value)
-      formData.append("requirements", event?.target[3]?.value);
-    if (project.reputationLevel !== Number(event?.target[4]?.value))
-      formData.append("reputationLevel", Number(event?.target[4]?.value));
-    if (project.colateralCost !== Number(event?.target[5]?.value))
-      formData.append("colateralCost", Number(event?.target[5]?.value));
-    if (project.maxContributorsNumber !== Number(event?.target[6]?.value))
-      formData.append("maxContributorsNumber", Number(event?.target[6]?.value));
+    if (project.details !== event?.target[3]?.value)
+      formData.append("details", event?.target[3]?.value);
+    if (project.requirements !== event?.target[4]?.value)
+      formData.append("requirements", event?.target[4]?.value);
+    if (project.reputationLevel !== Number(event?.target[5]?.value))
+      formData.append("reputationLevel", Number(event?.target[5]?.value));
+    if (project.colateralCost !== Number(event?.target[6]?.value))
+      formData.append("colateralCost", Number(event?.target[6]?.value));
+    if (project.maxContributorsNumber !== Number(event?.target[7]?.value))
+      formData.append("maxContributorsNumber", Number(event?.target[7]?.value));
     if (
-      project.githubRepository !== event?.target[7]?.value &&
+      project.githubRepository !== event?.target[8]?.value &&
       user.role === "admin"
     )
-      formData.append("githubRepository", event?.target[7]?.value);
+      formData.append("githubRepository", event?.target[8]?.value);
 
     if (user.role === "admin" || project.owner === user._id) {
       setLoading(true);
@@ -174,6 +176,19 @@ const UpdateProjectComponent = ({
                     focusBorderColor="white"
                     borderRadius={"none"}
                     resize={"none"}
+                  />
+                </FormControl>
+
+                <FormControl mt={3}>
+                  <FormLabel>Detalles</FormLabel>
+                  <Textarea
+                    type="text"
+                    defaultValue={project.details}
+                    placeholder="Detalles"
+                    focusBorderColor="white"
+                    borderRadius={"none"}
+                    resize={"none"}
+                    height={"0.5rem"}
                   />
                 </FormControl>
 

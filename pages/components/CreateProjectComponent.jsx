@@ -34,15 +34,18 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     const formData = new FormData();
     formData.append("name", event?.target[1]?.value);
     formData.append("description", event?.target[2]?.value);
-    formData.append("reputationLevel", event?.target[4]?.value);
-    formData.append("colateralCost", event?.target[6]?.value);
-    formData.append("maxContributorsNumber", event?.target[7]?.value);
+    formData.append("reputationLevel", event?.target[5]?.value);
+    formData.append("colateralCost", event?.target[7]?.value);
+    formData.append("maxContributorsNumber", event?.target[8]?.value);
     formData.append("owner", user._id);
     if (event?.target[0]?.value != "" && selectedFile != null) {
       formData.append("imageURL", selectedFile);
     }
     if (event?.target[3]?.value != "") {
-      formData.append("requirements", event?.target[3]?.value);
+      formData.append("details", event?.target[3]?.value);
+    }
+    if (event?.target[4]?.value != "") {
+      formData.append("requirements", event?.target[4]?.value);
     }
     if (event?.target[5]?.checked) {
       formData.append("visibleForAll", event?.target[5]?.checked);
@@ -119,6 +122,18 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 type="text"
                 name="description"
                 placeholder="Descripción"
+                focusBorderColor="white"
+                borderRadius={"none"}
+                resize={"none"}
+              />
+            </FormControl>
+
+            <FormControl mt={3}>
+              <FormLabel>Detalles</FormLabel>
+              <Textarea
+                type="text"
+                name="details"
+                placeholder="Detalles"
                 focusBorderColor="white"
                 borderRadius={"none"}
                 resize={"none"}

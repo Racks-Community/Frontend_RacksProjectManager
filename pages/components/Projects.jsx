@@ -160,6 +160,7 @@ function Projects() {
             variant="outline"
             colorScheme="white"
             borderRadius={"none"}
+            className="custom-buttons"
             _hover={{ bg: "white", color: "black" }}
           >
             Create Project

@@ -112,6 +112,19 @@ const ApproveProjectComponent = ({
                     fontSize="xs"
                     textTransform="uppercase"
                   >
+                    Detalles:
+                  </Text>
+                  <Text>{project.details}</Text>
+                </Box>
+
+                <Box fontSize={"0.85rem"}>
+                  <Text
+                    color="gray"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                  >
                     Requerimientos:
                   </Text>
                   <Text>{project.requirements}</Text>

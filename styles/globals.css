@@ -53,6 +53,12 @@ main {
 
 .chakra-modal__content {
   background: linear-gradient(90deg, #33393f 0, #2a2b2b) !important;
+  overflow-y: scroll !important;
+}
+
+.show-project-modal {
+  min-width: 50%;
+  max-height: 95%;
 }
 
 .chakra-popover__content {
@@ -334,7 +340,7 @@ main {
   /* MODALS */
   .chakra-modal__content {
     transform: scale(0.8) !important;
-    overflow: scroll !important;
+    overflow-y: scroll !important;
   }
   .create-pj-grid {
     grid-template-columns: repeat(1, 1fr) !important;

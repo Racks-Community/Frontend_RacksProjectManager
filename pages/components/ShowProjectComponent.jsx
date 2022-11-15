@@ -180,7 +180,13 @@ const ShowProjectComponent = ({
         >
           <ModalOverlay />
           {!openJoinProject && ObjectIsNotEmpty(project) ? (
-            <ModalContent>
+            <ModalContent
+              className={
+                isProjectContributor && project.details
+                  ? "show-project-modal"
+                  : ""
+              }
+            >
               <ModalHeader className="text-center">
                 DETALLES DEL PROYECTO
               </ModalHeader>
@@ -235,6 +241,25 @@ const ShowProjectComponent = ({
                       <Center>{project.description}</Center>
                     </Box>
 
+                    {isProjectContributor && (
+                      <>
+                        {project.details && (
+                          <Box fontSize={"0.85rem"}>
+                            <Text
+                              color="gray"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                            >
+                              Detalles:
+                            </Text>
+                            <Text>{project.details}</Text>
+                          </Box>
+                        )}
+                      </>
+                    )}
+
                     <Box fontSize={"0.85rem"}>
                       <Text
                         color="gray"
@@ -250,6 +275,20 @@ const ShowProjectComponent = ({
 
                     {isProjectContributor && (
                       <>
+                        {project.details && (
+                          <Box fontSize={"0.85rem"}>
+                            <Text
+                              color="gray"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                            >
+                              Detalles:
+                            </Text>
+                            <Text>{project.details}</Text>
+                          </Box>
+                        )}
                         <Box fontSize={"0.85rem"}>
                           <Text
                             color="gray"
