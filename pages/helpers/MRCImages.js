@@ -1,6 +1,7 @@
-import { MrCryptoAbi } from "../../web3Constants";
-import { ethers } from "ethers";
 import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
+import { contractAddresses, MrCryptoAbi } from "../../web3Constants";
+import { ethers } from "ethers";
+const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 export const getMRCImageUrlFromAvatar = async (uri) => {
   const tokenURIResponse = await (await fetch(uri)).json();
@@ -30,13 +31,33 @@ export const getMRCMetadataUrl = async (tokenId) => {
     "https://polygon-rpc.com"
   );
   const MRC = new ethers.Contract(
-    "0xeF453154766505FEB9dBF0a58E6990fd6eB66969",
+    "0xeF453154766505FEB9dBF0a58E6990fd6eB66969", // DEV
     MrCryptoAbi,
     provider
   );
   const uri = await MRC.tokenURI(tokenId);
   uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
   return uri;
+};
+
+export const fetchNFTIds = async () => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const MRC = new ethers.Contract(
+    contractAddresses[CHAIN_ID].MRCRYPTO,
+    MrCryptoAbi,
+    signer
+  );
+  const tokenIds = await MRC.walletOfOwner(
+    (
+      await provider.send("eth_requestAccounts", [])
+    )[0]
+  );
+  let ids = [];
+  for (let id of tokenIds) {
+    ids.push(ethers.BigNumber.from(id).toNumber());
+  }
+  return ids;
 };
 
 export default getMRCImageUrlFromMetadata;

@@ -21,6 +21,11 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
+import {
+  fetchNFTIds,
+  getMRCImageUrlFromId,
+  getMRCMetadataUrl,
+} from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -37,7 +42,7 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     event.preventDefault();
     const sendDiscordInvite = user.verified;
     const contributorData = {
-      avatar: await getMRCUrl(event?.target[0]?.value),
+      avatar: await getMRCMetadataUrl(event?.target[0]?.value),
       email: event?.target[1]?.value,
       githubUsername: event?.target[2]?.value,
       discord: event?.target[3]?.value,
@@ -73,52 +78,14 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     }
   };
 
-  const getMRCUrl = async (tokenId) => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://polygon-rpc.com"
-    );
-    const MRC = new ethers.Contract(
-      "0xeF453154766505FEB9dBF0a58E6990fd6eB66969",
-      MrCryptoAbi,
-      provider
-    );
-    const uri = await MRC.tokenURI(tokenId);
-    uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return uri;
-  };
-
-  const getMRCImageUrl = async (tokenId) => {
-    const uri = await getMRCUrl(tokenId);
-    const tokenURIResponse = await (await fetch(uri)).json();
-    const imageURI = tokenURIResponse.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
-  };
-
-  const fetchMRC = async () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-    const MRC = new ethers.Contract(
-      contractAddresses[CHAIN_ID].MRCRYPTO,
-      MrCryptoAbi,
-      signer
-    );
-    const tokenIds = await MRC.walletOfOwner(
-      (
-        await provider.send("eth_requestAccounts", [])
-      )[0]
-    );
-    let ids = [];
-    for (let id of tokenIds) {
-      ids.push(ethers.BigNumber.from(id).toNumber());
-    }
+  const getMRCIds = async () => {
+    const ids = await fetchNFTIds();
     setMRCIds(ids);
-    await getMRCUrl(ids[0]);
   };
 
   const handleOnChangeToken = async (event) => {
     if (event.target.value) {
-      const uri = await getMRCImageUrl(event.target.value);
+      const uri = await getMRCImageUrlFromId(event.target.value);
       setSelectedMRC(uri);
     } else {
       setSelectedMRC("#");
@@ -127,7 +94,7 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   useEffect(() => {
     if (user.role === "user" && user.address) {
-      fetchMRC();
+      getMRCIds();
     }
   }, [isOpen]);
 

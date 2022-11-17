@@ -5,8 +5,6 @@ import { useRouter } from "next/router";
 import CreateProjectComponent from "./components/CreateProjectComponent";
 import UpdateProjectComponent from "./components/UpdateProjectComponent";
 import Project from "./components/Project";
-import { contractAddresses, MrCryptoAbi } from "../web3Constants";
-import { ethers } from "ethers";
 import {
   Tooltip,
   Text,
@@ -28,13 +26,13 @@ import {
   getMRCImageUrlFromId,
   getMRCImageUrlFromMetadata,
   getMRCMetadataUrl,
+  fetchNFTIds,
 } from "./helpers/MRCImages";
 import Loading from "./components/Loading";
 import { formatDate } from "./helpers/FormatDate";
 import { ObjectIsNotEmpty } from "./helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 function Profile() {
   const user = useSelector(selectUserInfo);
@@ -141,23 +139,8 @@ function Profile() {
     }
   };
 
-  const fetchMRC = async () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-    const MRC = new ethers.Contract(
-      contractAddresses[CHAIN_ID].MRCRYPTO,
-      MrCryptoAbi,
-      signer
-    );
-    const tokenIds = await MRC.walletOfOwner(
-      (
-        await provider.send("eth_requestAccounts", [])
-      )[0]
-    );
-    let ids = [];
-    for (let id of tokenIds) {
-      ids.push(ethers.BigNumber.from(id).toNumber());
-    }
+  const getMRCIds = async () => {
+    const ids = await fetchNFTIds();
     setMRCIds(ids);
   };
 
@@ -216,7 +199,7 @@ function Profile() {
       })();
     }
     if (user.role === "user" && MRCIds.length == 0) {
-      fetchMRC();
+      getMRCIds();
     }
     if (!localStorage.getItem("token") && !ObjectIsNotEmpty(user)) {
       localStorage.removeItem("token");

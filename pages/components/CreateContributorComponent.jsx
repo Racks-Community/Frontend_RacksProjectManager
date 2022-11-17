@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
 import DiscordInviteComponent from "./DiscordInviteComponent";
-import {
-  contractAddresses,
-  RacksPmAbi,
-  MrCryptoAbi,
-} from "../../web3Constants";
+import { contractAddresses, RacksPmAbi } from "../../web3Constants";
 import { ethers } from "ethers";
 import {
   Modal,
@@ -25,7 +21,11 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import { getMRCImageUrlFromId, getMRCMetadataUrl } from "../helpers/MRCImages";
+import {
+  fetchNFTIds,
+  getMRCImageUrlFromId,
+  getMRCMetadataUrl,
+} from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
@@ -106,25 +106,9 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     }
   };
 
-  const fetchMRC = async () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-    const MRC = new ethers.Contract(
-      contractAddresses[CHAIN_ID].MRCRYPTO,
-      MrCryptoAbi,
-      signer
-    );
-    const tokenIds = await MRC.walletOfOwner(
-      (
-        await provider.send("eth_requestAccounts", [])
-      )[0]
-    );
-    let ids = [];
-    for (let id of tokenIds) {
-      ids.push(ethers.BigNumber.from(id).toNumber());
-    }
+  const getMRCIds = async () => {
+    const ids = await fetchNFTIds();
     setMRCIds(ids);
-    await getMRCMetadataUrl(ids[0]);
   };
 
   const onClose = () => {
@@ -134,7 +118,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
   useEffect(() => {
     if (user.role === "user" && user.address) {
-      fetchMRC();
+      getMRCIds();
     }
   }, [isOpen]);
 
