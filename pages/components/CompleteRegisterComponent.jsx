@@ -28,7 +28,6 @@ import {
 } from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const user = useSelector(selectUserInfo);

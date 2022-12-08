@@ -241,25 +241,6 @@ const ShowProjectComponent = ({
                       <Center>{project.description}</Center>
                     </Box>
 
-                    {isProjectContributor && (
-                      <>
-                        {project.details && (
-                          <Box fontSize={"0.85rem"}>
-                            <Text
-                              color="gray"
-                              fontWeight="semibold"
-                              letterSpacing="wide"
-                              fontSize="xs"
-                              textTransform="uppercase"
-                            >
-                              Detalles:
-                            </Text>
-                            <Text>{project.details}</Text>
-                          </Box>
-                        )}
-                      </>
-                    )}
-
                     <Box fontSize={"0.85rem"}>
                       <Text
                         color="gray"

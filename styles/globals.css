@@ -234,6 +234,28 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 999 !important;
+}
+
+.beta-tag {
+  z-index: 5;
+  padding: 5px;
+  width: 200px;
+  text-align: center;
+  position: fixed;
+  background: #f2f2f2;
+  bottom: 0rem;
+  left: 0rem;
+  transform: rotate(45deg) translate(-30%, 120%);
+  box-shadow: 0px 10px 10px rgb(0 0 0 / 20%);
+}
+.beta-tag span {
+  text-transform: uppercase;
+  color: #030303;
+  font-size: 14px;
+  font-weight: 900;
+  text-shadow: 0.5px 0 #000;
+  letter-spacing: 1px;
 }
 
 @media screen and (max-width: 1500px) {
@@ -384,6 +406,19 @@ main {
   }
   .contributors-popover-select {
     font-size: 0.7rem !important;
+  }
+  .beta-tag {
+    width: 200px;
+    height: 20px;
+    transform: rotate(45deg) translate(-31.5%, 260%);
+    box-shadow: 0px 10px 10px rgb(0 0 0 / 20%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .beta-tag span {
+    font-size: 10px;
+    text-shadow: 0.3px 0 #000;
   }
 }
 
