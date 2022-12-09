@@ -94,8 +94,9 @@ const UpdateProjectComponent = ({
     if (project.maxContributorsNumber !== Number(event?.target[7]?.value))
       formData.append("maxContributorsNumber", Number(event?.target[7]?.value));
     if (
-      project.githubRepository !== event?.target[8]?.value &&
-      user.role === "admin"
+      (project.githubRepository !== event?.target[8]?.value &&
+        user.role === "admin") ||
+      project.owner === user._id
     )
       formData.append("githubRepository", event?.target[8]?.value);
 
@@ -239,8 +240,11 @@ const UpdateProjectComponent = ({
                   />
                 </FormControl>
 
-                {user.role === "admin" && (
-                  <FormControl mt={3} isRequired>
+                {(user.role === "admin" || project.owner === user._id) && (
+                  <FormControl
+                    mt={3}
+                    isRequired={project.approveStatus == "ACTIVE"}
+                  >
                     <FormLabel>Repositorio Github</FormLabel>
                     <Input
                       type="text"

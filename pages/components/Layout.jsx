@@ -7,7 +7,7 @@ export default function Layout({ children }) {
       <Navbar />
       <main>{children}</main>
       <Footer />
-      <div class="beta-tag">
+      <div className="beta-tag">
         <span>BETA</span>
       </div>
     </>

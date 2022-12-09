@@ -30,7 +30,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let nProjectsBefore = await fetchProjects();
-
     const formData = new FormData();
     formData.append("name", event?.target[1]?.value);
     formData.append("description", event?.target[2]?.value);
@@ -47,10 +46,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     if (event?.target[4]?.value != "") {
       formData.append("requirements", event?.target[4]?.value);
     }
-    if (event?.target[5]?.checked) {
-      formData.append("visibleForAll", event?.target[5]?.checked);
+    if (event?.target[6]?.checked) {
+      formData.append("visibleForAll", event?.target[6]?.checked);
     }
-
+    if (event?.target[9]?.value != "") {
+      formData.append("githubRepository", event?.target[9]?.value);
+    }
     setLoading(true);
     const res = await fetch(API_URL + "projects", {
       method: "POST",
@@ -61,9 +62,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     });
 
     if (res?.ok) {
+      let count = 0;
       const fetchProjectsInterval = setInterval(async () => {
         let nProjects = await fetchProjects();
-        if (nProjects > nProjectsBefore) clearInterval(fetchProjectsInterval);
+        count++;
+        if (nProjects > nProjectsBefore || count == 30)
+          clearInterval(fetchProjectsInterval);
       }, 1000);
       toast.success("Proyecto creado!");
     } else {
@@ -87,7 +91,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       onClose={() => setIsOpen(false)}
     >
       <ModalOverlay />
-      <ModalContent maxH={"92vh"} style={{ overflow: "hidden" }}>
+      <ModalContent style={{ overflow: "hidden" }}>
         <ModalHeader className="text-center">CREAR PROYECTO</ModalHeader>
         <ModalCloseButton />
         <form
@@ -195,6 +199,17 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 placeholder="Número de Contribuidores"
                 focusBorderColor="white"
                 borderRadius={"none"}
+              />
+            </FormControl>
+
+            <FormControl mt={3}>
+              <FormLabel>Repositorio Github</FormLabel>
+              <Input
+                type="text"
+                placeholder="Github Repository"
+                focusBorderColor="white"
+                borderRadius={"none"}
+                resize={"none"}
               />
             </FormControl>
           </ModalBody>
