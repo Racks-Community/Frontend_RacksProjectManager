@@ -22,13 +22,12 @@ import {
 import React, { useState, useEffect } from "react";
 import ShowContributorComponent from "./ShowContributorComponent";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
-import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
+import { getMRCImageUrlFromContributor } from "../helpers/MRCImages";
 import { formatDate } from "../helpers/FormatDate";
 import { FaPlus } from "react-icons/fa";
+import { getUserById } from "../helpers/APICalls";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-const Project = ({ project, handleProjectClick, privateProject }) => {
+const Project = ({ project, admin, handleProjectClick, privateProject }) => {
   const [isOpenShowContributorComponent, setIsOpenShowContributorComponent] =
     useState(false);
   const [isOpenContributorsPopover, setIsOpenContributorsPopover] =
@@ -37,9 +36,9 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
   const [contributorToShow, setContributorToShow] = useState({});
   const [contrImages, setContrImages] = useState(null);
   const [contrArrayReduced, setContrArrayReduced] = useState([]);
+
   const status = {
     created: "CREATED",
-
     doing: "DOING",
     finished: "FINISHED",
   };
@@ -53,57 +52,46 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
     setIsOpenContributorsPopover(false);
   };
 
-  const handleShowContributorOpen = async (event, id, participationWeight) => {
-    if (id && event.target.alt === "PFP") {
-      const res = await fetch(API_URL + "users/id/" + id, {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (res?.ok) {
-        const data = await res.json();
-        if (project.completed) data.createdAt = formatDate(data.createdAt);
-        data.createdAt = formatDate(data.createdAt);
-        if (participationWeight > 0)
-          data.participationWeight = participationWeight;
-        setContributorToShow(data);
-        setIsOpenShowContributorComponent(true);
-      }
-    }
+  const checkProjectContributor = (contr) => {
+    if (!project.address) return false;
+    const userIsProjectContributor = project.contributors.indexOf(contr) > -1;
+    return userIsProjectContributor;
   };
 
-  const getMRCImageUrlFromContributor = async (id) => {
-    if (id) {
-      const res = await fetch(API_URL + "users/id/" + id, {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (res?.ok) {
-        const data = await res.json();
-        const mrc = await getMRCImageUrlFromAvatar(data.avatar);
-        return mrc;
-      }
+  const handleShowContributorOpen = async (event, id, participationWeight) => {
+    if (id && id != admin && event.target.alt === "PFP") {
+      const data = await getUserById(id);
+      data.createdAt = formatDate(data.createdAt);
+      data.isOwner = project.owner == id;
+      data.isContributor = checkProjectContributor(id);
+      if (participationWeight > 0)
+        data.participationWeight = participationWeight;
+      setContributorToShow(data);
+      setIsOpenShowContributorComponent(true);
     }
   };
 
   const fetchMRCImagesFromProject = async () => {
     const imgsMap = new Map();
-    const contributors = project.contributors.slice(0, 3);
-
-    for (const contr of project.contributors) {
+    const arrayWithOwner = [];
+    arrayWithOwner.push(...project.contributors);
+    if (arrayWithOwner[0] !== project.owner) {
+      arrayWithOwner.unshift(project.owner);
+      arrayWithOwner = [...new Set(arrayWithOwner)];
+    }
+    const contributors = arrayWithOwner.slice(0, 3);
+    for (const contr of arrayWithOwner) {
       if (!imgsMap.get(project.address))
         imgsMap.set(project.address, new Map());
       imgsMap
         .get(project.address)
         .set(contr, await getMRCImageUrlFromContributor(contr));
     }
-
-    project.contributors.length > 3
+    contributors.reverse();
+    arrayWithOwner.reverse();
+    arrayWithOwner.length > 3
       ? setContrArrayReduced(contributors)
-      : setContrArrayReduced(project.contributors);
+      : setContrArrayReduced(arrayWithOwner);
     setContrImages(imgsMap);
   };
 
@@ -215,10 +203,20 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                     <Spacer />
                     <Center>
                       <HStack>
+                        {project.contributors.length > 3 && (
+                          <FaPlus
+                            className="all-contributors"
+                            onClick={() => setIsOpenContributorsPopover(true)}
+                          />
+                        )}
                         {contrArrayReduced.map((contr, index) => (
                           <Box key={contr}>
                             {contrImages ? (
-                              <>
+                              <div
+                                className={
+                                  contr == project.owner ? "ownerPFP" : ""
+                                }
+                              >
                                 <Image
                                   src={contrImages
                                     .get(project.address)
@@ -229,17 +227,20 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                                       contr,
                                       project.completed &&
                                         project.participationWeights.length ==
-                                          project.contributors.length
+                                          contrArrayReduced.length
                                         ? project.participationWeights[index]
                                         : 0
                                     )
                                   }
-                                  style={{ cursor: "pointer" }}
-                                  borderRadius="full"
+                                  className={
+                                    contr == admin
+                                      ? "racksPFP"
+                                      : "contributorPFP"
+                                  }
                                   boxSize="30px"
                                   alt="PFP"
                                 />
-                              </>
+                              </div>
                             ) : (
                               <Image
                                 src={"./fallback.gif"}
@@ -252,12 +253,6 @@ const Project = ({ project, handleProjectClick, privateProject }) => {
                             )}
                           </Box>
                         ))}
-                        {project.contributors.length > 3 && (
-                          <FaPlus
-                            className="all-contributors"
-                            onClick={() => setIsOpenContributorsPopover(true)}
-                          />
-                        )}
                       </HStack>
                     </Center>
                   </Flex>

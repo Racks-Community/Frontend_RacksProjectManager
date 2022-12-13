@@ -10,6 +10,7 @@ import Project from "./Project";
 import Loading from "./Loading";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 import { formatDate } from "../helpers/FormatDate";
+import { getAdmin } from "../helpers/APICalls";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,6 +31,7 @@ function Projects() {
   const [devProjects, setDevProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [pendingProjects, setPendigProjects] = useState([]);
+  const [adminId, setAdminId] = useState(null);
   const status = {
     created: "CREATED",
     doing: "DOING",
@@ -126,11 +128,17 @@ function Projects() {
     }
   };
 
+  const fetchAdminId = async () => {
+    const admin = await getAdmin();
+    setAdminId(admin);
+  };
+
   const clearProjectToShow = () => {
     setProjectToShow({});
   };
 
   useEffect(() => {
+    fetchAdminId();
     if (ObjectIsNotEmpty(user)) {
       fetchProjects();
     }
@@ -175,6 +183,7 @@ function Projects() {
               {newProjects.map((p) => (
                 <Project
                   project={p}
+                  admin={adminId}
                   handleProjectClick={handleProjectClick}
                   privateProject={false}
                   key={p.address}
@@ -197,6 +206,7 @@ function Projects() {
               {devProjects.map((p) => (
                 <Project
                   project={p}
+                  admin={adminId}
                   handleProjectClick={handleProjectClick}
                   privateProject={false}
                   key={p.address}
@@ -219,6 +229,7 @@ function Projects() {
               {completedProjects.map((p) => (
                 <Project
                   project={p}
+                  admin={adminId}
                   handleProjectClick={handleProjectClick}
                   privateProject={false}
                   key={p.address}
@@ -241,6 +252,7 @@ function Projects() {
               {pendingProjects.map((p) => (
                 <Project
                   project={p}
+                  admin={adminId}
                   handleProjectClick={handleProjectClick}
                   privateProject={true}
                   key={p.address}

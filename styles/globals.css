@@ -10,6 +10,7 @@
   background-attachment: fixed;
   font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif !important;
   overflow-x: hidden;
+  overflow-y: unset !important;
   height: 100%;
 }
 
@@ -59,6 +60,10 @@ main {
 .show-project-modal {
   min-width: 50%;
   max-height: 95%;
+}
+
+.show-project-modal .show-project-grid {
+  width: 39% !important;
 }
 
 .chakra-popover__content {
@@ -166,6 +171,36 @@ main {
 }
 .popover-contributors {
   position: absolute;
+}
+.contributorPFP,
+.racksPFP {
+  cursor: pointer;
+  border-radius: 100%;
+}
+.ownerPFP {
+  height: 34.5px;
+  width: 34.5px;
+  padding-top: 2.2px;
+  padding-left: 2.2px;
+  background: linear-gradient(
+    60deg,
+    #fefe0e,
+    #acac08,
+    #020910,
+    #020910,
+    #a1a0a0,
+    #ffffff
+  );
+  border-radius: 100%;
+  z-index: -1;
+  animation: animatedgradient 30s ease alternate infinite;
+  background-size: 300% 300%;
+}
+.racksPFP {
+  width: 2rem !important;
+  height: 1rem !important;
+  margin-top: 7px;
+  margin-left: -1px;
 }
 
 /* CREATE PROJECT COMPONENT */
@@ -460,5 +495,17 @@ main {
 @media screen and (min-height: 1050px) {
   main {
     height: 82%;
+  }
+}
+
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

@@ -1,7 +1,15 @@
 import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
 import { contractAddresses, MrCryptoAbi } from "../../web3Constants";
 import { ethers } from "ethers";
+import { getUserById } from "./APICalls";
+
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
+
+export const getMRCImageUrlFromContributor = async (id) => {
+  const data = await getUserById(id);
+  const mrc = await getMRCImageUrlFromAvatar(data.avatar);
+  return mrc;
+};
 
 export const getMRCImageUrlFromAvatar = async (uri) => {
   const tokenURIResponse = await (await fetch(uri)).json();

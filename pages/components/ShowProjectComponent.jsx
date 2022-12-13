@@ -238,10 +238,6 @@ const ShowProjectComponent = ({
                     )}
 
                     <Box fontSize={"0.85rem"}>
-                      <Center>{project.description}</Center>
-                    </Box>
-
-                    <Box fontSize={"0.85rem"}>
                       <Text
                         color="gray"
                         fontWeight="semibold"
@@ -252,6 +248,10 @@ const ShowProjectComponent = ({
                         Requerimientos:
                       </Text>
                       <Text>{project.requirements}</Text>
+                    </Box>
+
+                    <Box fontSize={"0.85rem"}>
+                      <Center>{project.description}</Center>
                     </Box>
 
                     {isProjectContributor && (
@@ -312,7 +312,11 @@ const ShowProjectComponent = ({
                       </>
                     )}
 
-                    <Grid templateColumns="repeat(4, 1fr)" w={"100%"}>
+                    <Grid
+                      templateColumns="repeat(4, 1fr)"
+                      w={"100%"}
+                      className="show-project-grid"
+                    >
                       <GridItem
                         color="gray.500"
                         fontWeight="semibold"

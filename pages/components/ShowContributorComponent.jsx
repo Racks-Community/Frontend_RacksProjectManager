@@ -12,6 +12,7 @@ import {
   Box,
   Divider,
   VStack,
+  HStack,
   Badge,
   Grid,
   GridItem,
@@ -79,9 +80,18 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
               />
               <Center>
                 <VStack alignItems="center">
-                  <Badge borderRadius="full" px="2" mb="1" colorScheme="yellow">
-                    {"Reputation Level " + contributor.reputationLevel}
-                  </Badge>
+                  <HStack>
+                    {contributor.isOwner && (
+                      <Badge borderRadius="full" px="2" colorScheme="green">
+                        Owner
+                      </Badge>
+                    )}
+                    {contributor.isContributor && (
+                      <Badge borderRadius="full" px="2" colorScheme="yellow">
+                        {"Reputation Level " + contributor.reputationLevel}
+                      </Badge>
+                    )}
+                  </HStack>
                   <Grid templateColumns="repeat(2, 1fr)">
                     <GridItem
                       color="gray.500"
