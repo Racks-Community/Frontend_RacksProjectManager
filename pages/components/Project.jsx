@@ -25,7 +25,7 @@ import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 import { getMRCImageUrlFromContributor } from "../helpers/MRCImages";
 import { formatDate } from "../helpers/FormatDate";
 import { FaPlus } from "react-icons/fa";
-import { getUserById } from "../helpers/APICalls";
+import getUserById from "../helpers/APICalls";
 
 const Project = ({ project, admin, handleProjectClick, privateProject }) => {
   const [isOpenShowContributorComponent, setIsOpenShowContributorComponent] =
@@ -60,7 +60,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
 
   const handleShowContributorOpen = async (event, id, participationWeight) => {
     if (id && id != admin && event.target.alt === "PFP") {
-      const data = await getUserById(id);
+      const data = await getUserById(id, localStorage.getItem("token"));
       data.createdAt = formatDate(data.createdAt);
       data.isOwner = project.owner == id;
       data.isContributor = checkProjectContributor(id);
@@ -85,7 +85,13 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
         imgsMap.set(project.address, new Map());
       imgsMap
         .get(project.address)
-        .set(contr, await getMRCImageUrlFromContributor(contr));
+        .set(
+          contr,
+          await getMRCImageUrlFromContributor(
+            contr,
+            localStorage.getItem("token")
+          )
+        );
     }
     contributors.reverse();
     arrayWithOwner.reverse();

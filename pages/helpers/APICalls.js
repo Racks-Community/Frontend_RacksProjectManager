@@ -1,11 +1,11 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getUserById = async (id) => {
+export const getUserById = async (id, token) => {
   if (id) {
     const res = await fetch(API_URL + "users/id/" + id, {
       method: "get",
       headers: new Headers({
-        Authorization: localStorage.getItem("token"),
+        Authorization: token,
       }),
     });
     if (res?.ok) {
@@ -15,11 +15,11 @@ export const getUserById = async (id) => {
   }
 };
 
-export const getAdmin = async () => {
+export const getAdmin = async (token) => {
   const res = await fetch(API_URL + "getAdminId", {
     method: "get",
     headers: new Headers({
-      Authorization: localStorage.getItem("token"),
+      Authorization: token,
     }),
   });
   if (res?.ok) {
@@ -27,3 +27,5 @@ export const getAdmin = async () => {
     return data;
   }
 };
+
+export default getUserById;

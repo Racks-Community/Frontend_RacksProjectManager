@@ -129,7 +129,7 @@ function Projects() {
   };
 
   const fetchAdminId = async () => {
-    const admin = await getAdmin();
+    const admin = await getAdmin(localStorage.getItem("token"));
     setAdminId(admin);
   };
 
