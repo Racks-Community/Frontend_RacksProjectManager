@@ -29,7 +29,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
+import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
 import FundProjectComponent from "./FundProjectComponent";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;

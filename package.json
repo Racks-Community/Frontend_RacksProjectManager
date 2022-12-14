@@ -15,6 +15,7 @@
     "@fontsource/montserrat": "^4.5.12",
     "@rainbow-me/rainbowkit": "^0.5.0",
     "@reduxjs/toolkit": "^1.8.5",
+    "axios": "^1.2.1",
     "ethers": "5.7.0",
     "framer-motion": "^6",
     "next": "12.2.5",

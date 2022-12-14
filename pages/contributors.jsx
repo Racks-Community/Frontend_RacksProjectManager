@@ -34,7 +34,7 @@ import {
   FaUndo,
   FaTrashAlt,
 } from "react-icons/fa";
-import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
+import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
 import Loading from "./components/Loading";
 import { toast } from "react-toastify";
 

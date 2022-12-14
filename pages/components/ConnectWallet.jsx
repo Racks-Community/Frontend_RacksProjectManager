@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container, Text, Heading, Center, VStack } from "@chakra-ui/react";
-import { initParticleSlider } from "../helpers/Particles";
+import { initParticleSlider } from "../../helpers/Particles";
 import Loading from "./Loading";
 
 function ConnectWallet() {

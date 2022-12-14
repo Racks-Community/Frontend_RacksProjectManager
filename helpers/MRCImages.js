@@ -1,29 +1,31 @@
-import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
-import { contractAddresses, MrCryptoAbi } from "../../web3Constants";
+import axios from "axios";
 import { ethers } from "ethers";
-import getUserById from "./APICalls";
+import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
+import { contractAddresses, MrCryptoAbi } from "../web3Constants";
+import { getUserById } from "./APICalls";
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 export const getMRCImageUrlFromContributor = async (id, token) => {
+  if (!id || !token) return null;
   const data = await getUserById(id, token);
   const mrc = await getMRCImageUrlFromAvatar(data.avatar);
   return mrc;
 };
 
 export const getMRCImageUrlFromAvatar = async (uri) => {
-  const tokenURIResponse = await (await fetch(uri)).json();
+  if (!uri) return null;
+
+  const tokenURIResponse = (await axios.get(uri)).data;
   const imageURI = tokenURIResponse.image;
   const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
   return imageURIURL;
 };
 
 export const getMRCImageUrlFromId = async (tokenId) => {
+  if (!tokenId) return null;
   const uri = await getMRCMetadataUrl(tokenId);
-  const tokenURIResponse = await (await fetch(uri)).json();
-  const imageURI = tokenURIResponse.image;
-  const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-  return imageURIURL;
+  return await getMRCImageUrlFromAvatar(uri);
 };
 
 export const getMRCImageUrlFromMetadata = (jsonToken) => {
@@ -67,5 +69,3 @@ export const fetchNFTIds = async () => {
   }
   return ids;
 };
-
-export default getMRCImageUrlFromMetadata;

@@ -21,11 +21,11 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import ShowContributorComponent from "./ShowContributorComponent";
-import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
-import { getMRCImageUrlFromContributor } from "../helpers/MRCImages";
-import { formatDate } from "../helpers/FormatDate";
+import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
+import { getMRCImageUrlFromContributor } from "../../helpers/MRCImages";
+import { formatDate } from "../../helpers/FormatDate";
 import { FaPlus } from "react-icons/fa";
-import getUserById from "../helpers/APICalls";
+import { getUserById } from "../../helpers/APICalls";
 
 const Project = ({ project, admin, handleProjectClick, privateProject }) => {
   const [isOpenShowContributorComponent, setIsOpenShowContributorComponent] =

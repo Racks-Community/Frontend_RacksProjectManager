@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import { ThemeProvider } from "./chakra_theme/theme";
 import "@rainbow-me/rainbowkit/styles.css";
 import "@fontsource/montserrat/400.css";
+import { Image } from "@chakra-ui/react";
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -21,8 +22,8 @@ import { selectUserInfo, setUserInfo } from "../store/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
-import { getMRCImageUrlFromAvatar } from "./helpers/MRCImages";
 import { useRouter } from "next/router";
+import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -57,15 +58,17 @@ function MyApp({ Component, pageProps }) {
 
   const CustomAvatar = ({ size }) => {
     return imageURL != "" ? (
-      <img
+      <Image
         src={imageURL}
+        alt="avatar"
         width={size}
         height={size}
         style={{ borderRadius: 999 }}
       />
     ) : (
-      <img
+      <Image
         src={"./fallback.gif"}
+        alt="avatar"
         width={size}
         height={size}
         style={{ borderRadius: 999 }}

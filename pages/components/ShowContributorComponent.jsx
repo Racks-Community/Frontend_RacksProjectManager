@@ -20,8 +20,8 @@ import {
   Image,
   Link,
 } from "@chakra-ui/react";
-import { getMRCImageUrlFromMetadata } from "../helpers/MRCImages";
-import ObjectIsNotEmpty from "../helpers/ObjectIsNotEmpty";
+import { getMRCImageUrlFromMetadata } from "../../helpers/MRCImages";
+import ObjectIsNotEmpty from "../../helpers/ObjectIsNotEmpty";
 
 const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
   const [contributorMRC, setContributorMRC] = useState(null);

@@ -27,10 +27,10 @@ import {
   getMRCImageUrlFromMetadata,
   getMRCMetadataUrl,
   fetchNFTIds,
-} from "./helpers/MRCImages";
+} from "../helpers/MRCImages";
 import Loading from "./components/Loading";
-import { formatDate } from "./helpers/FormatDate";
-import { ObjectIsNotEmpty } from "./helpers/ObjectIsNotEmpty";
+import { formatDate } from "../helpers/FormatDate";
+import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

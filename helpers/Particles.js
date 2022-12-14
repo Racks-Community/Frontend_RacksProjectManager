@@ -32,5 +32,3 @@ export const initParticleSlider = () => {
     document.body.appendChild(psScript);
   }
 };
-
-export default initParticleSlider;

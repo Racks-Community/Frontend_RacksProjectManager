@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import CompleteProjectComponent from "./CompleteProjectComponent";
-import ObjectIsNotEmpty from "../helpers/ObjectIsNotEmpty";
+import ObjectIsNotEmpty from "../../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

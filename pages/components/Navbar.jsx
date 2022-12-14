@@ -6,8 +6,8 @@ import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 import CreateContributorComponent from "./CreateContributorComponent";
 import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
-import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
-import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
+import { getMRCImageUrlFromAvatar } from "../../helpers/MRCImages";
+import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

@@ -8,9 +8,9 @@ import ShowProjectComponent from "./ShowProjectComponent";
 import ApproveProjectComponent from "./ApproveProjectComponent";
 import Project from "./Project";
 import Loading from "./Loading";
-import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
-import { formatDate } from "../helpers/FormatDate";
-import { getAdmin } from "../helpers/APICalls";
+import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
+import { formatDate } from "../../helpers/FormatDate";
+import { getAdmin } from "../../helpers/APICalls";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
