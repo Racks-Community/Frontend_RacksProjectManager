@@ -81,7 +81,7 @@ function Profile() {
         setTimeout(async () => {
           await fetchUser();
         }, 1000);
-        toast.success("Perfil de Contributor actualizada!");
+        toast.success("Perfil de Contributor actualizado!");
       } else {
         toast.error("Error al actualizar el perfil");
       }
