@@ -1,1 +1,458 @@
-[{"type":"constructor","payable":false,"inputs":[{"type":"address","name":"_racksPM"},{"type":"string","name":"_name"},{"type":"uint256","name":"_colateralCost"},{"type":"uint256","name":"_reputationLevel"},{"type":"uint256","name":"_maxContributorsNumber"}]},{"type":"error","name":"adminErr","inputs":[]},{"type":"error","name":"contributorErr","inputs":[]},{"type":"error","name":"deletedErr","inputs":[]},{"type":"error","name":"erc20TransferFailed","inputs":[]},{"type":"error","name":"invalidParameterErr","inputs":[]},{"type":"error","name":"maxContributorsNumberExceededErr","inputs":[]},{"type":"error","name":"noFundsGiveAwayErr","inputs":[]},{"type":"error","name":"notCompletedErr","inputs":[]},{"type":"error","name":"pausedErr","inputs":[]},{"type":"error","name":"pendingErr","inputs":[]},{"type":"error","name":"projectContributorAlreadyExistsErr","inputs":[]},{"type":"error","name":"projectContributorHasNoReputationEnoughErr","inputs":[]},{"type":"error","name":"projectContributorIsBannedErr","inputs":[]},{"type":"error","name":"projectFinishedErr","inputs":[]},{"type":"error","name":"projectInvalidParameterErr","inputs":[]},{"type":"error","name":"projectNoEditableErr","inputs":[]},{"type":"error","name":"transferGiveAwayFailed","inputs":[]},{"type":"event","anonymous":false,"name":"OwnershipTransferred","inputs":[{"type":"address","name":"previousOwner","indexed":true},{"type":"address","name":"newOwner","indexed":true}]},{"type":"event","anonymous":false,"name":"RoleAdminChanged","inputs":[{"type":"bytes32","name":"role","indexed":true},{"type":"bytes32","name":"previousAdminRole","indexed":true},{"type":"bytes32","name":"newAdminRole","indexed":true}]},{"type":"event","anonymous":false,"name":"RoleGranted","inputs":[{"type":"bytes32","name":"role","indexed":true},{"type":"address","name":"account","indexed":true},{"type":"address","name":"sender","indexed":true}]},{"type":"event","anonymous":false,"name":"RoleRevoked","inputs":[{"type":"bytes32","name":"role","indexed":true},{"type":"address","name":"account","indexed":true},{"type":"address","name":"sender","indexed":true}]},{"type":"event","anonymous":false,"name":"newProjectContributorsRegistered","inputs":[{"type":"address","name":"projectAddress","indexed":false},{"type":"address","name":"newProjectContributor","indexed":false}]},{"type":"event","anonymous":false,"name":"projectFunded","inputs":[{"type":"address","name":"projectAddress","indexed":false},{"type":"address","name":"funderWallet","indexed":false},{"type":"uint256","name":"amount","indexed":false}]},{"type":"function","name":"DEFAULT_ADMIN_ROLE","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"bytes32"}]},{"type":"function","name":"addAdmin","constant":false,"payable":false,"inputs":[{"type":"address","name":"_newAdmin"}],"outputs":[]},{"type":"function","name":"approveProject","constant":false,"payable":false,"inputs":[],"outputs":[]},{"type":"function","name":"deleteProject","constant":false,"payable":false,"inputs":[],"outputs":[]},{"type":"function","name":"finishProject","constant":false,"payable":false,"inputs":[{"type":"uint256","name":"_totalReputationPointsReward"},{"type":"address[]","name":"_contributors"},{"type":"uint256[]","name":"_participationWeights"}],"outputs":[]},{"type":"function","name":"fundProject","constant":false,"payable":false,"inputs":[{"type":"uint256","name":"_amount"}],"outputs":[]},{"type":"function","name":"getAccountFunds","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_account"}],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getAllContributorsAddress","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"address[]"}]},{"type":"function","name":"getColateralCost","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getContributorByAddress","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_account"}],"outputs":[{"type":"tuple","components":[{"type":"address","name":"wallet"},{"type":"uint256","name":"reputationLevel"},{"type":"uint256","name":"reputationPoints"},{"type":"bool","name":"banned"}]}]},{"type":"function","name":"getContributorParticipation","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_contributor"}],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getMaxContributors","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getName","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"string"}]},{"type":"function","name":"getNumberOfContributors","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getProjectFunds","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getReputationLevel","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getRoleAdmin","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"bytes32","name":"role"}],"outputs":[{"type":"bytes32"}]},{"type":"function","name":"getTotalAmountFunded","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256"}]},{"type":"function","name":"giveAway","constant":false,"payable":false,"inputs":[],"outputs":[]},{"type":"function","name":"grantRole","constant":false,"payable":false,"inputs":[{"type":"bytes32","name":"role"},{"type":"address","name":"account"}],"outputs":[]},{"type":"function","name":"hasRole","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"bytes32","name":"role"},{"type":"address","name":"account"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"isActive","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"bool"}]},{"type":"function","name":"isContributorInProject","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_contributor"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"isDeleted","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"bool"}]},{"type":"function","name":"isFinished","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"bool"}]},{"type":"function","name":"isPending","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"bool"}]},{"type":"function","name":"owner","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"address"}]},{"type":"function","name":"registerProjectContributor","constant":false,"payable":false,"inputs":[],"outputs":[]},{"type":"function","name":"removeAdmin","constant":false,"payable":false,"inputs":[{"type":"address","name":"_account"}],"outputs":[]},{"type":"function","name":"removeContributor","constant":false,"payable":false,"inputs":[{"type":"address","name":"_contributor"},{"type":"bool","name":"_returnColateral"}],"outputs":[]},{"type":"function","name":"renounceOwnership","constant":false,"payable":false,"inputs":[],"outputs":[]},{"type":"function","name":"renounceRole","constant":false,"payable":false,"inputs":[{"type":"bytes32","name":"role"},{"type":"address","name":"account"}],"outputs":[]},{"type":"function","name":"revokeRole","constant":false,"payable":false,"inputs":[{"type":"bytes32","name":"role"},{"type":"address","name":"account"}],"outputs":[]},{"type":"function","name":"setColateralCost","constant":false,"payable":false,"inputs":[{"type":"uint256","name":"_colateralCost"}],"outputs":[]},{"type":"function","name":"setMaxContributorsNumber","constant":false,"payable":false,"inputs":[{"type":"uint256","name":"_maxContributorsNumber"}],"outputs":[]},{"type":"function","name":"setName","constant":false,"payable":false,"inputs":[{"type":"string","name":"_name"}],"outputs":[]},{"type":"function","name":"setReputationLevel","constant":false,"payable":false,"inputs":[{"type":"uint256","name":"_reputationLevel"}],"outputs":[]},{"type":"function","name":"supportsInterface","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"bytes4","name":"_interfaceId"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"transferOwnership","constant":false,"payable":false,"inputs":[{"type":"address","name":"newOwner"}],"outputs":[]}]
+[
+  {
+    "type": "constructor",
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_racksPM" },
+      { "type": "string", "name": "_name" },
+      { "type": "uint256", "name": "_colateralCost" },
+      { "type": "uint256", "name": "_reputationLevel" },
+      { "type": "uint256", "name": "_maxContributorsNumber" }
+    ]
+  },
+  { "type": "error", "name": "adminErr", "inputs": [] },
+  { "type": "error", "name": "contributorErr", "inputs": [] },
+  { "type": "error", "name": "deletedErr", "inputs": [] },
+  { "type": "error", "name": "erc20TransferFailed", "inputs": [] },
+  { "type": "error", "name": "invalidParameterErr", "inputs": [] },
+  { "type": "error", "name": "maxContributorsNumberExceededErr", "inputs": [] },
+  { "type": "error", "name": "noFundsGiveAwayErr", "inputs": [] },
+  { "type": "error", "name": "notCompletedErr", "inputs": [] },
+  { "type": "error", "name": "pausedErr", "inputs": [] },
+  { "type": "error", "name": "pendingErr", "inputs": [] },
+  {
+    "type": "error",
+    "name": "projectContributorAlreadyExistsErr",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "projectContributorHasNoReputationEnoughErr",
+    "inputs": []
+  },
+  { "type": "error", "name": "projectContributorIsBannedErr", "inputs": [] },
+  { "type": "error", "name": "projectFinishedErr", "inputs": [] },
+  { "type": "error", "name": "projectInvalidParameterErr", "inputs": [] },
+  { "type": "error", "name": "projectNoEditableErr", "inputs": [] },
+  { "type": "error", "name": "transferGiveAwayFailed", "inputs": [] },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "OwnershipTransferred",
+    "inputs": [
+      { "type": "address", "name": "previousOwner", "indexed": true },
+      { "type": "address", "name": "newOwner", "indexed": true }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RoleAdminChanged",
+    "inputs": [
+      { "type": "bytes32", "name": "role", "indexed": true },
+      { "type": "bytes32", "name": "previousAdminRole", "indexed": true },
+      { "type": "bytes32", "name": "newAdminRole", "indexed": true }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RoleGranted",
+    "inputs": [
+      { "type": "bytes32", "name": "role", "indexed": true },
+      { "type": "address", "name": "account", "indexed": true },
+      { "type": "address", "name": "sender", "indexed": true }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RoleRevoked",
+    "inputs": [
+      { "type": "bytes32", "name": "role", "indexed": true },
+      { "type": "address", "name": "account", "indexed": true },
+      { "type": "address", "name": "sender", "indexed": true }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "newProjectContributorsRegistered",
+    "inputs": [
+      { "type": "address", "name": "projectAddress", "indexed": false },
+      { "type": "address", "name": "newProjectContributor", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "projectFunded",
+    "inputs": [
+      { "type": "address", "name": "projectAddress", "indexed": false },
+      { "type": "address", "name": "funderWallet", "indexed": false },
+      { "type": "uint256", "name": "amount", "indexed": false }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "DEFAULT_ADMIN_ROLE",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "bytes32" }]
+  },
+  {
+    "type": "function",
+    "name": "addAdmin",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_newAdmin" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "approveProject",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "deleteProject",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "finishProject",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "uint256", "name": "_totalReputationPointsReward" },
+      { "type": "address[]", "name": "_contributors" },
+      { "type": "uint256[]", "name": "_participationWeights" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "fundProject",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "uint256", "name": "_amount" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "getAccountFunds",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_account" }],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getAllContributorsAddress",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address[]" }]
+  },
+  {
+    "type": "function",
+    "name": "getColateralCost",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getContributorByAddress",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_account" }],
+    "outputs": [
+      {
+        "type": "tuple",
+        "components": [
+          { "type": "address", "name": "wallet" },
+          { "type": "uint256", "name": "reputationLevel" },
+          { "type": "uint256", "name": "reputationPoints" },
+          { "type": "bool", "name": "banned" }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "getContributorParticipation",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_contributor" }],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getMaxContributors",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getName",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "string" }]
+  },
+  {
+    "type": "function",
+    "name": "getNumberOfContributors",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getProjectFunds",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getReputationLevel",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getRoleAdmin",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "bytes32", "name": "role" }],
+    "outputs": [{ "type": "bytes32" }]
+  },
+  {
+    "type": "function",
+    "name": "getTotalAmountFunded",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "giveAway",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "grantRole",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "bytes32", "name": "role" },
+      { "type": "address", "name": "account" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "hasRole",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      { "type": "bytes32", "name": "role" },
+      { "type": "address", "name": "account" }
+    ],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "isActive",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "isContributorInProject",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_contributor" }],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "isDeleted",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "isFinished",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "isPending",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "registerProjectContributor",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "removeAdmin",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_account" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "removeContributor",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_contributor" },
+      { "type": "bool", "name": "_returnColateral" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "renounceRole",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "bytes32", "name": "role" },
+      { "type": "address", "name": "account" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "revokeRole",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "bytes32", "name": "role" },
+      { "type": "address", "name": "account" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setColateralCost",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "uint256", "name": "_colateralCost" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setMaxContributorsNumber",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "uint256", "name": "_maxContributorsNumber" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setName",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "string", "name": "_name" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setReputationLevel",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "uint256", "name": "_reputationLevel" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "supportsInterface",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "bytes4", "name": "_interfaceId" }],
+    "outputs": [{ "type": "bool" }]
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "newOwner" }],
+    "outputs": []
+  }
+]

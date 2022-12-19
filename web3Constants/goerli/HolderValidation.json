@@ -1,0 +1,81 @@
+[
+  {
+    "type": "constructor",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_erc721" }]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "OwnershipTransferred",
+    "inputs": [
+      { "type": "address", "name": "previousOwner", "indexed": true },
+      { "type": "address", "name": "newOwner", "indexed": true }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "newCollectionAdded",
+    "inputs": [{ "type": "address", "name": "newCollection", "indexed": false }]
+  },
+  {
+    "type": "function",
+    "name": "addCollection",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_newCollection" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "deleteCollection",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_deleteCollection" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "getAllCollections",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address[]" }]
+  },
+  {
+    "type": "function",
+    "name": "isHolder",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_wallet" }],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "constant": false,
+    "payable": false,
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "newOwner" }],
+    "outputs": []
+  }
+]
