@@ -92,11 +92,13 @@ const ShowProjectComponent = ({
           return;
         }
 
-        let erctx = await mockErc20.approve(
-          project.address,
-          ethers.utils.parseEther(project.colateralCost + "")
-        );
-        await erctx.wait();
+        if (project.colateralCost > 0) {
+          let erctx = await mockErc20.approve(
+            project.address,
+            ethers.utils.parseEther(project.colateralCost + "")
+          );
+          await erctx.wait();
+        }
 
         const projectContract = new ethers.Contract(
           project.address,
