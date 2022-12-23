@@ -30,7 +30,7 @@ function Projects() {
   const [newProjects, setNewProjects] = useState([]);
   const [devProjects, setDevProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
-  const [pendingProjects, setPendigProjects] = useState([]);
+  const [pendingProjects, setPendingProjects] = useState([]);
   const [adminId, setAdminId] = useState(null);
   const status = {
     created: "CREATED",
@@ -117,9 +117,8 @@ function Projects() {
       const pendingPjArray = data.filter(
         (project) => project.approveStatus === approveStatus.pending
       );
-      setPendigProjects(pendingPjArray);
+      setPendingProjects(pendingPjArray);
       if (pendingPjArray.length > 0) nSections++;
-
       setSectionsNumber(nSections);
 
       return user.role === "admin"
@@ -295,7 +294,11 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
-      {sectionsNumber > 2 && (
+      {((user.role === "admin" && sectionsNumber > 2) ||
+        (user.role === "user" && sectionsNumber > 3) ||
+        (user.role === "user" &&
+          sectionsNumber == 3 &&
+          pendingProjects.length == 0)) && (
         <style global jsx>{`
           main {
             height: auto;
