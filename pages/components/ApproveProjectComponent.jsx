@@ -195,7 +195,7 @@ const ApproveProjectComponent = ({
                     mt="1"
                     colSpan={3}
                   >
-                    <Text color="gray">N.Contributors</Text>
+                    <Text color="gray">N.Miembros</Text>
                   </GridItem>
                   <GridItem
                     fontWeight="semibold"

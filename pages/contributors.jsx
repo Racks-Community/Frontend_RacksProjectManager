@@ -85,9 +85,9 @@ function Contributors() {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
-        toast.success("Contributor eliminado del Proyecto");
+        toast.success("Holder eliminado del Proyecto");
       } else {
-        toast.error("Error al eliminar Contributor del Proyecto");
+        toast.error("Error al eliminar Holder del Proyecto");
       }
       handlePopoverClose();
       setDeleteLoading(false);
@@ -110,9 +110,9 @@ function Contributors() {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
-        toast.success("Contributor actualizado");
+        toast.success("Holder actualizado");
       } else {
-        toast.error("Error al actualizar Contributor");
+        toast.error("Error al actualizar Holder");
       }
       handlePopoverClose();
       setBanLoading(false);
@@ -196,7 +196,7 @@ function Contributors() {
       >
         <Center>
           <Heading as="h1" mb="2rem" mt="2rem" className="rackspm-heading">
-            Contributors
+            Holders
           </Heading>
         </Center>
         <TableContainer mt="3rem" className="contributors-table">
@@ -283,7 +283,7 @@ function Contributors() {
                               alignItems="center"
                               justifyContent="center"
                             >
-                              Banear Contributor
+                              Banear Holder
                             </PopoverHeader>
                             <PopoverBody align="center">
                               {"¿Seguro que quiere banear a " +
@@ -350,7 +350,7 @@ function Contributors() {
                               alignItems="center"
                               justifyContent="center"
                             >
-                              Desbanear Contributor
+                              Desbanear Holder
                             </PopoverHeader>
                             <PopoverBody align="center">
                               {"¿Seguro que quiere desbanear a " +
@@ -418,7 +418,7 @@ function Contributors() {
                             alignItems="center"
                             justifyContent="center"
                           >
-                            Eliminar Contributor
+                            Eliminar Holder
                           </PopoverHeader>
                           <PopoverBody align="center">
                             {contributorProjects.length == 0 ? (

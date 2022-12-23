@@ -46,9 +46,7 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
       >
         <ModalOverlay />
         <ModalContent w="25rem">
-          <ModalHeader className="text-center">
-            DETALLES CONTRIBUTOR
-          </ModalHeader>
+          <ModalHeader className="text-center">DETALLES MIEMBRO</ModalHeader>
           <ModalCloseButton colorScheme="white" />
           <ModalBody pb={4}>
             <Box>
@@ -192,7 +190,7 @@ const ShowContributorComponent = ({ isOpen, setIsOpen, contributor }) => {
                       textTransform="uppercase"
                       mt="1"
                     >
-                      <Text color="gray">Contributor desde:</Text>
+                      <Text color="gray">Miembro desde:</Text>
                     </GridItem>
                     <GridItem
                       fontWeight="semibold"

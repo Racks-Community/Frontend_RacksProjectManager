@@ -8,6 +8,7 @@ import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
 import { getMRCImageUrlFromAvatar } from "../../helpers/MRCImages";
 import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
+import { fetchUser } from "../../helpers/APICalls";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -28,17 +29,9 @@ function Navbar() {
     router.reload();
   };
 
-  const fetchUser = async () => {
-    const res = await fetch(API_URL + "token", {
-      method: "get",
-      headers: new Headers({
-        Authorization: localStorage.getItem("token"),
-      }),
-    });
-    if (res?.ok) {
-      const data = await res.json();
-      dispatch(setUserInfo(data.user));
-    }
+  const fetchUserCall = async () => {
+    const data = await fetchUser();
+    dispatch(setUserInfo(data.user));
   };
 
   const handleContributorClick = () => {
@@ -148,7 +141,7 @@ function Navbar() {
                 transition: "0.5s",
               }}
             >
-              Contributor
+              Registro
             </Button>
           )}
           {user.role === "admin" && (
@@ -167,7 +160,7 @@ function Navbar() {
                 transition: "0.5s",
               }}
             >
-              Contributors
+              Holders
             </Button>
           )}
           {user.role === "admin" && localStorage.getItem("manualLogin") ? (
@@ -199,12 +192,12 @@ function Navbar() {
       <CreateContributorComponent
         isOpen={isOpenCreateContributorComponent}
         setIsOpen={setIsOpenCreateContributorComponent}
-        fetchUser={fetchUser}
+        fetchUser={fetchUserCall}
       />
       <CompleteRegisterComponent
         isOpen={isOpenProfileComponent}
         setIsOpen={setIsOpenProfileComponent}
-        fetchUser={fetchUser}
+        fetchUser={fetchUserCall}
       />
     </>
   );

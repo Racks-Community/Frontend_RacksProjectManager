@@ -86,7 +86,7 @@ const ShowProjectComponent = ({
       try {
         const isContributor = await racksPM.isWalletContributor(user.address);
         if (!isContributor) {
-          toast.error("Necesitas ser Contributor");
+          toast.error("Necesitas ser Miembro");
           setIsOpen(false);
           setLoading(false);
           return;
@@ -366,7 +366,7 @@ const ShowProjectComponent = ({
                         mt="1"
                         colSpan={3}
                       >
-                        <Text color="gray">N.Contributors</Text>
+                        <Text color="gray">N.Miembros</Text>
                       </GridItem>
                       <GridItem
                         fontWeight="semibold"
@@ -379,6 +379,27 @@ const ShowProjectComponent = ({
                         {project.contributors.length +
                           "/" +
                           project.maxContributorsNumber}
+                      </GridItem>
+                      <GridItem
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        mt="1"
+                        colSpan={3}
+                      >
+                        <Text color="gray">Fondos</Text>
+                      </GridItem>
+                      <GridItem
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        mt="1"
+                        textAlign={"end"}
+                        colSpan={1}
+                      >
+                        {project.funds + " USDC"}
                       </GridItem>
                       {project.funds > 0 && (
                         <>
@@ -522,12 +543,11 @@ const ShowProjectComponent = ({
               <ModalBody fontSize={"0.85rem"}>
                 {(errorCodeJoinProject == errorCode.completed ||
                   errorCodeJoinProject == errorCode.full) && (
-                  <Center>El Proyecto no admite nuevos Contributors</Center>
+                  <Center>El Proyecto no admite nuevos Miembros</Center>
                 )}
                 {errorCodeJoinProject == errorCode.contributor && (
                   <Center>
-                    Para participar en un proyecto antes debe registrarse como
-                    Contributor.
+                    Para participar en un proyecto antes debe ser Miembro.
                   </Center>
                 )}
                 {errorCodeJoinProject == errorCode.reputation && (

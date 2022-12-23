@@ -31,6 +31,7 @@ import {
 import Loading from "./components/Loading";
 import { formatDate } from "../helpers/FormatDate";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
+import { fetchUser } from "../helpers/APICalls";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -79,9 +80,9 @@ function Profile() {
       });
       if (res?.ok) {
         setTimeout(async () => {
-          await fetchUser();
+          await fetchUserCall();
         }, 1000);
-        toast.success("Perfil de Contributor actualizado!");
+        toast.success("Perfil de Holder actualizado!");
       } else {
         toast.error("Error al actualizar el perfil");
       }
@@ -93,17 +94,9 @@ function Profile() {
     setIsOpenCreateProjectComponent(true);
   };
 
-  const fetchUser = async () => {
-    const res = await fetch(API_URL + "token", {
-      method: "get",
-      headers: new Headers({
-        Authorization: localStorage.getItem("token"),
-      }),
-    });
-    if (res?.ok) {
-      const data = await res.json();
-      dispatch(setUserInfo(data.user));
-    }
+  const fetchUserCall = async () => {
+    const data = await fetchUser();
+    dispatch(setUserInfo(data.user));
   };
 
   const handleOnChangeToken = async (event) => {

@@ -49,9 +49,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     if (event?.target[6]?.checked) {
       formData.append("visibleForAll", event?.target[6]?.checked);
     }
-    if (event?.target[9]?.value != "") {
-      formData.append("githubRepository", event?.target[9]?.value);
-    }
     setLoading(true);
     const res = await fetch(API_URL + "projects", {
       method: "POST",
@@ -192,24 +189,13 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             </FormControl>
 
             <FormControl mt={3} isRequired>
-              <FormLabel>Número máximo de Contribuidores</FormLabel>
+              <FormLabel>Número máximo de Miembros</FormLabel>
               <Input
                 type="number"
                 name="maxContributorsNumber"
                 placeholder="Número de Contribuidores"
                 focusBorderColor="white"
                 borderRadius={"none"}
-              />
-            </FormControl>
-
-            <FormControl mt={3}>
-              <FormLabel>Repositorio Github</FormLabel>
-              <Input
-                type="text"
-                placeholder="Github Repository"
-                focusBorderColor="white"
-                borderRadius={"none"}
-                resize={"none"}
               />
             </FormControl>
           </ModalBody>

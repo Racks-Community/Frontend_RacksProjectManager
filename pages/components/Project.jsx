@@ -327,7 +327,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
                         mt="1"
                         colSpan={2}
                       >
-                        <Text color="gray">N.Contributors</Text>
+                        <Text color="gray">N.Miembros</Text>
                       </GridItem>
                       <GridItem
                         fontWeight="semibold"
@@ -423,7 +423,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
             <PopoverArrow />
             <PopoverCloseButton />
             <PopoverHeader borderColor="yellow">
-              <Center>Contributors</Center>
+              <Center>Holders</Center>
             </PopoverHeader>
             <PopoverBody>
               <Center>

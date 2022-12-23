@@ -76,7 +76,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
             setTimeout(async () => {
               await fetchUser();
             }, 1000);
-            toast.success("Bienvenido a Racks Labs como Contributor!");
+            toast.success("Bienvenido a Racks Labs!");
             setIsOpenDiscordInviteComponent(true);
           }
         } catch (error) {
@@ -87,10 +87,10 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
               Authorization: localStorage.getItem("token"),
             },
           });
-          toast.error("Error al registrarse como Contributor");
+          toast.error("Error al registrarse");
         }
       } else {
-        toast.error("Error al registrarse como Contributor");
+        toast.error("Error al registrarse");
       }
       setIsOpen(false);
       setLoading(false);
@@ -127,9 +127,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
       <Modal isCentered autoFocus={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader className="text-center">
-            REGISTRO DE CONTRIBUTOR
-          </ModalHeader>
+          <ModalHeader className="text-center">REGISTRO DE MIEMBRO</ModalHeader>
           <ModalCloseButton colorScheme="teal" />
           <form onSubmit={handleSubmit} autoComplete="off">
             <ModalBody pb={6}>

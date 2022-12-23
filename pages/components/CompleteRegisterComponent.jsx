@@ -65,7 +65,7 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
         setTimeout(async () => {
           await fetchUser();
         }, 1000);
-        toast.success("Perfil de Contributor actualizado!");
+        toast.success("Perfil de Holder actualizado!");
         setTimeout(async () => {
           if (sendDiscordInvite) setIsOpenDiscordInviteComponent(true);
         }, 1000);

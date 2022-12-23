@@ -11,6 +11,7 @@ export const getUserById = async (id, token) => {
     if (res?.status) {
       return res.data;
     }
+    return null;
   }
 };
 
@@ -23,4 +24,18 @@ export const getAdmin = async (token) => {
   if (res?.status) {
     return res.data;
   }
+  return null;
+};
+
+export const fetchUser = async () => {
+  const res = await fetch(API_URL + "token", {
+    method: "get",
+    headers: new Headers({
+      Authorization: localStorage.getItem("token"),
+    }),
+  });
+  if (res?.ok) {
+    return await res.json();
+  }
+  return null;
 };

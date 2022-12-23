@@ -295,7 +295,7 @@ function Projects() {
         fetchProjects={fetchProjects}
         project={projectToShow}
       />
-      {sectionsNumber !== 1 && (
+      {sectionsNumber > 2 && (
         <style global jsx>{`
           main {
             height: auto;
