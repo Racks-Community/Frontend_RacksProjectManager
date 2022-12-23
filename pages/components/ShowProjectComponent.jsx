@@ -558,20 +558,35 @@ const ShowProjectComponent = ({
                 )}
                 {errorCodeJoinProject == errorCode.none && (
                   <>
-                    <Text>
-                      Para participar en este proyecto debes transferir
-                      {" " + project.colateralCost} USDC como fianza.
-                    </Text>
-                    <br />
-                    <Text>Esta será devuelta al finalizar el proyecto.</Text>
-                    <Text>
-                      Se perderá el derecho a devolución del colateral si se
-                      filtra información del proyecto o realiza cualquier acción
-                      grave que perjudique o cause daños al desarrollo del
-                      proyecto.
-                    </Text>
-                    <br />
-                    <Text>¿Está seguro de querer unirse a este proyecto?</Text>
+                    {project.colateralCost == 0 ? (
+                      <Center textAlign={"center"}>
+                        Este proyecto no requiere de pagar ningun colateral.
+                        <br />
+                        Por favor no haga nada que pueda ir en contra de los
+                        intereses del proyecto.
+                      </Center>
+                    ) : (
+                      <>
+                        <Text>
+                          Para participar en este proyecto debes transferir
+                          {" " + project.colateralCost} USDC como fianza.
+                        </Text>
+                        <br />
+                        <Text>
+                          Esta será devuelta al finalizar el proyecto.
+                        </Text>
+                        <Text>
+                          Se perderá el derecho a devolución del colateral si se
+                          filtra información del proyecto o realiza cualquier
+                          acción grave que perjudique o cause daños al
+                          desarrollo del proyecto.
+                        </Text>
+                        <br />
+                        <Text>
+                          ¿Está seguro de querer unirse a este proyecto?
+                        </Text>
+                      </>
+                    )}
                   </>
                 )}
               </ModalBody>
