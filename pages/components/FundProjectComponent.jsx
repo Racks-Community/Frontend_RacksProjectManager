@@ -111,8 +111,8 @@ const FundProjectComponent = ({
               <FormControl mt={4} isRequired>
                 <FormLabel>Cantidad a Donar</FormLabel>
                 <Input
+                  min={1}
                   type="number"
-                  min="1"
                   placeholder="100 USDC"
                   focusBorderColor="white"
                   borderRadius={"none"}

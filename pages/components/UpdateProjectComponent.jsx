@@ -208,6 +208,7 @@ const UpdateProjectComponent = ({
                 <FormControl mt={3} isRequired>
                   <FormLabel>Nivel de Reputación</FormLabel>
                   <Input
+                    min={1}
                     type="number"
                     isDisabled={project.status !== "CREATED"}
                     defaultValue={project.reputationLevel}
@@ -220,6 +221,7 @@ const UpdateProjectComponent = ({
                 <FormControl mt={3} isRequired>
                   <FormLabel>Colateral</FormLabel>
                   <Input
+                    min={0}
                     type="number"
                     isDisabled={project.status !== "CREATED"}
                     defaultValue={project.colateralCost}
@@ -232,6 +234,7 @@ const UpdateProjectComponent = ({
                 <FormControl mt={3} isRequired>
                   <FormLabel>Número máximo de Contribuidores</FormLabel>
                   <Input
+                    min={1}
                     type="number"
                     defaultValue={project.maxContributorsNumber}
                     placeholder="Número de Contribuidores"

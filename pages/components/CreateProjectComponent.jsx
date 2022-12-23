@@ -157,6 +157,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 <FormControl mt={3} isRequired>
                   <FormLabel>Nivel de Reputación</FormLabel>
                   <Input
+                    min={1}
                     type="number"
                     name="reputationLevel"
                     placeholder="Reputación"
@@ -180,6 +181,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             <FormControl mt={3} isRequired>
               <FormLabel>Colateral</FormLabel>
               <Input
+                min={0}
                 type="number"
                 name="colateralCost"
                 placeholder="Colateral"
@@ -191,6 +193,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
             <FormControl mt={3} isRequired>
               <FormLabel>Número máximo de Miembros</FormLabel>
               <Input
+                min={1}
                 type="number"
                 name="maxContributorsNumber"
                 placeholder="Número de Contribuidores"
