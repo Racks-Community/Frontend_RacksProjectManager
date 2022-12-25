@@ -43,8 +43,8 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     const contributorData = {
       avatar: await getMRCMetadataUrl(event?.target[0]?.value),
       email: event?.target[1]?.value,
-      githubUsername: event?.target[2]?.value,
-      discord: event?.target[3]?.value,
+      discord: event?.target[2]?.value,
+      githubUsername: event?.target[3]?.value || "undefined",
     };
     if (event?.target[4]?.value != "")
       contributorData.urlTwitter = event?.target[4]?.value;
@@ -165,19 +165,19 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
                 />
               </FormControl>
               <FormControl mt={4} isRequired>
-                <FormLabel>Github</FormLabel>
-                <Input
-                  type="text"
-                  placeholder="Usuario de Github"
-                  focusBorderColor="white"
-                  borderRadius={"none"}
-                />
-              </FormControl>
-              <FormControl mt={4} isRequired>
                 <FormLabel>Discord</FormLabel>
                 <Input
                   type="text"
                   placeholder="Usuario de Discord"
+                  focusBorderColor="white"
+                  borderRadius={"none"}
+                />
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Github</FormLabel>
+                <Input
+                  type="text"
+                  placeholder="Usuario de Github"
                   focusBorderColor="white"
                   borderRadius={"none"}
                 />

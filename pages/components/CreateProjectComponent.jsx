@@ -33,9 +33,10 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     const formData = new FormData();
     formData.append("name", event?.target[1]?.value);
     formData.append("description", event?.target[2]?.value);
-    formData.append("reputationLevel", event?.target[5]?.value);
-    formData.append("colateralCost", event?.target[7]?.value);
-    formData.append("maxContributorsNumber", event?.target[8]?.value);
+    formData.append("isProgramming", event?.target[5]?.checked);
+    formData.append("reputationLevel", event?.target[6]?.value);
+    formData.append("colateralCost", event?.target[8]?.value);
+    formData.append("maxContributorsNumber", event?.target[9]?.value);
     formData.append("owner", user._id);
     if (event?.target[0]?.value != "" && selectedFile != null) {
       formData.append("imageURL", selectedFile);
@@ -46,8 +47,8 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
     if (event?.target[4]?.value != "") {
       formData.append("requirements", event?.target[4]?.value);
     }
-    if (event?.target[6]?.checked) {
-      formData.append("visibleForAll", event?.target[6]?.checked);
+    if (event?.target[7]?.checked) {
+      formData.append("visibleForAll", event?.target[7]?.checked);
     }
     setLoading(true);
     const res = await fetch(API_URL + "projects", {
@@ -114,6 +115,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 placeholder="Nombre"
                 focusBorderColor="white"
                 borderRadius={"none"}
+                pattern="^[A-Za-z0-9 _]*$"
               />
             </FormControl>
 
@@ -150,6 +152,12 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
+            </FormControl>
+
+            <FormControl mt={"1rem"}>
+              <Checkbox colorScheme="green" defaultChecked>
+                Es un proyecto de Programación
+              </Checkbox>
             </FormControl>
 
             <Grid templateColumns="repeat(2, 1fr)" className="create-pj-grid">

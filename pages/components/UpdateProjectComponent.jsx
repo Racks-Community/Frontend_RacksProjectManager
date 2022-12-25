@@ -45,13 +45,17 @@ const UpdateProjectComponent = ({
   const [selectedFile, setSelectedFile] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const isProjectOwner = () => {
+    return project.owner === user._id;
+  };
+
   const onCloseDeleteProjectPopover = () => {
     setIsOpenDeleteProjectPopover(false);
   };
 
   const handleDeleteProject = async () => {
     setIsOpenDeleteProjectPopover(false);
-    if (user.role === "admin" || project.owner === user._id) {
+    if (user.role === "admin" || isProjectOwner()) {
       setDeleteLoading(true);
       const res = await fetch(API_URL + "projects/" + project.address, {
         method: "DELETE",
@@ -96,11 +100,11 @@ const UpdateProjectComponent = ({
     if (
       (project.githubRepository !== event?.target[8]?.value &&
         user.role === "admin") ||
-      project.owner === user._id
+      isProjectOwner
     )
       formData.append("githubRepository", event?.target[8]?.value);
 
-    if (user.role === "admin" || project.owner === user._id) {
+    if (user.role === "admin" || isProjectOwner) {
       setLoading(true);
       const res = await fetch(API_URL + "projects/" + project.address, {
         method: "PATCH",
@@ -243,23 +247,24 @@ const UpdateProjectComponent = ({
                   />
                 </FormControl>
 
-                {(user.role === "admin" || project.owner === user._id) && (
-                  <FormControl
-                    mt={3}
-                    isRequired={project.approveStatus == "ACTIVE"}
-                  >
-                    <FormLabel>Repositorio Github</FormLabel>
-                    <Input
-                      type="text"
-                      isDisabled={project.status !== "CREATED"}
-                      defaultValue={project.githubRepository}
-                      placeholder="Github Repository"
-                      focusBorderColor="white"
-                      borderRadius={"none"}
-                      resize={"none"}
-                    />
-                  </FormControl>
-                )}
+                {(user.role === "admin" || isProjectOwner) &&
+                  project.githubRepository && (
+                    <FormControl
+                      mt={3}
+                      isRequired={project.approveStatus == "ACTIVE"}
+                    >
+                      <FormLabel>Repositorio Github</FormLabel>
+                      <Input
+                        type="text"
+                        isDisabled={project.status !== "CREATED"}
+                        defaultValue={project.githubRepository}
+                        placeholder="Github Repository"
+                        focusBorderColor="white"
+                        borderRadius={"none"}
+                        resize={"none"}
+                      />
+                    </FormControl>
+                  )}
               </ModalBody>
 
               <ModalFooter

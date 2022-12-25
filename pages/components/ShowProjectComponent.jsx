@@ -21,6 +21,7 @@ import {
   Box,
   Divider,
   VStack,
+  HStack,
   Badge,
   Grid,
   GridItem,
@@ -58,6 +59,7 @@ const ShowProjectComponent = ({
   const errorCode = {
     completed: "PROJECT_COMPLETED",
     reputation: "NO_ENOUGH_REPUTATION",
+    no_github: "NO_GITHUB_ACCOUNT",
     full: "PROJECT_FULL",
     contributor: "NO_CONTRIBUTOR",
     none: "NONE",
@@ -159,10 +161,11 @@ const ShowProjectComponent = ({
     if (ObjectIsNotEmpty(project)) {
       setIsProjectContributor(checkProjectContributor());
       setProjectToFund(project);
-
       if (project.completed) setErrorCodeJoinProject(errorCode.completed);
       else if (!user.contributor || (user.contributor && !user.verified))
         setErrorCodeJoinProject(errorCode.contributor);
+      else if (user.githubUsername === "undefined" && project.isProgramming)
+        setErrorCodeJoinProject(errorCode.no_github);
       else if (project.reputationLevel > user.reputationLevel)
         setErrorCodeJoinProject(errorCode.reputation);
       else if (project.maxContributorsNumber == project.contributors.length)
@@ -223,21 +226,28 @@ const ShowProjectComponent = ({
                     style={{ borderColor: "#FEFE0E" }}
                   />
                   <VStack alignItems="baseline">
-                    {project.status === status.created && (
-                      <Badge borderRadius="full" px="2" colorScheme="green">
-                        NEW
-                      </Badge>
-                    )}
-                    {project.status === status.doing && (
-                      <Badge borderRadius="full" px="2" colorScheme="yellow">
-                        IN DEVELOPMENT
-                      </Badge>
-                    )}
-                    {project.status === status.finished && (
-                      <Badge borderRadius="full" px="2" colorScheme="red">
-                        COMPLETED
-                      </Badge>
-                    )}
+                    <HStack>
+                      {project.status === status.created && (
+                        <Badge borderRadius="full" px="2" colorScheme="green">
+                          NEW
+                        </Badge>
+                      )}
+                      {project.status === status.doing && (
+                        <Badge borderRadius="full" px="2" colorScheme="yellow">
+                          IN DEVELOPMENT
+                        </Badge>
+                      )}
+                      {project.status === status.finished && (
+                        <Badge borderRadius="full" px="2" colorScheme="red">
+                          COMPLETED
+                        </Badge>
+                      )}
+                      {!project.isProgramming && (
+                        <Badge borderRadius="full" px="2" colorScheme="gray">
+                          NO PROGRAMMING
+                        </Badge>
+                      )}
+                    </HStack>
 
                     <Box fontSize={"0.85rem"}>
                       <Text
@@ -272,22 +282,25 @@ const ShowProjectComponent = ({
                             <Text>{project.details}</Text>
                           </Box>
                         )}
-                        <Box fontSize={"0.85rem"}>
-                          <Text
-                            color="gray"
-                            fontWeight="semibold"
-                            letterSpacing="wide"
-                            fontSize="xs"
-                            textTransform="uppercase"
-                          >
-                            Github Repository:
-                          </Text>
-                          <Center>
-                            <Link href="project.githubRepository" isExternal>
-                              {project.githubRepository}
-                            </Link>
-                          </Center>
-                        </Box>
+
+                        {project.githubRepository && (
+                          <Box fontSize={"0.85rem"}>
+                            <Text
+                              color="gray"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                            >
+                              Github Repository:
+                            </Text>
+                            <Center>
+                              <Link href="project.githubRepository" isExternal>
+                                {project.githubRepository}
+                              </Link>
+                            </Center>
+                          </Box>
+                        )}
 
                         <Box fontSize={"0.85rem"}>
                           <Text
@@ -550,6 +563,11 @@ const ShowProjectComponent = ({
                 {errorCodeJoinProject == errorCode.contributor && (
                   <Center>
                     Para participar en un proyecto antes debe ser Miembro.
+                  </Center>
+                )}
+                {errorCodeJoinProject == errorCode.no_github && (
+                  <Center textAlign={"center"}>
+                    Introduzca un usuario de Github válido en su perfil.
                   </Center>
                 )}
                 {errorCodeJoinProject == errorCode.reputation && (
