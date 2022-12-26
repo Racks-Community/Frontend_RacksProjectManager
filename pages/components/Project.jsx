@@ -58,14 +58,16 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
     return userIsProjectContributor;
   };
 
-  const handleShowContributorOpen = async (event, id, participationWeight) => {
+  const handleShowContributorOpen = async (event, id) => {
     if (id && id != admin && event.target.alt === "PFP") {
       const data = await getUserById(id, localStorage.getItem("token"));
       data.createdAt = formatDate(data.createdAt);
       data.isOwner = project.owner == id;
       data.isContributor = checkProjectContributor(id);
-      if (participationWeight > 0)
-        data.participationWeight = participationWeight;
+      if (project.completed && project.participationWeights.length > 0) {
+        const index = project.contributors.indexOf(id);
+        data.participationWeight = project.participationWeights[index];
+      }
       setContributorToShow(data);
       setIsOpenShowContributorComponent(true);
     }
@@ -228,15 +230,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
                                     .get(project.address)
                                     .get(contr)}
                                   onClick={(event) =>
-                                    handleShowContributorOpen(
-                                      event,
-                                      contr,
-                                      project.completed &&
-                                        project.participationWeights.length ==
-                                          contrArrayReduced.length
-                                        ? project.participationWeights[index]
-                                        : 0
-                                    )
+                                    handleShowContributorOpen(event, contr)
                                   }
                                   className={
                                     contr == admin
@@ -428,20 +422,14 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
             <PopoverBody>
               <Center>
                 <Flex wrap>
-                  {project.contributors.map((contr) => (
+                  {project.contributors.map((contr, index) => (
                     <Box key={contr}>
                       {contrImages ? (
                         <>
                           <Image
                             src={contrImages.get(project.address).get(contr)}
                             onClick={(event) =>
-                              handleShowContributorOpen(
-                                event,
-                                contr,
-                                project.completed
-                                  ? project.participationWeights[index]
-                                  : 0
-                              )
+                              handleShowContributorOpen(event, contr)
                             }
                             style={{ cursor: "pointer" }}
                             borderRadius="full"
