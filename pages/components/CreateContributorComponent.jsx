@@ -76,7 +76,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
             setTimeout(async () => {
               await fetchUser();
             }, 1000);
-            toast.success("Bienvenido a Racks Labs!");
+            toast.success("Bienvenido a Racks Community!");
             setIsOpenDiscordInviteComponent(true);
           }
         } catch (error) {
