@@ -99,7 +99,7 @@ const ShowProjectComponent = ({
             project.address,
             ethers.utils.parseEther(project.colateralCost + "")
           );
-          await erctx.wait();
+          await erctx.wait(1);
         }
 
         const projectContract = new ethers.Contract(
