@@ -211,7 +211,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
                     <Spacer />
                     <Center>
                       <HStack>
-                        {project.contributors.length > 3 && (
+                        {project.contributors.length >= 3 && (
                           <FaPlus
                             className="all-contributors"
                             onClick={() => setIsOpenContributorsPopover(true)}
