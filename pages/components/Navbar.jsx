@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Image, Box, Spacer, Button } from "@chakra-ui/react";
+import { Flex, Image, Box, Spacer, Button, HStack } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../../store/userSlice";
@@ -9,8 +9,6 @@ import { useRouter } from "next/router";
 import { getMRCImageUrlFromAvatar } from "../../helpers/MRCImages";
 import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
 import { fetchUser } from "../../helpers/APICalls";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function Navbar() {
   const router = useRouter();
@@ -22,6 +20,12 @@ function Navbar() {
   ] = useState(false);
   const [isOpenProfileComponent, setIsOpenProfileComponent] = useState(false);
   const [selectedMRC, setSelectedMRC] = useState(null);
+
+  const outlineStyleBtn = {
+    bg: "#FEFE0E",
+    color: "black",
+    transition: "0.5s",
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -40,6 +44,10 @@ function Navbar() {
     }
   };
 
+  const handleFAQClick = () => {
+    router.push("/faq");
+  };
+
   const handleProfileClick = () => {
     if (user.contributor === true) {
       setIsOpenProfileComponent(true);
@@ -56,7 +64,8 @@ function Navbar() {
     if (
       !localStorage.getItem("token") &&
       !ObjectIsNotEmpty(user) &&
-      window.location.pathname != "/admin"
+      window.location.pathname != "/admin" &&
+      window.location.pathname != "/faq"
     ) {
       localStorage.removeItem("token");
       router.push("/");
@@ -114,11 +123,7 @@ function Navbar() {
                   borderColor={"#FEFE0E"}
                   color="white"
                   borderRadius={"none"}
-                  _hover={{
-                    bg: "#FEFE0E",
-                    color: "black",
-                    transition: "0.5s",
-                  }}
+                  _hover={outlineStyleBtn}
                 >
                   Completar Registro
                 </Button>
@@ -135,11 +140,7 @@ function Navbar() {
               borderColor={"#FEFE0E"}
               color="white"
               borderRadius={"none"}
-              _hover={{
-                bg: "#FEFE0E",
-                color: "black",
-                transition: "0.5s",
-              }}
+              _hover={outlineStyleBtn}
             >
               Registro
             </Button>
@@ -154,11 +155,7 @@ function Navbar() {
               borderColor={"#FEFE0E"}
               color="white"
               borderRadius={"none"}
-              _hover={{
-                bg: "#FEFE0E",
-                color: "black",
-                transition: "0.5s",
-              }}
+              _hover={outlineStyleBtn}
             >
               Holders
             </Button>
@@ -179,12 +176,27 @@ function Navbar() {
             </Button>
           ) : (
             <div className={!user.address ? "connect-button" : "wallet-button"}>
-              <ConnectButton
-                accountStatus="address"
-                chainStatus="icon"
-                showBalance={false}
-                variant="outline"
-              />
+              <HStack>
+                <Button
+                  onClick={handleFAQClick}
+                  className="custom-buttons"
+                  variant="outline"
+                  mr="1rem"
+                  bg="transparent"
+                  borderColor={"#FEFE0E"}
+                  color="white"
+                  borderRadius={"none"}
+                  _hover={outlineStyleBtn}
+                >
+                  FAQ
+                </Button>
+                <ConnectButton
+                  accountStatus="address"
+                  chainStatus="icon"
+                  showBalance={false}
+                  variant="outline"
+                />
+              </HStack>
             </div>
           )}
         </Box>
