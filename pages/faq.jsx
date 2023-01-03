@@ -94,8 +94,8 @@ function FAQ() {
           </Heading>
         </Center>
         <Accordion mt="2rem">
-          {items.map((item) => (
-            <AccordionItem>
+          {items.map((item, index) => (
+            <AccordionItem key={index}>
               <h2>
                 <AccordionButton _expanded={itemStyle}>
                   <Box as="span" flex="1" textAlign="left">
