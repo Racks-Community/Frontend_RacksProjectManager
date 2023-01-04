@@ -16,7 +16,7 @@ function FAQ() {
     {
       question: "¿Quién puede usar Racks Community?",
       answer:
-        "Cualquier <b>holder de Mr.Crypto</b> puede usar la aplicación web para ver el estado de los proyectos, y podrán interactuar despues de registrarse. ",
+        "Cualquier <b>holder de Mr.Crypto</b> puede usar la aplicación web para ver el estado de los proyectos, y podrán interactuar después de registrarse. ",
     },
     {
       question: "¿Qué datos debo proporcionar para registrarme?",
@@ -47,18 +47,18 @@ function FAQ() {
     {
       question: "¿Cómo puedo finalizar un proyecto?",
       answer:
-        "Tal y como se indica en la app, deberás contactar con un adminstrador mediante un ticket en el server de <b>Discord</b>.<br/> El administrador agendará una reunión en la que todos los participantes llegan a un acuerdo sobre la participación de cada miembro, los puntos de reputación total a repartir, y finalizará el proyecto. <br/> La participación acordada se guardará en blockchain y será la referencia para repartir todas las recompensas. <br/><br/>",
+        "Tal y como se indica en la app, deberás contactar con un administrador mediante un ticket en el server de <b>Discord</b>.<br/> El administrador agendará una reunión en la que todos los participantes llegan a un acuerdo sobre la participación de cada miembro, los puntos de reputación total a repartir, y finalizará el proyecto. <br/> La participación acordada se guardará en blockchain y será la referencia para repartir todas las recompensas. <br/><br/>",
     },
     {
       question: "¿Para qué sirve la Reputación?",
       answer:
-        "El nivel de reputación determina que proyectos podemos ver, siendo que solo podemos ver proyectos cuyo nivel de reputación sea igual o menor que el nuestro, y los proyectos visibles para todos (opción seleccionable al crear proyecto). <br/> Para aumentar nuestra reputación debemos participar en proyectos que lleguen a completarse.<br/><br/> La relación entre puntos de Reputación y nivel de reputación es:&emsp; <b>Rep points = Rep level x 100</b><br/> Para nivel de reputación = 2 => necesitamos 200 puntos de reputación para subir al nivel 3, se guardan los puntos sobrantes, y los puntos necesarios ahora para el nivel 4 son 300 puntos.",
+        "El nivel de reputación determina qué proyectos podemos ver, siendo que solo podemos ver proyectos cuyo nivel de reputación sea igual o menor que el nuestro, y los proyectos visibles para todos (opción seleccionable al crear proyecto). <br/> Para aumentar nuestra reputación debemos participar en proyectos que lleguen a completarse.<br/><br/> La relación entre puntos de Reputación y nivel de reputación es:&emsp; <b>Rep points = Rep level x 100</b><br/> Para nivel de reputación = 2 => necesitamos 200 puntos de reputación para subir al nivel 3, se guardan los puntos sobrantes, y los puntos necesarios ahora para el nivel 4 son 300 puntos.",
     },
     {
       question:
         "¿Por qué tengo que transferir un colateral para participar en un proyecto?",
       answer:
-        "Es la mejor forma de exigir un compromiso, al final todos queremos que nuestros compañeros de equipo se lo tomen en serio. Aunque desde Racks Communit recomendamos establecer siempre un colateral ajustado a las exigencias del proyecto, esposible crear un proyecto que no requiera ningun colateral.",
+        "Es la mejor forma de exigir un compromiso, al final todos queremos que nuestros compañeros de equipo se lo tomen en serio. Aunque desde Racks Community recomendamos establecer siempre un colateral ajustado a las exigencias del proyecto, es posible crear un proyecto que no requiera ningún colateral.",
     },
     {
       question: "¿Qué puede ocasionar que pierda el colateral introducido?",
@@ -69,7 +69,7 @@ function FAQ() {
       question:
         "¿Qué debo hacer si he ingresado en un proyecto pero ya no tengo tiempo para participar en el desarrollo?",
       answer:
-        "Para evitar abusos por parte de usuarios que quieran acaparar proyectos, queremos incentivar que solo te unas a los proyectos en los que te puedas comprometer (estar a la vez en más de un proyecto no está prohibido pero no es aconsejable salvo que tengas el tiempo necesario).<br/> Por este motivo si no puedes continuar en un proyecto, deberás abrir un ticket para contactar con un adminstrador, el cual verá tu caso y te eliminará del proyecto devolviendo tu colateral. <b> Pero ten en cuenta que es una bala de un solo uso, no cumplir con el compromiso de forma recurrente se traducirá en ban.",
+        "Para evitar abusos por parte de usuarios que quieran acaparar proyectos, queremos incentivar que solo te unas a los proyectos en los que te puedas comprometer (estar a la vez en más de un proyecto no está prohibido pero no es aconsejable salvo que tengas el tiempo necesario).<br/> Por este motivo si no puedes continuar en un proyecto, deberás abrir un ticket para contactar con un administrador, el cual verá tu caso y te eliminará del proyecto devolviendo tu colateral. <b> Pero ten en cuenta que es una bala de un solo uso, no cumplir con el compromiso de forma recurrente se traducirá en ban.",
     },
   ]);
 

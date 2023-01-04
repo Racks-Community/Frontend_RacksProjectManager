@@ -116,7 +116,7 @@ const Project = ({ project, admin, handleProjectClick, privateProject }) => {
           autoFocus={false}
         >
           <PopoverTrigger>
-            <Box p="6" pt="3" pb="2">
+            <Box p="6" pt="3" pb="2" mt="2">
               <Box
                 w="17rem"
                 borderWidth="1px"

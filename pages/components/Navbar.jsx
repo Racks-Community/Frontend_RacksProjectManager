@@ -87,6 +87,21 @@ function Navbar() {
         </Box>
         <Spacer />
         <Box pr="8" className="flex items-center navbar-buttons-container">
+          {!ObjectIsNotEmpty(user) && (
+            <Button
+              onClick={handleFAQClick}
+              className="custom-buttons"
+              variant="outline"
+              mr="1rem"
+              bg="transparent"
+              borderColor={"#FEFE0E"}
+              color="white"
+              borderRadius={"none"}
+              _hover={outlineStyleBtn}
+            >
+              FAQ
+            </Button>
+          )}
           {user.role === "user" && user.contributor && (
             <>
               {user.verified ? (
@@ -176,27 +191,12 @@ function Navbar() {
             </Button>
           ) : (
             <div className={!user.address ? "connect-button" : "wallet-button"}>
-              <HStack>
-                <Button
-                  onClick={handleFAQClick}
-                  className="custom-buttons"
-                  variant="outline"
-                  mr="1rem"
-                  bg="transparent"
-                  borderColor={"#FEFE0E"}
-                  color="white"
-                  borderRadius={"none"}
-                  _hover={outlineStyleBtn}
-                >
-                  FAQ
-                </Button>
-                <ConnectButton
-                  accountStatus="address"
-                  chainStatus="icon"
-                  showBalance={false}
-                  variant="outline"
-                />
-              </HStack>
+              <ConnectButton
+                accountStatus="address"
+                chainStatus="icon"
+                showBalance={false}
+                variant="outline"
+              />
             </div>
           )}
         </Box>

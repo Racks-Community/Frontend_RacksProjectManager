@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../store/userSlice";
 import { useRouter } from "next/router";
 import CreateProjectComponent from "./components/CreateProjectComponent";
+import ShowProjectComponent from "./components/ShowProjectComponent";
 import UpdateProjectComponent from "./components/UpdateProjectComponent";
 import Project from "./components/Project";
 import {
-  Tooltip,
   Text,
   Heading,
   Box,
@@ -42,6 +42,8 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [isOpenCreateProjectComponent, setIsOpenCreateProjectComponent] =
     useState(false);
+  const [isOpenShowProjectComponent, setIsOpenShowProjectComponent] =
+    useState(false);
   const [isOpenUpdateProjectComponent, setIsOpenUpdateProjectComponent] =
     useState(false);
   const [selectedMRC, setSelectedMRC] = useState("#");
@@ -51,6 +53,7 @@ function Profile() {
   const [MRCIds, setMRCIds] = useState([]);
   const [MRCToken, setMRCToken] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [projectToShow, setProjectToShow] = useState({});
   const [projectToUpdate, setProjectToUpdate] = useState({});
 
   const handleSubmit = async (event) => {
@@ -90,6 +93,10 @@ function Profile() {
     }
   };
 
+  const clearProjectToShow = () => {
+    setProjectToShow({});
+  };
+
   const handleDisplayCreateProject = () => {
     setIsOpenCreateProjectComponent(true);
   };
@@ -124,9 +131,12 @@ function Profile() {
     if (res?.ok) {
       const data = await res.json();
       data = data.filter((project) => project.owner === user._id);
-      for (const project of data) {
+      data.map((project) => {
         project.createdAt = formatDate(project.createdAt);
-      }
+        if (project.completed) {
+          project.completedAt = formatDate(project.completedAt);
+        }
+      });
       setProjects(data);
       return data.length;
     }
@@ -139,8 +149,13 @@ function Profile() {
 
   const handleProjectClick = (event, project) => {
     if (event.target.alt === "PFP") return;
-    setProjectToUpdate(project);
-    setIsOpenUpdateProjectComponent(true);
+    if (project.completed) {
+      setProjectToShow(project);
+      setIsOpenShowProjectComponent(true);
+    } else {
+      setProjectToUpdate(project);
+      setIsOpenUpdateProjectComponent(true);
+    }
   };
 
   const setMRCBackgroundStyles = (color) => {
@@ -354,36 +369,28 @@ function Profile() {
           </Heading>
         </Center>
         <Center>
-          <Tooltip
-            label="Solo puedes tener 3 Proyectos a la vez."
-            bg="#333"
-            hasArrow
-            shouldWrapChildren
-            isDisabled={projects.length < 3}
+          <Button
+            onClick={handleDisplayCreateProject}
+            className="custom-buttons"
+            variant="outline"
+            bg="transparent"
+            borderColor={"#FEFE0E"}
+            color="white"
+            borderRadius={"none"}
+            _hover={{
+              bg: "#FEFE0E",
+              color: "black",
+              transition: "0.5s",
+            }}
           >
-            <Button
-              onClick={handleDisplayCreateProject}
-              className="custom-buttons"
-              variant="outline"
-              bg="transparent"
-              borderColor={"#FEFE0E"}
-              color="white"
-              borderRadius={"none"}
-              disabled={projects.length >= 3}
-              _hover={{
-                bg: "#FEFE0E",
-                color: "black",
-                transition: "0.5s",
-              }}
-            >
-              Crear Proyecto
-            </Button>
-          </Tooltip>
+            Crear Proyecto
+          </Button>
         </Center>
         {projects.length > 0 && (
           <Grid
             templateColumns="repeat(4, 1fr)"
             className={"projects-section-flex"}
+            w="80vw"
             py="3"
           >
             {projects.map((p) => (
@@ -401,6 +408,13 @@ function Profile() {
         isOpen={isOpenCreateProjectComponent}
         setIsOpen={setIsOpenCreateProjectComponent}
         fetchProjects={fetchProjects}
+      />
+      <ShowProjectComponent
+        isOpen={isOpenShowProjectComponent}
+        setIsOpen={setIsOpenShowProjectComponent}
+        fetchProjects={fetchProjects}
+        project={projectToShow}
+        clearProject={clearProjectToShow}
       />
       <UpdateProjectComponent
         isOpen={isOpenUpdateProjectComponent}

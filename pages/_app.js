@@ -146,6 +146,7 @@ function MyApp({ Component, pageProps }) {
         localStorage.setItem("token", "Bearer " + data.token);
         dispatch(setUserInfo(data.user));
         setLoginStatus(true);
+        if (window.location.pathname != "/") router.push("/");
         return true;
       }
     },
