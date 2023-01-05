@@ -39,7 +39,7 @@ function CustomChakraProvider({ children }) {
 
 export function ThemeProvider({ children }) {
   return (
-    <NextThemeProvider>
+    <NextThemeProvider forcedTheme="dark">
       <CustomChakraProvider>{children}</CustomChakraProvider>
     </NextThemeProvider>
   );
