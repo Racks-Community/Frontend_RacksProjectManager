@@ -6,10 +6,7 @@ import Loading from "./Loading";
 function ConnectWallet() {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const script = document.getElementById("ParticleSlider");
-      if (!script) {
-        initParticleSlider();
-      }
+      initParticleSlider();
     }
   }, []);
 

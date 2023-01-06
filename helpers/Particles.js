@@ -12,7 +12,7 @@ const init = function () {
   var img = document.createElement("img");
   img.src = imgParticle;
 
-  var ps = new ParticleSlider({
+  new ParticleSlider({
     width: 2200,
     height: 2000,
     imgs: [img],
@@ -21,14 +21,20 @@ const init = function () {
 
 export const initParticleSlider = () => {
   if (typeof window !== "undefined") {
-    var psScript = document.createElement("script");
-    psScript.addEventListener
-      ? psScript.addEventListener("load", init, false)
-      : (psScript.onload = init);
-    psScript.src =
-      "https://s3-us-west-2.amazonaws.com/s.cdpn.io/23500/ps-0.9.js";
-    psScript.setAttribute("type", "text/javascript");
-    psScript.setAttribute("id", "ParticleSlider");
-    document.body.appendChild(psScript);
+    let psElement = document.getElementById("ParticleSliderScript");
+    if (psElement) {
+      psElement.parentElement.removeChild(psElement);
+      psElement = document.getElementById("ParticleSliderScript");
+    } else {
+      var psScript = document.createElement("script");
+      psScript.addEventListener
+        ? psScript.addEventListener("load", init, false)
+        : (psScript.onload = init);
+      psScript.src =
+        "https://s3-us-west-2.amazonaws.com/s.cdpn.io/23500/ps-0.9.js";
+      psScript.setAttribute("type", "text/javascript");
+      psScript.setAttribute("id", "ParticleSliderScript");
+      document.body.appendChild(psScript);
+    }
   }
 };
