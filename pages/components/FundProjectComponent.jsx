@@ -84,10 +84,14 @@ const FundProjectComponent = ({
             toast.success("Ha donado " + amount + " USDC al Proyecto!");
           } else {
             toast.error("Error al donar al Proyecto");
+            setIsOpen(false);
+            setLoading(false);
           }
         }
       } catch (error) {
         toast.error("Error al donar al Proyecto");
+        setIsOpen(false);
+        setLoading(false);
       }
       setIsOpen(false);
       setLoading(false);
