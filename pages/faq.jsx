@@ -71,6 +71,16 @@ function FAQ() {
       answer:
         "Para evitar abusos por parte de usuarios que quieran acaparar proyectos, queremos incentivar que solo te unas a los proyectos en los que te puedas comprometer (estar a la vez en más de un proyecto no está prohibido pero no es aconsejable salvo que tengas el tiempo necesario).<br/> Por este motivo si no puedes continuar en un proyecto, deberás abrir un ticket para contactar con un administrador, el cual verá tu caso y te eliminará del proyecto devolviendo tu colateral. <b> Pero ten en cuenta que es una bala de un solo uso, no cumplir con el compromiso de forma recurrente se traducirá en ban.",
     },
+    {
+      question: "¿Por qué no puedo editar mi proyecto?",
+      answer:
+        "Hay ciertos atributos de un proyecto que no son editables cuando el proyecto ya está en fase de desarrollo, tales como <b>Colateral Cost</b>, <b>Reputación</b> , <b>Máximo de Participantes</b> y <b>Nombre</b>.<br/> Un proyecto está en desarrollo cuando tiene al menos un participante.",
+    },
+    {
+      question: "¿Qué son los fondos de un proyecto?",
+      answer:
+        "Los fondos vienen de donaciones de holders. Estas donaciones serán en stable coin <b>(USDC)</b> y se almacenarán en el smart contract del proyecto, que hará de custodio hasta que el proyecto finalice. Los fondos se repartirán entre los participantes proporcionalmente según su porcentaje de participación.<br/><br/> Las donaciones de fondos no generan ninguna obligación con el donante.<br/>Recomendamos las donaciones por parte de los creadores de proyectos como una forma de incentivar la participación.",
+    },
   ]);
 
   const itemStyle = {

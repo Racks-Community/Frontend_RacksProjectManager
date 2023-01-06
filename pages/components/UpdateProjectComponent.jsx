@@ -236,12 +236,12 @@ const UpdateProjectComponent = ({
                 </FormControl>
 
                 <FormControl mt={3} isRequired>
-                  <FormLabel>Número máximo de Contribuidores</FormLabel>
+                  <FormLabel>Número máximo de Participantes</FormLabel>
                   <Input
                     min={1}
                     type="number"
                     defaultValue={project.maxContributorsNumber}
-                    placeholder="Número de Contribuidores"
+                    placeholder="Número de Participantes"
                     focusBorderColor="white"
                     borderRadius={"none"}
                   />

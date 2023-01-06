@@ -204,7 +204,7 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
                 min={1}
                 type="number"
                 name="maxContributorsNumber"
-                placeholder="Número de Contribuidores"
+                placeholder="Número de Participantes"
                 focusBorderColor="white"
                 borderRadius={"none"}
               />
