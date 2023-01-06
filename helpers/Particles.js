@@ -25,6 +25,7 @@ export const initParticleSlider = () => {
     if (psElement) {
       psElement.parentElement.removeChild(psElement);
       psElement = document.getElementById("ParticleSliderScript");
+      console.log(psElement);
     } else {
       var psScript = document.createElement("script");
       psScript.addEventListener
