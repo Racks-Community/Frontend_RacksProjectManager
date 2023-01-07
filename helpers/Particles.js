@@ -23,10 +23,12 @@ export const initParticleSlider = () => {
   if (typeof window !== "undefined") {
     let psElement = document.getElementById("ParticleSliderScript");
     if (psElement) {
+      console.log(psElement, "if");
       psElement.parentElement.removeChild(psElement);
       psElement = document.getElementById("ParticleSliderScript");
-      console.log(psElement);
+      console.log(psElement, "if after remove");
     } else {
+      console.log(psElement, "else");
       var psScript = document.createElement("script");
       psScript.addEventListener
         ? psScript.addEventListener("load", init, false)
