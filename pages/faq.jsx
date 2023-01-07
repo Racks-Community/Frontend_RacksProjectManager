@@ -69,7 +69,7 @@ function FAQ() {
       question:
         "¿Qué debo hacer si he ingresado en un proyecto pero ya no tengo tiempo para participar en el desarrollo?",
       answer:
-        "Para evitar abusos por parte de usuarios que quieran acaparar proyectos, queremos incentivar que solo te unas a los proyectos en los que te puedas comprometer (estar a la vez en más de un proyecto no está prohibido pero no es aconsejable salvo que tengas el tiempo necesario).<br/> Por este motivo si no puedes continuar en un proyecto, deberás abrir un ticket para contactar con un administrador, el cual verá tu caso y te eliminará del proyecto devolviendo tu colateral. <b> Pero ten en cuenta que es una bala de un solo uso, no cumplir con el compromiso de forma recurrente se traducirá en ban.",
+        "Para evitar abusos por parte de usuarios que quieran acaparar proyectos, queremos incentivar que solo te unas a los proyectos en los que te puedas comprometer (estar a la vez en más de un proyecto no está prohibido pero no es aconsejable salvo que tengas el tiempo necesario).<br/> Por este motivo si no puedes continuar en un proyecto, deberás abrir un ticket para contactar con un administrador, el cual verá tu caso y te eliminará del proyecto devolviendo tu colateral. <br/> Pero ten en cuenta que es una bala de un solo uso, no cumplir con el compromiso de forma recurrente se traducirá en ban.",
     },
     {
       question: "¿Por qué no puedo editar mi proyecto?",
@@ -91,13 +91,7 @@ function FAQ() {
 
   return (
     <>
-      <Container
-        className="profile-container"
-        mt="-1.8rem"
-        mb="3.2rem"
-        maxW="50%"
-        height={"100%"}
-      >
+      <Container className="faq-container" mt="-1.8rem" height={"100%"}>
         <Center>
           <Heading as="h1" mb="2rem" mt="2rem" className="rackspm-heading">
             FAQ
@@ -121,6 +115,21 @@ function FAQ() {
           ))}
         </Accordion>
       </Container>
+      <style global jsx>{`
+        main {
+          height: 85.5%;
+        }
+        @media screen and (max-height: 1000px) {
+          main {
+            height: auto;
+          }
+        }
+        @media screen and (max-width: 1400px) {
+          main {
+            height: auto;
+          }
+        }
+      `}</style>
     </>
   );
 }

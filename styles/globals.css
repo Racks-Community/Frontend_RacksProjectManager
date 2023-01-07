@@ -123,6 +123,11 @@ main {
 .profile-container {
   height: 100%;
 }
+.faq-container {
+  height: 100%;
+  max-width: 60% !important;
+  margin-bottom: 19.8rem;
+}
 .project-section-title {
   margin-left: 8vw;
 }
@@ -305,6 +310,12 @@ main {
   }
 }
 
+@media screen and (max-width: 1400px) {
+  .faq-container {
+    margin-bottom: 16rem;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   .projects-container {
     margin-top: 0 !important;
@@ -325,6 +336,9 @@ main {
   }
   .profile-projects-text {
     right: 10vw;
+  }
+  .faq-container {
+    max-width: 90% !important;
   }
 }
 
@@ -456,6 +470,16 @@ main {
     font-size: 10px;
     text-shadow: 0.3px 0 #000;
   }
+  .faq-container {
+    max-width: 95% !important;
+    margin-bottom: 3rem;
+  }
+  .faq-container {
+    font-size: 12px !important;
+  }
+  .faq-container span {
+    font-size: 13px !important;
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -484,6 +508,9 @@ main {
   .profile-projects-text {
     top: 4.5rem !important;
     font-size: 2.3vw !important;
+  }
+  .faq-container {
+    margin-bottom: 3rem;
   }
 }
 
