@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Image, Box, Spacer, Button, HStack } from "@chakra-ui/react";
+import { useAccount } from "wagmi";
+import { Flex, Image, Box, Spacer, Button } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../../store/userSlice";
@@ -14,6 +15,7 @@ function Navbar() {
   const router = useRouter();
   const user = useSelector(selectUserInfo);
   const dispatch = useDispatch();
+  const { address, isConnected } = useAccount();
   const [
     isOpenCreateContributorComponent,
     setIsOpenCreateContributorComponent,
@@ -28,6 +30,7 @@ function Navbar() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("address");
     localStorage.removeItem("token");
     localStorage.removeItem("manualLogin");
     router.reload();
@@ -67,10 +70,20 @@ function Navbar() {
       window.location.pathname != "/admin" &&
       window.location.pathname != "/faq"
     ) {
+      localStorage.removeItem("address");
       localStorage.removeItem("token");
       router.push("/");
     }
   }, [user]);
+
+  useEffect(() => {
+    const loginAddress = localStorage.getItem("address");
+    if (isConnected && loginAddress && address != loginAddress) {
+      localStorage.removeItem("address");
+      localStorage.removeItem("token");
+      router.reload();
+    }
+  }, [address]);
 
   return (
     <>

@@ -34,13 +34,10 @@ export const initParticleSlider = () => {
   if (typeof window !== "undefined") {
     let psElement = document.getElementById("ParticleSliderScript");
     if (psElement) {
-      console.log(psElement, "if");
       psElement.parentElement.removeChild(psElement);
       createScript();
       psElement = document.getElementById("ParticleSliderScript");
-      console.log(psElement, "if after remove");
     } else {
-      console.log(psElement, "else");
       createScript();
     }
   }

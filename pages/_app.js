@@ -85,6 +85,7 @@ function MyApp({ Component, pageProps }) {
         }),
       });
       if (!res?.ok) {
+        localStorage.removeItem("address");
         localStorage.removeItem("token");
         router.reload();
         setAuthenticationStatus("unauthenticated");
@@ -144,6 +145,7 @@ function MyApp({ Component, pageProps }) {
       } else {
         const data = await verifyRes.json();
         localStorage.setItem("token", "Bearer " + data.token);
+        localStorage.setItem("address", data.user.address);
         dispatch(setUserInfo(data.user));
         setLoginStatus(true);
         if (window.location.pathname != "/") router.push("/");
@@ -151,6 +153,7 @@ function MyApp({ Component, pageProps }) {
       }
     },
     signOut: async () => {
+      localStorage.removeItem("address");
       localStorage.removeItem("token");
       router.reload();
     },

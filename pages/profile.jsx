@@ -210,6 +210,7 @@ function Profile() {
       getMRCIds();
     }
     if (!localStorage.getItem("token") && !ObjectIsNotEmpty(user)) {
+      localStorage.removeItem("address");
       localStorage.removeItem("token");
       router.push("/");
     }

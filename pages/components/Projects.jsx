@@ -142,6 +142,7 @@ function Projects() {
       fetchProjects();
     }
     if (!localStorage.getItem("token") && !ObjectIsNotEmpty(user)) {
+      localStorage.removeItem("address");
       localStorage.removeItem("token");
       router.reload();
     }
