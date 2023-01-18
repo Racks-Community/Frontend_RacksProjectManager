@@ -26,8 +26,8 @@ import {
   getMRCImageUrlFromId,
   getMRCMetadataUrl,
 } from "../../helpers/MRCImages";
+import { createContributorAPI, deleteUserAPI } from "../../helpers/APICalls";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
@@ -53,15 +53,8 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
     if (user.address) {
       setLoading(true);
-      const res = await fetch(API_URL + "users/contributor/" + user.address, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(contributorData),
-      });
-      if (res?.ok) {
+      const data = await createContributorAPI(user.address, contributorData);
+      if (data) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const racksPM = new ethers.Contract(
@@ -80,13 +73,7 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
             setIsOpenDiscordInviteComponent(true);
           }
         } catch (error) {
-          await fetch(API_URL + "users/contributor/" + user.address, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-          });
+          await deleteUserAPI(user.address);
           toast.error("Error al registrarse");
         }
       } else {

@@ -27,8 +27,7 @@ import {
 import { toast } from "react-toastify";
 import CompleteProjectComponent from "./CompleteProjectComponent";
 import ObjectIsNotEmpty from "../../helpers/ObjectIsNotEmpty";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { deleteProjectAPI, updateProjectAPI } from "../../helpers/APICalls";
 
 const UpdateProjectComponent = ({
   isOpen,
@@ -57,14 +56,8 @@ const UpdateProjectComponent = ({
     setIsOpenDeleteProjectPopover(false);
     if (user.role === "admin" || isProjectOwner()) {
       setDeleteLoading(true);
-      const res = await fetch(API_URL + "projects/" + project.address, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      });
-
-      if (res?.ok) {
+      const data = await deleteProjectAPI(project.address);
+      if (data) {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
@@ -106,15 +99,9 @@ const UpdateProjectComponent = ({
 
     if (user.role === "admin" || isProjectOwner) {
       setLoading(true);
-      const res = await fetch(API_URL + "projects/" + project.address, {
-        method: "PATCH",
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-        body: formData,
-      });
+      const data = await updateProjectAPI(project.address, formData);
 
-      if (res?.ok) {
+      if (data) {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);

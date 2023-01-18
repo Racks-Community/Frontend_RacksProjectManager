@@ -2,13 +2,13 @@ import axios from "axios";
 import { ethers } from "ethers";
 import ObjectIsNotEmpty from "./ObjectIsNotEmpty";
 import { contractAddresses, MrCryptoAbi } from "../web3Constants";
-import { getUserById } from "./APICalls";
+import { getUserByIdAPI } from "./APICalls";
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
-export const getMRCImageUrlFromContributor = async (id, token) => {
-  if (!id || !token) return null;
-  const data = await getUserById(id, token);
+export const getMRCImageUrlFromContributor = async (id) => {
+  if (!id) return null;
+  const data = await getUserByIdAPI(id);
   const mrc = await getMRCImageUrlFromAvatar(data.avatar);
   return mrc;
 };

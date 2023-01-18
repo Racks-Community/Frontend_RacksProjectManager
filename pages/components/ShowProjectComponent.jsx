@@ -32,8 +32,8 @@ import {
 import { toast } from "react-toastify";
 import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
 import FundProjectComponent from "./FundProjectComponent";
+import { addContributorToProjectAPI } from "../../helpers/APICalls";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 const ShowProjectComponent = ({
@@ -111,14 +111,7 @@ const ShowProjectComponent = ({
         let tx = await projectContract.registerProjectContributor();
         await tx.wait();
         if (tx.hash) {
-          await fetch(API_URL + "projects/add-contributor/" + project.address, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: localStorage.getItem("token"),
-            },
-            body: JSON.stringify({ contributorAddress: user.address }),
-          });
+          await addContributorToProjectAPI(project.address, user.address);
           setTimeout(async () => {
             await fetchProjects();
           }, 1500);

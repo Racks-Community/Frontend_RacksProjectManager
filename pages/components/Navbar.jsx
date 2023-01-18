@@ -9,7 +9,7 @@ import CompleteRegisterComponent from "./CompleteRegisterComponent";
 import { useRouter } from "next/router";
 import { getMRCImageUrlFromAvatar } from "../../helpers/MRCImages";
 import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
-import { fetchUser } from "../../helpers/APICalls";
+import { getTokenAPI } from "../../helpers/APICalls";
 
 function Navbar() {
   const router = useRouter();
@@ -37,7 +37,7 @@ function Navbar() {
   };
 
   const fetchUserCall = async () => {
-    const data = await fetchUser();
+    const data = await getTokenAPI();
     dispatch(setUserInfo(data.user));
   };
 

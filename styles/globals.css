@@ -27,6 +27,10 @@
   background: none !important;
 }
 
+option {
+  background: #33393f !important;
+}
+
 main {
   height: 81.5%;
 }

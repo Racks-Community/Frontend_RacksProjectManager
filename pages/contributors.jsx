@@ -37,8 +37,12 @@ import {
 import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
 import Loading from "./components/Loading";
 import { toast } from "react-toastify";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import {
+  banContributorAPI,
+  getProjectsAPI,
+  getUsersAPI,
+  removeContributorAPI,
+} from "../helpers/APICalls";
 
 function Contributors() {
   const user = useSelector(selectUserInfo);
@@ -69,19 +73,12 @@ function Contributors() {
     event.preventDefault();
     if (user.role === "admin") {
       setDeleteLoading(true);
-      const res = await fetch(
-        API_URL + "projects/remove-contributor/" + event?.target[0]?.value,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-          },
-          body: JSON.stringify({ contributorAddress: contributor.address }),
-        }
+      const data = await removeContributorAPI(
+        event?.target[0]?.value,
+        contributor.address
       );
 
-      if (res?.ok) {
+      if (data) {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
@@ -97,16 +94,11 @@ function Contributors() {
   const handleBanContributor = async (contributor) => {
     if (user.role === "admin") {
       setBanLoading(true);
-      const res = await fetch(API_URL + "users/ban/" + contributor.address, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ banned: !contributor.banned }),
-      });
-
-      if (res?.ok) {
+      const data = await banContributorAPI(
+        contributor.address,
+        !contributor.banned
+      );
+      if (data) {
         setTimeout(async () => {
           await fetchContributors();
         }, 1000);
@@ -120,14 +112,8 @@ function Contributors() {
   };
 
   const fetchContributorProjects = async (contributor) => {
-    const res = await fetch(API_URL + "projects", {
-      method: "GET",
-      headers: new Headers({
-        Authorization: localStorage.getItem("token"),
-      }),
-    });
-    if (res?.ok) {
-      const data = await res.json();
+    const data = await getProjectsAPI();
+    if (data) {
       const result = data.filter(
         (project) =>
           project.contributors.indexOf(contributor._id) > -1 &&
@@ -143,14 +129,8 @@ function Contributors() {
 
   const fetchContributors = async () => {
     if (user.role === "admin") {
-      const res = await fetch(API_URL + "users", {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (res?.ok) {
-        const data = await res.json();
+      const data = await getUsersAPI();
+      if (data) {
         if (data.length > 0) setContributors(data);
       }
     }

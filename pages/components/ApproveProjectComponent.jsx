@@ -22,8 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { approveProjectAPI } from "../../helpers/APICalls";
 
 const ApproveProjectComponent = ({
   isOpen,
@@ -39,15 +38,8 @@ const ApproveProjectComponent = ({
     if (user.role === "admin" && project.approveStatus === "PENDING") {
       approve ? setLoadingApprove(true) : setLoadingReject(true);
 
-      const res = await fetch(API_URL + "projects/approve/" + project.address, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ approve: approve }),
-      });
-      if (res?.ok) {
+      const data = await approveProjectAPI(project.address, approve);
+      if (data) {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);

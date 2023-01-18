@@ -34,7 +34,7 @@ function FAQ() {
         "Podrás crear un proyecto desde la página del perfil. Una vez creado, el proyecto podrá ser aprobado por un administrador y aparecerá en la lista de proyectos, o rechazado. Una vez rechazado solo podrás eliminarlo.",
     },
     {
-      question: "¿Qué hace a aplicación cuando crea un proyecto?",
+      question: "¿Qué hace la aplicación cuando creo un proyecto?",
       answer:
         "Aparte de la creación de un nuevo proyecto en base de datos y blockchain, se encarga de crear un repositorio de <b>Github</b> dentro de nuestra organización (este paso se omite si el proyecto no es de programación), y también crea una nueva sección con un canal de texto y voz en el server de <b>Discord</b> al que tendrán acceso aquellos que se unan al proyecto.",
     },

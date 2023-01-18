@@ -26,8 +26,7 @@ import {
   getMRCImageUrlFromId,
   getMRCMetadataUrl,
 } from "../../helpers/MRCImages";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { updateUserAPI } from "../../helpers/APICalls";
 
 const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
   const user = useSelector(selectUserInfo);
@@ -53,15 +52,8 @@ const CompleteRegisterComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
     if (user.contributor) {
       setLoading(true);
-      const res = await fetch(API_URL + "users/" + user.address, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(contributorData),
-      });
-      if (res?.ok) {
+      const data = await updateUserAPI(user.address, contributorData);
+      if (data) {
         setTimeout(async () => {
           await fetchUser();
         }, 1000);

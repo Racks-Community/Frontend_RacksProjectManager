@@ -15,8 +15,7 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getDiscordInviteAPI } from "../../helpers/APICalls";
 
 const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
   const user = useSelector(selectUserInfo);
@@ -24,14 +23,8 @@ const DiscordInviteComponent = ({ isOpen, setIsOpen }) => {
 
   const getDiscordInvite = async () => {
     if (user.contributor && user.verified) {
-      const res = await fetch(API_URL + "discord-invite", {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      });
-      if (res?.ok) {
-        const data = await res.json();
+      const data = await getDiscordInviteAPI();
+      if (data) {
         setDiscordInvite(data);
       } else {
         setDiscordInvite(undefined);

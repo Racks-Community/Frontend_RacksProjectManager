@@ -21,8 +21,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
+import { fundProjectAPI } from "../../helpers/APICalls";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 const FundProjectComponent = ({
@@ -68,18 +68,8 @@ const FundProjectComponent = ({
         await tx.wait();
         if (tx.hash) {
           const projectData = { funderWallet: account, amount };
-          const res = await fetch(
-            API_URL + "projects/fund/" + project.address,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token"),
-              },
-              body: JSON.stringify(projectData),
-            }
-          );
-          if (res?.ok) {
+          const data = await fundProjectAPI(project.address, projectData);
+          if (data) {
             await fetchProjects();
             toast.success("Ha donado " + amount + " USDC al Proyecto!");
           } else {

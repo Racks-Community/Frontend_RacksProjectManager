@@ -24,8 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
 import { useRouter } from "next/router";
 import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getTokenAPI, getNonceAPI, loginNftAPI } from "../helpers/APICalls";
 
 const { chains, provider } = configureChains(
   [chain.goerli], // DEV
@@ -78,20 +77,14 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
-      const res = await fetch(API_URL + "token", {
-        method: "get",
-        headers: new Headers({
-          Authorization: localStorage.getItem("token"),
-        }),
-      });
-      if (!res?.ok) {
+      const data = await getTokenAPI();
+      if (!data) {
         localStorage.removeItem("address");
         localStorage.removeItem("token");
         router.reload();
         setAuthenticationStatus("unauthenticated");
       } else {
         setAuthenticationStatus("authenticated");
-        const data = await res.json();
         dispatch(setUserInfo(data.user));
       }
     };
@@ -116,9 +109,7 @@ function MyApp({ Component, pageProps }) {
     getNonce: async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const account = (await provider.send("eth_requestAccounts", []))[0];
-      const response = await fetch(API_URL + "nonce?address=" + account);
-      const nonceRes = await response.json();
-      return await nonceRes.nonce;
+      return await getNonceAPI(account);
     },
     createMessage: ({ nonce, address, chainId }) => {
       return new SiweMessage({
@@ -135,15 +126,10 @@ function MyApp({ Component, pageProps }) {
       return message.prepareMessage();
     },
     verify: async ({ message, signature }) => {
-      const verifyRes = await fetch(API_URL + "loginnft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, signature }),
-      });
-      if (!verifyRes?.ok) {
+      const data = await loginNftAPI(message, signature);
+      if (!data) {
         return false;
       } else {
-        const data = await verifyRes.json();
         localStorage.setItem("token", "Bearer " + data.token);
         localStorage.setItem("address", data.user.address);
         dispatch(setUserInfo(data.user));

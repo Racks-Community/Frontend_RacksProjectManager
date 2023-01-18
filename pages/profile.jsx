@@ -31,9 +31,11 @@ import {
 import Loading from "./components/Loading";
 import { formatDate } from "../helpers/FormatDate";
 import { ObjectIsNotEmpty } from "../helpers/ObjectIsNotEmpty";
-import { fetchUser } from "../helpers/APICalls";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import {
+  getTokenAPI,
+  getProjectsAPI,
+  updateUserAPI,
+} from "../helpers/APICalls";
 
 function Profile() {
   const user = useSelector(selectUserInfo);
@@ -73,15 +75,8 @@ function Profile() {
       contributorData.country = event?.target[5]?.value;
     if (user.contributor) {
       setLoading(true);
-      const res = await fetch(API_URL + "users/" + user.address, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(contributorData),
-      });
-      if (res?.ok) {
+      const data = await updateUserAPI(user.address, contributorData);
+      if (data) {
         setTimeout(async () => {
           await fetchUserCall();
         }, 1000);
@@ -102,7 +97,7 @@ function Profile() {
   };
 
   const fetchUserCall = async () => {
-    const data = await fetchUser();
+    const data = await getTokenAPI();
     dispatch(setUserInfo(data.user));
   };
 
@@ -122,14 +117,8 @@ function Profile() {
   };
 
   const fetchProjects = async () => {
-    const res = await fetch(API_URL + "projects", {
-      method: "GET",
-      headers: new Headers({
-        Authorization: localStorage.getItem("token"),
-      }),
-    });
-    if (res?.ok) {
-      const data = await res.json();
+    const data = await getProjectsAPI();
+    if (data) {
       data = data.filter((project) => project.owner === user._id);
       data.map((project) => {
         project.createdAt = formatDate(project.createdAt);
@@ -238,7 +227,7 @@ function Profile() {
             color={getTextColorOnBackground}
           >
             <Text>
-              {"Projects Joined: " + user.totalProjects} <br />
+              {"Projects Completed: " + user.totalProjects} <br />
               {"Joined at: " + contrCreatedAt}
             </Text>
           </VStack>

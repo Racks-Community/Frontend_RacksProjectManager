@@ -25,8 +25,10 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import {
+  completeProjectAPI,
+  getProjectParticipationAPI,
+} from "../../helpers/APICalls";
 
 const CompleteProjectComponent = ({
   isOpen,
@@ -71,19 +73,8 @@ const CompleteProjectComponent = ({
       };
 
       setLoading(true);
-      const res = await fetch(
-        API_URL + "projects/completed/" + project.address,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
-          },
-          body: JSON.stringify(projectData),
-        }
-      );
-
-      if (res?.ok) {
+      const data = await completeProjectAPI(project.address, projectData);
+      if (data) {
         setTimeout(async () => {
           await fetchProjects();
         }, 1000);
@@ -104,17 +95,8 @@ const CompleteProjectComponent = ({
       project.contributors.length > 0 &&
       participations.length == 0
     ) {
-      const res = await fetch(
-        API_URL + "projects/participation/" + project.address,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      );
-      if (res?.ok) {
-        const data = await res.json();
+      const data = await getProjectParticipationAPI(project.address);
+      if (data) {
         setParticipation(data);
       } else {
         if (res.status == 409)

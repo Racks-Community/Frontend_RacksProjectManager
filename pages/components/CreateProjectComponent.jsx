@@ -19,8 +19,7 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { createProjectAPI } from "../../helpers/APICalls";
 
 const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const user = useSelector(selectUserInfo);
@@ -51,15 +50,9 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       formData.append("visibleForAll", event?.target[7]?.checked);
     }
     setLoading(true);
-    const res = await fetch(API_URL + "projects", {
-      method: "POST",
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
-      body: formData,
-    });
+    const data = await createProjectAPI(formData);
 
-    if (res?.ok) {
+    if (data) {
       let count = 0;
       const fetchProjectsInterval = setInterval(async () => {
         let nProjects = await fetchProjects();

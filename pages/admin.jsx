@@ -17,6 +17,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { loginAPI } from "../helpers/APICalls";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -37,16 +38,9 @@ const Admin = () => {
       password: event?.target[1]?.value,
     };
 
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
+    const data = await loginAPI(loginData);
 
-    if (res?.ok) {
-      const data = await res.json();
+    if (data) {
       localStorage.setItem("token", "Bearer " + data.token);
       localStorage.setItem("manualLogin", true);
       dispatch(setUserInfo(data.user));

@@ -10,9 +10,7 @@ import Project from "./Project";
 import Loading from "./Loading";
 import { ObjectIsNotEmpty } from "../../helpers/ObjectIsNotEmpty";
 import { formatDate } from "../../helpers/FormatDate";
-import { getAdmin } from "../../helpers/APICalls";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { getAdminAPI, getProjectsAPI } from "../../helpers/APICalls";
 
 function Projects() {
   const user = useSelector(selectUserInfo);
@@ -75,14 +73,8 @@ function Projects() {
   };
 
   const fetchProjects = async () => {
-    const res = await fetch(API_URL + "projects", {
-      method: "GET",
-      headers: new Headers({
-        Authorization: localStorage.getItem("token"),
-      }),
-    });
-    if (res?.ok) {
-      const data = await res.json();
+    const data = await getProjectsAPI();
+    if (data) {
       data.map((project) => {
         project.createdAt = formatDate(project.createdAt);
         if (project.completed) {
@@ -128,7 +120,7 @@ function Projects() {
   };
 
   const fetchAdminId = async () => {
-    const admin = await getAdmin(localStorage.getItem("token"));
+    const admin = await getAdminAPI();
     setAdminId(admin);
   };
 
