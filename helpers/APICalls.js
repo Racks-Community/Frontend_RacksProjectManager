@@ -33,15 +33,21 @@ export const loginNftAPI = async (message, signature) => {
 // TOKEN
 
 export const getTokenAPI = async () => {
-  const res = await axios({
-    method: "get",
-    url: API_URL + "token",
-    headers: { Authorization: getToken() },
-  });
-  if (res?.status) {
-    return res.data;
+  try {
+    const res = await axios({
+      method: "get",
+      url: API_URL + "token",
+      headers: { Authorization: getToken() },
+    });
+    if (res?.status) {
+      return res.data;
+    }
+    return null;
+  } catch (error) {
+    localStorage.removeItem("address");
+    localStorage.removeItem("token");
+    router.push("/");
   }
-  return null;
 };
 
 // LOGIN

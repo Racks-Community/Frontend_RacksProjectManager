@@ -164,6 +164,8 @@ function Profile() {
       setMRCBackground("linear-gradient(90deg, #00FF91 0, #003E00)");
     } else if (color === "Fuchsia") {
       setMRCBackground("linear-gradient(90deg, #F339B8 0, #5A032E)");
+    } else {
+      setMRCBackground("linear-gradient(90deg, #87A9A2 0, #252525)");
     }
   };
 
