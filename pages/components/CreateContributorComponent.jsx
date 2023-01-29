@@ -26,7 +26,11 @@ import {
   getMRCImageUrlFromId,
   getMRCMetadataUrl,
 } from "../../helpers/MRCImages";
-import { createContributorAPI, deleteUserAPI } from "../../helpers/APICalls";
+import {
+  createContributorAPI,
+  createContributorWebhookAPI,
+  deleteUserAPI,
+} from "../../helpers/APICalls";
 
 const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
@@ -53,24 +57,37 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
 
     if (user.address) {
       setLoading(true);
+
       const data = await createContributorAPI(user.address, contributorData);
       if (data) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const racksPM = new ethers.Contract(
-          contractAddresses[CHAIN_ID].RacksProjectManager,
-          RacksPmAbi,
-          signer
-        );
         try {
-          let tx = await racksPM.registerContributor();
-          await tx.wait();
-          if (tx.hash) {
-            setTimeout(async () => {
-              await fetchUser();
-            }, 1000);
-            toast.success("Bienvenido a Racks Community!");
-            setIsOpenDiscordInviteComponent(true);
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const racksPM = new ethers.Contract(
+            contractAddresses[CHAIN_ID].RacksProjectManager,
+            RacksPmAbi,
+            signer
+          );
+          const isContributor = await racksPM.isWalletContributor(user.address);
+          if (isContributor) {
+            const response = await createContributorWebhookAPI(user.address);
+            if (response) {
+              setTimeout(async () => {
+                await fetchUser();
+              }, 1000);
+              toast.success("Bienvenido a Racks Community!");
+              setIsOpenDiscordInviteComponent(true);
+            }
+          } else {
+            let tx = await racksPM.registerContributor();
+            await tx.wait();
+            if (tx.hash) {
+              setTimeout(async () => {
+                await fetchUser();
+              }, 1000);
+              toast.success("Bienvenido a Racks Community!");
+              setIsOpenDiscordInviteComponent(true);
+            }
           }
         } catch (error) {
           await deleteUserAPI(user.address);
@@ -79,9 +96,10 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
       } else {
         toast.error("Error al registrarse");
       }
-      setIsOpen(false);
-      setLoading(false);
     }
+
+    setIsOpen(false);
+    setLoading(false);
   };
 
   const handleOnChangeToken = async (event) => {

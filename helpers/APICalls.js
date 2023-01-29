@@ -173,6 +173,18 @@ export const createContributorAPI = async (
 
 // PATCH
 
+export const createContributorWebhookAPI = async (contributorAddress) => {
+  const res = await axios({
+    method: "patch",
+    url: API_URL + "users/contributor/webhook/" + contributorAddress,
+    headers: { Authorization: getToken() },
+  });
+  if (res?.status) {
+    return res.data;
+  }
+  return null;
+};
+
 export const updateUserAPI = async (userAddress, contributorData) => {
   const res = await axios({
     method: "patch",
