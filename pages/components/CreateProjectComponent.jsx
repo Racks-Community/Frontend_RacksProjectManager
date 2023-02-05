@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
+import { contractAddresses, RacksPmAbi } from "../../web3Constants";
+import { ethers } from "ethers";
 import {
   Modal,
   ModalContent,
@@ -19,7 +21,12 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
-import { createProjectAPI } from "../../helpers/APICalls";
+import {
+  createProjectAPI,
+  deletePendingProjectAPI,
+} from "../../helpers/APICalls";
+
+const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
   const user = useSelector(selectUserInfo);
@@ -50,18 +57,39 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
       formData.append("visibleForAll", event?.target[7]?.checked);
     }
     setLoading(true);
-    const data = await createProjectAPI(formData);
 
-    if (data) {
-      let count = 0;
-      const fetchProjectsInterval = setInterval(async () => {
-        let nProjects = await fetchProjects();
-        count++;
-        if (nProjects > nProjectsBefore || count == 30)
-          clearInterval(fetchProjectsInterval);
-      }, 1000);
-      toast.success("Proyecto creado!");
-    } else {
+    try {
+      const data = await createProjectAPI(formData);
+
+      if (data) {
+        if (user.role === "user") {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const racksPM = new ethers.Contract(
+            contractAddresses[CHAIN_ID].RacksProjectManager,
+            RacksPmAbi,
+            signer
+          );
+          let tx = await racksPM.createProject(
+            formData.get("name"),
+            ethers.utils.parseEther(formData.get("colateralCost") + ""),
+            formData.get("reputationLevel"),
+            formData.get("maxContributorsNumber")
+          );
+          await tx.wait();
+        }
+        let count = 0;
+        const fetchProjectsInterval = setInterval(async () => {
+          let nProjects = await fetchProjects();
+          count++;
+          if (nProjects > nProjectsBefore || count == 30)
+            clearInterval(fetchProjectsInterval);
+        }, 1000);
+        toast.success("Proyecto creado!");
+      }
+    } catch (error) {
+      console.log(error);
+      await deletePendingProjectAPI(formData.get("name"));
       toast.error("Error al crear Proyecto");
     }
     setIsOpen(false);

@@ -301,6 +301,18 @@ export const deleteProjectAPI = async (projectAddress) => {
   return null;
 };
 
+export const deletePendingProjectAPI = async (projectName) => {
+  const res = await axios({
+    method: "delete",
+    url: API_URL + "projects/pending/" + projectName,
+    headers: { Authorization: getToken() },
+  });
+  if (res?.status) {
+    return res.data;
+  }
+  return null;
+};
+
 // UTILS
 
 export const getUserByIdAPI = async (id) => {
