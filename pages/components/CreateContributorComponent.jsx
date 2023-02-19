@@ -58,8 +58,8 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
     if (user.address) {
       setLoading(true);
 
-      const data = await createContributorAPI(user.address, contributorData);
-      if (data) {
+      try {
+        await createContributorAPI(user.address, contributorData);
         try {
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
@@ -90,16 +90,28 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
             }
           }
         } catch (error) {
-          await deleteUserAPI(user.address);
-          toast.error("Error al registrarse");
+          await handleError();
         }
-      } else {
-        toast.error("Error al registrarse");
+      } catch (error) {
+        await handleError();
       }
+
+      setTimeout(async () => {
+        if (loading) {
+          setIsOpen(false);
+          setLoading(false);
+          await handleError();
+        }
+      }, 10000);
     }
 
     setIsOpen(false);
     setLoading(false);
+  };
+
+  const handleError = async () => {
+    await deleteUserAPI(user.address);
+    toast.error("Error al registrarse");
   };
 
   const handleOnChangeToken = async (event) => {
