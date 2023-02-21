@@ -17,9 +17,8 @@ export const getMRCImageUrlFromAvatar = async (uri) => {
   if (!uri) return null;
 
   const tokenURIResponse = (await axios.get(uri)).data;
-  const imageURI = tokenURIResponse.image;
-  const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-  return imageURIURL;
+  console.log(tokenURIResponse);
+  return tokenURIResponse.image;
 };
 
 export const getMRCImageUrlFromId = async (tokenId) => {
@@ -30,24 +29,12 @@ export const getMRCImageUrlFromId = async (tokenId) => {
 
 export const getMRCImageUrlFromMetadata = (jsonToken) => {
   if (ObjectIsNotEmpty(jsonToken)) {
-    const imageURI = jsonToken.image;
-    const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-    return imageURIURL;
+    return jsonToken.image;
   }
 };
 
 export const getMRCMetadataUrl = async (tokenId) => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://polygon-rpc.com"
-  );
-  const MRC = new ethers.Contract(
-    "0xeF453154766505FEB9dBF0a58E6990fd6eB66969", // DEV
-    MrCryptoAbi,
-    provider
-  );
-  const uri = await MRC.tokenURI(tokenId);
-  uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-  return uri;
+  return "https://testapi.racksmafia.com/metadata/" + tokenId + ".json";
 };
 
 export const fetchNFTIds = async () => {
