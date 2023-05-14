@@ -71,6 +71,10 @@ const CreateContributorComponent = ({ isOpen, setIsOpen, fetchUser }) => {
           const isContributor = await racksPM.isWalletContributor(user.address);
           if (isContributor) {
             const response = await createContributorWebhookAPI(user.address);
+            setTimeout(async () => {
+              await handleError();
+            }, 40000);
+
             if (response) {
               setTimeout(async () => {
                 await fetchUser();

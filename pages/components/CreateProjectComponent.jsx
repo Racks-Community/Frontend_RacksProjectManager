@@ -88,7 +88,6 @@ const CreateProjectComponent = ({ isOpen, setIsOpen, fetchProjects }) => {
         toast.success("Proyecto creado!");
       }
     } catch (error) {
-      console.log(error);
       await deletePendingProjectAPI(formData.get("name"));
       toast.error("Error al crear Proyecto");
     }

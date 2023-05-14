@@ -17,7 +17,6 @@ export const getMRCImageUrlFromAvatar = async (uri) => {
   if (!uri) return null;
 
   const tokenURIResponse = (await axios.get(uri)).data;
-  console.log(tokenURIResponse);
   return tokenURIResponse.image;
 };
 
@@ -34,7 +33,11 @@ export const getMRCImageUrlFromMetadata = (jsonToken) => {
 };
 
 export const getMRCMetadataUrl = async (tokenId) => {
-  return "https://testapi.racksmafia.com/metadata/" + tokenId + ".json";
+  return (
+    "https://mrcrypto.s3.eu-central-1.amazonaws.com/metadata/" +
+    tokenId +
+    ".json"
+  );
 };
 
 export const fetchNFTIds = async () => {

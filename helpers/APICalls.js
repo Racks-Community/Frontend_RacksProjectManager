@@ -178,6 +178,7 @@ export const createContributorWebhookAPI = async (contributorAddress) => {
     method: "patch",
     url: API_URL + "users/contributor/webhook/" + contributorAddress,
     headers: { Authorization: getToken() },
+    timeout: 20000,
   });
   if (res?.status) {
     return res.data;

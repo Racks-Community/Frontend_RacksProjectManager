@@ -59,17 +59,17 @@ const CompleteProjectComponent = ({
     event.preventDefault();
 
     if (user.role === "admin" && participationIsValid) {
-      let contributors = [];
-      let weights = [];
+      let contributorParticipation = [];
       for (const contr of participations) {
-        contributors.push(contr.address);
-        weights.push(contr.participation);
+        contributorParticipation.push({
+          contributor: contr.contributor,
+          participation: contr.participation,
+        });
       }
 
       const projectData = {
         totalReputationPointsReward: event?.target[0]?.value,
-        contributors: contributors,
-        participationWeights: weights,
+        contributorParticipation,
       };
 
       setLoading(true);
@@ -160,7 +160,7 @@ const CompleteProjectComponent = ({
                 {participations.length > 0 ? (
                   <Box>
                     {participations.map((contributor) => (
-                      <Box key={contributor.address} pt={6} pb={2}>
+                      <Box key={contributor.contributor} pt={6} pb={2}>
                         <FormLabel mb={"2.5rem"}>{contributor.name}</FormLabel>
                         <Slider
                           colorScheme={participationIsValid ? "yellow" : "red"}
@@ -169,7 +169,8 @@ const CompleteProjectComponent = ({
                           onChange={(val) =>
                             setParticipation(
                               participations.map((contribution) =>
-                                contribution.address == contributor.address
+                                contribution.contributor ==
+                                contributor.contributor
                                   ? { ...contribution, participation: val }
                                   : { ...contribution }
                               )

@@ -85,6 +85,7 @@ const ShowProjectComponent = ({
         MockErc20Abi,
         signer
       );
+      console.log(contractAddresses[CHAIN_ID].MockErc20);
       try {
         const isContributor = await racksPM.isWalletContributor(user.address);
         if (!isContributor) {
@@ -101,7 +102,6 @@ const ShowProjectComponent = ({
           );
           await erctx.wait(1);
         }
-
         const projectContract = new ethers.Contract(
           project.address,
           ProjectAbi,
