@@ -288,7 +288,7 @@ const ShowProjectComponent = ({
                               Github Repository:
                             </Text>
                             <Center>
-                              <Link href="project.githubRepository" isExternal>
+                              <Link href={project.githubRepository} isExternal>
                                 {project.githubRepository}
                               </Link>
                             </Center>
