@@ -72,14 +72,20 @@ const CompleteProjectComponent = ({
         contributorParticipation,
       };
 
-      setLoading(true);
-      const data = await completeProjectAPI(project.address, projectData);
-      if (data) {
-        setTimeout(async () => {
-          await fetchProjects();
-        }, 1000);
-        toast.success("Proyecto finalizado!");
-      } else {
+      try {
+        setLoading(true);
+        const data = await completeProjectAPI(project.address, projectData);
+        if (data) {
+          setTimeout(async () => {
+            await fetchProjects();
+          }, 1000);
+          toast.success("Proyecto finalizado!");
+        } else {
+          toast.error("Error al finalizar Proyecto");
+        }
+      } catch (error) {
+        setIsOpen(false);
+        setLoading(false);
         toast.error("Error al finalizar Proyecto");
       }
       setIsOpen(false);

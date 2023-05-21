@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const getToken = () => {
@@ -46,7 +47,7 @@ export const getTokenAPI = async () => {
   } catch (error) {
     localStorage.removeItem("address");
     localStorage.removeItem("token");
-    router.push("/");
+    document.location = "/";
   }
 };
 
@@ -103,6 +104,7 @@ export const completeProjectAPI = async (projectAddress, projectData) => {
     url: API_URL + "projects/completed/" + projectAddress,
     headers: { Authorization: getToken() },
     data: projectData,
+    timeout: 20000,
   });
   if (res?.status) {
     return res.data;
