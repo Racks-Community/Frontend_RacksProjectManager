@@ -308,7 +308,7 @@ const ShowProjectComponent = ({
                           <Center>
                             <Link
                               href={
-                                "https://goerli.etherscan.io/address/" +
+                                "https://mumbai.etherscan.io/address/" +
                                 project.address
                               }
                               isExternal

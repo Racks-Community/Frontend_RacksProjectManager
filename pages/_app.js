@@ -27,7 +27,7 @@ import { getMRCImageUrlFromAvatar } from "../helpers/MRCImages";
 import { getTokenAPI, getNonceAPI, loginNftAPI } from "../helpers/APICalls";
 
 const { chains, provider } = configureChains(
-  [chain.goerli], // DEV
+  [chain.polygonMumbai], // DEV
   [
     jsonRpcProvider({
       rpc: () => ({ http: process.env.NEXT_PUBLIC_RPC_URL }),
