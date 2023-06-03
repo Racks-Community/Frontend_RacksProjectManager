@@ -85,7 +85,6 @@ const ShowProjectComponent = ({
         MockErc20Abi,
         signer
       );
-      console.log(contractAddresses[CHAIN_ID].MockErc20);
       try {
         const isContributor = await racksPM.isWalletContributor(user.address);
         if (!isContributor) {
